@@ -10,3 +10,6 @@ class Renderable(Component):
         self.char = char
         self.color = color
         self.always_visible = always_visible
+
+    def handle_event(self, event):
+        raise NotImplementedError()

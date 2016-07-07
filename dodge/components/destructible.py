@@ -27,3 +27,6 @@ class Destructible(Component):
 
     def take_damage(self, damage):
         raise NotImplementedError()
+
+    def handle_event(self, event):
+        raise NotImplementedError()

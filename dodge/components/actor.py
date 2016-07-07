@@ -23,3 +23,6 @@ class Actor(Component):
 
     def pass_time(self, time):
         raise NotImplementedError()
+
+    def handle_event(self, event):
+        raise NotImplementedError()

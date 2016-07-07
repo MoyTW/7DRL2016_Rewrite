@@ -16,3 +16,6 @@ class Attacker(Component):
         # buffs = sum(buff[0] for buff in self._power_buffs)
         # return self.base_power + bonus + buffs
         raise NotImplementedError()
+
+    def handle_event(self, event):
+        raise NotImplementedError()

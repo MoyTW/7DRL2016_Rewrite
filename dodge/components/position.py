@@ -13,3 +13,6 @@ class Position(Component):
 
     def move(self, dx, dy, ignore_blockers=False):
         raise NotImplementedError()
+
+    def handle_event(self, event):
+        raise NotImplementedError()
