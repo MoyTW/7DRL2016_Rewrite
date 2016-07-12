@@ -1,18 +1,33 @@
-from component import Component
-
-
-PositionName = 'POSITION'
+from component import Component, ComponentType
+from dodge.event import EventType, EventParam
 
 
 class Position(Component):
     def __init__(self, x, y, blocks=False):
-        super(Position, self).__init__(name=PositionName)
+        super(Position, self).__init__(component_type=ComponentType.POSITION,
+                                       target_events=[EventType.TELEPORT, EventType.MOVE],
+                                       emittable_events=[])
         self.x = x
         self.y = y
         self.blocks = blocks
 
-    def move(self, dx, dy, ignore_blockers=False):
-        raise NotImplementedError()
+    # TODO: Add in map to check for blockers
+    def teleport(self, x, y, ignore_blockers=False):
+        self.x = x
+        self.y = y
 
-    def handle_event(self, event):
-        raise NotImplementedError()
+    # TODO: Add in map to check for blockers
+    def move(self, dx, dy, ignore_blockers=False):
+        self.x += dx
+        self.y += dy
+
+    # TODO: Re-register position post-update
+    def _handle_event(self, event):
+        if event.event_type == EventType.TELEPORT:
+            self.teleport(event.params[EventParam.X], event.params[EventParam.Y])
+            return True
+        elif event.event_type == EventType.MOVE:
+            self.move(event.params[EventParam.X], event.params[EventParam.Y])
+            return True
+        else:
+            return False

@@ -2,18 +2,22 @@ import enum
 
 
 class EventType(enum.Enum):
-    ATTACK, DAMAGE = range(2)
+    ATTACK, DAMAGE, TELEPORT, MOVE = range(4)
 
 
 class EventParam(enum.Enum):
-    QUANTITY, DAMAGE_TYPE, TARGET = range(3)
+    QUANTITY, DAMAGE_TYPE, TARGET, X, Y, IGNORE_BLOCKERS = range(6)
 
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
                        (EventParam.DAMAGE_TYPE, False)),
     EventType.ATTACK: ((EventParam.QUANTITY, True),
-                       (EventParam.TARGET, True))
+                       (EventParam.TARGET, True)),
+    EventType.TELEPORT: ((EventParam.X, True),
+                         (EventParam.Y, True)),
+    EventType.MOVE: ((EventParam.X, True),
+                     (EventParam.Y, True))
 }
 
 
