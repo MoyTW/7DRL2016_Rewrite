@@ -1,12 +1,11 @@
-from component import Component
-
-
-PlayerName = 'PLAYER'
+from component import Component, ComponentType
 
 
 class Player(Component):
     def __init__(self):
-        super(Player, self).__init__(name=PlayerName)
+        super(Player, self).__init__(component_type=ComponentType.PLAYER,
+                                     target_events=[],
+                                     emittable_events=[])
 
-    def handle_event(self, event):
+    def _handle_event(self, event):
         raise NotImplementedError()
