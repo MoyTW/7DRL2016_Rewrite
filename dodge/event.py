@@ -1,21 +1,19 @@
-# TODO: Get, use enum34
-class EventType:
-    def __init__(self):
-        raise NotImplementedError()
+import enum
 
+
+class EventType(enum.Enum):
     ATTACK, DAMAGE = range(2)
 
 
-class EventParam:
-    def __init__(self):
-        raise NotImplementedError()
-
-    QUANTITY, DAMAGE_TYPE = range(2)
+class EventParam(enum.Enum):
+    QUANTITY, DAMAGE_TYPE, TARGET = range(3)
 
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
-                       (EventParam.DAMAGE_TYPE, False))
+                       (EventParam.DAMAGE_TYPE, False)),
+    EventType.ATTACK: ((EventParam.QUANTITY, True),
+                       (EventParam.TARGET, True))
 }
 
 
@@ -24,7 +22,8 @@ class Event(object):
         self.event_type = event_type
         self.params = params
         if not self.is_event_type(event_type):
-            raise ValueError(str(event_type) + ' is missing required parameters! See: ' + str(params))
+            raise ValueError(str(event_type) + ' is missing required parameters! Has: ' + str(params) + ' Needs: ' +
+                             str(event_templates[event_type]))
 
     def is_event_type(self, event_type):
         if event_type not in event_templates:
