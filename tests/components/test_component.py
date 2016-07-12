@@ -5,7 +5,7 @@ from dodge.event import Event, EventType, EventParam
 
 class TestComponent(unittest.TestCase):
     def setUp(self):
-        self.c = Component('damage test', [EventType.DAMAGE])
+        self.c = Component('damage test', [EventType.DAMAGE], [])
 
     def tests_runs_fn_if_listening_for_event(self):
         with self.assertRaises(NotImplementedError):
