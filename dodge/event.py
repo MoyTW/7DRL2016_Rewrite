@@ -9,7 +9,9 @@ event_templates = {
     EventType.TELEPORT: ((EventParam.X, True),
                          (EventParam.Y, True)),
     EventType.MOVE: ((EventParam.X, True),
-                     (EventParam.Y, True))
+                     (EventParam.Y, True)),
+    EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
+    EventType.END_TURN: []
 }
 
 

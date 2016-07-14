@@ -15,7 +15,7 @@ class ComponentType(Enum):
 
 
 class EventType(Enum):
-    ATTACK, DAMAGE, TELEPORT, MOVE = range(4)
+    ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN = range(6)
 
 
 class EventParam(Enum):
