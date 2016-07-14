@@ -1,13 +1,8 @@
-from enum import Enum
 from config import Config
 import ui as ui
 from entity import Entity
 import components
 from level import Level
-
-
-class GameStatus(Enum):
-    PLAYING, PLAYER_DEATH, VICTORY, AUTOPILOT, MENU = range(5)
 
 
 class GameState(object):

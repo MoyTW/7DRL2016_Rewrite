@@ -1,11 +1,71 @@
 import libtcodpy as libtcod
 from enum import Enum
 from components import ComponentType
+from constants import GameStatus
 
 
 class InputCommands(Enum):
-    (MV_UP, MV_UP_RIGHT, MV_RIGHT, MV_DOWN_RIGHT, MV_DOWN, MV_DOWN_LEFT, MV_LEFT, MV_UP_LEFT, WAIT, ITEM_TAKE,
-     AUTOPILOT_ACTIVATE, INVENTORY, ITEM_DROP, STAIRS_DOWN, CHAR_INFO, ZONE_SUMMARY, UNKNOWN_INPUT) = range(17)
+    (MV_UP, MV_UP_RIGHT, MV_RIGHT, MV_DOWN_RIGHT, MV_DOWN, MV_DOWN_LEFT, MV_LEFT, MV_UP_LEFT, WAIT, ITEM_GET,
+     AUTOPILOT_ACTIVATE, INVENTORY, ITEM_DROP, STAIRS_DOWN, CHAR_INFO, ZONE_SUMMARY, EXIT, UNKNOWN_INPUT) = range(18)
+
+
+class InputHandler(object):
+    def __init__(self):
+        self.key = libtcod.Key()
+
+    # TODO: Change from silly if/else to a map
+    def get_keyboard_input(self, game_state):
+        if self.key.vk == libtcod.KEY_ESCAPE:
+            return InputCommands.EXIT
+
+        if game_state == GameStatus.PLAYING:
+            # movement keys
+            # TODO: Implement movement
+            if self.key.vk == libtcod.KEY_UP or self.key.vk == libtcod.KEY_KP8:
+                return InputCommands.MV_UP
+            elif self.key.vk == libtcod.KEY_DOWN or self.key.vk == libtcod.KEY_KP2:
+                return InputCommands.MV_DOWN
+            elif self.key.vk == libtcod.KEY_LEFT or self.key.vk == libtcod.KEY_KP4:
+                return InputCommands.MV_LEFT
+            elif self.key.vk == libtcod.KEY_RIGHT or self.key.vk == libtcod.KEY_KP6:
+                return InputCommands.MV_RIGHT
+            elif self.key.vk == libtcod.KEY_HOME or self.key.vk == libtcod.KEY_KP7:
+                return InputCommands.MV_UP_LEFT
+            elif self.key.vk == libtcod.KEY_PAGEUP or self.key.vk == libtcod.KEY_KP9:
+                return InputCommands.MV_UP_RIGHT
+            elif self.key.vk == libtcod.KEY_END or self.key.vk == libtcod.KEY_KP1:
+                return InputCommands.MV_DOWN_LEFT
+            elif self.key.vk == libtcod.KEY_PAGEDOWN or self.key.vk == libtcod.KEY_KP3:
+                return InputCommands.MV_DOWN_RIGHT
+            elif self.key.vk == libtcod.KEY_KP5:
+                return InputCommands.WAIT
+            else:
+                # Test for other keys? What?
+                key_char = chr(self.key.c)
+
+                # TODO: Implement below
+                if key_char == 'g':
+                    return InputCommands.ITEM_GET
+                # TODO: Implement below
+                elif key_char == 'a':
+                    return InputCommands.AUTOPILOT_ACTIVATE
+                # TODO: Implement below
+                elif key_char == 'i':
+                    return InputCommands.INVENTORY
+                # TODO: Implement below
+                elif key_char == 'd':
+                    return InputCommands.ITEM_DROP
+                # TODO: Implement below
+                elif key_char == '<' or key_char == ',':
+                    return InputCommands.STAIRS_DOWN
+                # TODO: Implement below
+                elif key_char == 'c':
+                    return InputCommands.CHAR_INFO
+                # TODO: Implement below
+                elif key_char == 'r':
+                    return InputCommands.ZONE_SUMMARY
+
+                return InputCommands.UNKNOWN_INPUT
 
 
 def to_color(r, g, b):
