@@ -1,4 +1,63 @@
 import libtcodpy as libtcod
+from components import ComponentType
+
+
+def to_color(r, g, b):
+    return libtcod.Color(r, g, b)
+
+
+class LevelRenderer(object):
+    def __init__(self, console, level, config, camera_x=0, camera_y=0):
+        self.console = console
+        self.level = level
+        self.config = config
+        self.camera_x = camera_x
+        self.camera_y = camera_y
+
+    def to_camera_coordinates(self, xr, yr):
+        # convert coordinates on the map to coordinates on the screen
+        (xr, yr) = (xr - self.camera_x, yr - self.camera_y)
+
+        if xr < 0 or yr < 0 or xr >= self.config.CAMERA_WIDTH or yr >= self.config.CAMERA_HEIGHT:
+            return None, None  # if it's outside the view, return nothing
+        else:
+            return xr, yr
+
+    def render_entity(self, entity, camera_x, camera_y):
+        position = entity.components[ComponentType.POSITION]
+        renderable = entity.components[ComponentType.RENDERABLE]
+
+        if libtcod.map_is_in_fov(self.level.fov_map, position.x, position.y) or \
+                (renderable.always_visible and self.level[position.x][position.y].explored):
+            (x, y) = self.to_camera_coordinates(position.x, position.y)
+
+            if x is not None:
+                libtcod.console_set_default_foreground(self.console, renderable.color)
+                libtcod.console_put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
+
+    def render_all(self):
+        libtcod.console_clear(self.console)
+        libtcod.console_set_default_foreground(0, libtcod.white)
+
+        self.level.recompute_fov()
+
+        # Display blocked tiles
+        for x in range(self.config.CAMERA_WIDTH):
+            for y in range(self.config.CAMERA_HEIGHT):
+                if libtcod.map_is_in_fov(self.level.fov_map, x, y) or self.level[x][y].explored:
+                    if self.level[x][y].blocked is not False:
+                        libtcod.console_set_char_background(self.console, x, y, col=libtcod.white)
+                    # This is just because it looks nice
+                    else:
+                        libtcod.console_set_char_background(self.console, x, y, col=to_color(x, 0, y))
+
+        for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
+            # TODO: Camera lol
+            self.render_entity(entity, camera_x=0, camera_y=0)
+
+        libtcod.console_blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
+
+        libtcod.console_flush()
 
 
 class UI(object):
@@ -7,7 +66,7 @@ class UI(object):
 
         libtcod.console_init_root(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 'A Roguelike Where You Dodge Projectiles',
                                   False)
-        self.con = libtcod.console_new(config.MAP_WIDTH, config.MAP_HEIGHT)
+        self.console = libtcod.console_new(config.MAP_WIDTH, config.MAP_HEIGHT)
         self.panel = libtcod.console_new(config.SCREEN_WIDTH, config.PANEL_HEIGHT)
         libtcod.console_set_fullscreen(config.FULL_SCREEN)
 
@@ -19,7 +78,7 @@ class UI(object):
         if header == '':
             header_height = 0
         else:
-            header_height = libtcod.console_get_height_rect(self.con, 0, 0, width, self.config.SCREEN_HEIGHT, header)
+            header_height = libtcod.console_get_height_rect(self.console, 0, 0, width, self.config.SCREEN_HEIGHT, header)
         height = len(options) + header_height
 
         window = libtcod.console_new(width, height)
@@ -65,4 +124,4 @@ class UI(object):
                                  libtcod.CENTER, 'by MoyTW')
 
         # menu + choice
-        return self.menu('', ['Quit', 'Quit', 'Quit'], 24)
+        return self.menu('', ['New Game', 'Quit'], 24)

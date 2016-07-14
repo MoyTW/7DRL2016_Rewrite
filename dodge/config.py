@@ -5,5 +5,10 @@ class Config(object):
         self.MAP_WIDTH = 300
         self.MAP_HEIGHT = 300
         self.PANEL_HEIGHT = 7
-        self.FULL_SCREEN = True
+        self.FULL_SCREEN = False
+        self.CAMERA_WIDTH = 80
+        self.CAMERA_HEIGHT = 43
+        self.VISION_RADIUS = 20
+        self.FOV_ALGO = 0
+        self.FOV_LIGHT_WALLS = True
         # etc etc etc
