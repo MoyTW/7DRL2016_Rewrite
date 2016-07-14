@@ -1,3 +1,7 @@
+from components import ComponentType
+import fov
+
+
 class Tile(object):
     def __init__(self, blocked, block_sight=None):
         self.blocked = blocked
@@ -25,10 +29,31 @@ class Zone(object):
 
 
 class Level(object):
-    def __init__(self):
-        self.tiles = [[]]
+    def __init__(self, width, height, config):
+        self._width = width
+        self._height = height
+        self.config = config
+
+        self._tiles = [[Tile(False) for _ in range(height)] for _ in range(width)]
         self.zones = []
         self._entities = {}
+        self.fov_map = fov.create_fov_map(width, height)
+        for y in range(height):
+            for x in range(width):
+                fov.set_fov_tile_properties(self.fov_map, x, y, not self[x][y].block_sight,
+                                            not self[x][y].blocked)
+
+    # Allow by-index access
+    def __getitem__(self, index):
+        return self._tiles[index]
+
+    @property
+    def width(self):
+        return self._width
+
+    @property
+    def height(self):
+        return self._height
 
     def add_entity(self, entity):
         self._entities[entity.eid] = entity
@@ -42,11 +67,22 @@ class Level(object):
     def get_entities_by_position(self, x1, y1, x2, y2):
         raise NotImplementedError()
 
+    def entities_with_component(self, component_type):
+        return [e for e in self._entities.viewvalues() if component_type in frozenset(e.components.keys())]
+
+    def entities_with_components(self, component_types):
+        return [e for e in self._entities.viewvalues() if frozenset(e.components.keys()) >= frozenset(component_types)]
+
+    def recompute_fov(self):
+        # Assumes only 1 player-controlled unit
+        player = self.entities_with_component(ComponentType.PLAYER)[0]
+        position = player.components[ComponentType.POSITION]
+
+        fov.recompute_fov(self.fov_map, position.x, position.y, self.config.VISION_RADIUS, self.config.FOV_LIGHT_WALLS,
+                          self.config.FOV_ALGO)
+
 
 class LevelBuilder(object):
-    def build_tiles(self, tile_params):
-        raise NotImplementedError()
-
     def build_zone(self, zone_params):
         raise NotImplementedError()
 
