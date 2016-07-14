@@ -1,12 +1,4 @@
-import enum
-
-
-class EventType(enum.Enum):
-    ATTACK, DAMAGE, TELEPORT, MOVE = range(4)
-
-
-class EventParam(enum.Enum):
-    QUANTITY, DAMAGE_TYPE, TARGET, X, Y, IGNORE_BLOCKERS = range(6)
+from constants import EventParam, EventType
 
 
 event_templates = {

@@ -1,10 +1,3 @@
-import enum
-
-
-class ComponentType(enum.Enum):
-    ACTOR, AI, ATTACKER, DESTRUCTIBLE, EQUIPMENT, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE = range(10)
-
-
 class Component(object):
     def __init__(self, component_type, target_events, emittable_events):
         self._type = component_type

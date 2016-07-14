@@ -1,12 +1,6 @@
 import libtcodpy as libtcod
-from enum import Enum
-from components import ComponentType
-from constants import GameStatus
-
-
-class InputCommands(Enum):
-    (MV_UP, MV_UP_RIGHT, MV_RIGHT, MV_DOWN_RIGHT, MV_DOWN, MV_DOWN_LEFT, MV_LEFT, MV_UP_LEFT, WAIT, ITEM_GET,
-     AUTOPILOT_ACTIVATE, INVENTORY, ITEM_DROP, STAIRS_DOWN, CHAR_INFO, ZONE_SUMMARY, EXIT, UNKNOWN_INPUT) = range(18)
+from constants import ComponentType
+from constants import GameStatus, InputCommands
 
 
 class InputHandler(object):

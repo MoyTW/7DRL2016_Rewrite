@@ -1,4 +1,5 @@
-from component import Component, ComponentType
+from constants import ComponentType
+from component import Component
 from dodge.event import EventType, EventParam
 
 

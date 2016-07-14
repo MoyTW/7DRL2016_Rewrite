@@ -1,4 +1,4 @@
-from components import ComponentType
+from constants import ComponentType
 from fov import FOVMap
 
 

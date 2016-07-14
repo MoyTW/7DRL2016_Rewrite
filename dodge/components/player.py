@@ -1,5 +1,5 @@
-from component import Component, ComponentType
-
+from component import Component
+from constants import ComponentType
 
 class Player(Component):
     def __init__(self):
