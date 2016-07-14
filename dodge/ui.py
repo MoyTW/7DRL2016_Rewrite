@@ -27,7 +27,7 @@ class LevelRenderer(object):
         position = entity.components[ComponentType.POSITION]
         renderable = entity.components[ComponentType.RENDERABLE]
 
-        if libtcod.map_is_in_fov(self.level.fov_map, position.x, position.y) or \
+        if self.level.in_fov(position.x, position.y) or \
                 (renderable.always_visible and self.level[position.x][position.y].explored):
             (x, y) = self.to_camera_coordinates(position.x, position.y)
 
@@ -44,7 +44,7 @@ class LevelRenderer(object):
         # Display blocked tiles
         for x in range(self.config.CAMERA_WIDTH):
             for y in range(self.config.CAMERA_HEIGHT):
-                if libtcod.map_is_in_fov(self.level.fov_map, x, y) or self.level[x][y].explored:
+                if self.level.in_fov(x, y) or self.level[x][y].explored:
                     if self.level[x][y].blocked is not False:
                         libtcod.console_set_char_background(self.console, x, y, col=libtcod.white)
                     # This is just because it looks nice

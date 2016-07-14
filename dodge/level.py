@@ -1,5 +1,5 @@
 from components import ComponentType
-import fov
+from fov import FOVMap
 
 
 class Tile(object):
@@ -37,11 +37,10 @@ class Level(object):
         self._tiles = [[Tile(False) for _ in range(height)] for _ in range(width)]
         self.zones = []
         self._entities = {}
-        self.fov_map = fov.create_fov_map(width, height)
+        self.fov_map = FOVMap(width, height)
         for y in range(height):
             for x in range(width):
-                fov.set_fov_tile_properties(self.fov_map, x, y, not self[x][y].block_sight,
-                                            not self[x][y].blocked)
+                self.fov_map.set_tile_properties(x, y, not self[x][y].block_sight, not self[x][y].blocked)
 
     # Allow by-index access
     def __getitem__(self, index):
@@ -73,13 +72,16 @@ class Level(object):
     def entities_with_components(self, component_types):
         return [e for e in self._entities.viewvalues() if frozenset(e.components.keys()) >= frozenset(component_types)]
 
+    def in_fov(self, x, y):
+        return self.fov_map.in_fov(x, y)
+
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
         player = self.entities_with_component(ComponentType.PLAYER)[0]
         position = player.components[ComponentType.POSITION]
 
-        fov.recompute_fov(self.fov_map, position.x, position.y, self.config.VISION_RADIUS, self.config.FOV_LIGHT_WALLS,
-                          self.config.FOV_ALGO)
+        self.fov_map.recompute_fov(position.x, position.y, self.config.VISION_RADIUS, self.config.FOV_LIGHT_WALLS,
+                                   self.config.FOV_ALGO)
 
 
 class LevelBuilder(object):
