@@ -1,5 +1,11 @@
 import libtcodpy as libtcod
+from enum import Enum
 from components import ComponentType
+
+
+class InputCommands(Enum):
+    (MV_UP, MV_UP_RIGHT, MV_RIGHT, MV_DOWN_RIGHT, MV_DOWN, MV_DOWN_LEFT, MV_LEFT, MV_UP_LEFT, WAIT, ITEM_TAKE,
+     AUTOPILOT_ACTIVATE, INVENTORY, ITEM_DROP, STAIRS_DOWN, CHAR_INFO, ZONE_SUMMARY, UNKNOWN_INPUT) = range(17)
 
 
 def to_color(r, g, b):
