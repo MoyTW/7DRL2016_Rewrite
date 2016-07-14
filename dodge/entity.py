@@ -5,7 +5,7 @@ class Entity(object):
         self.components = {}
         if components:
             for component in components:
-                self.components[component.name] = component
+                self.components[component.type] = component
 
     def handle_event(self, event):
         for component in self.components.values():

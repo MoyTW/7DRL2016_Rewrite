@@ -21,11 +21,14 @@ class Component(object):
         else:
             return False
 
-    def get_type(self):
+    @property
+    def type(self):
         return self._type
 
-    def get_target_events(self):
+    @property
+    def target_events(self):
         return self._target_events
 
-    def get_emittable_events(self):
+    @property
+    def emittable_events(self):
         return self._emittable_events
