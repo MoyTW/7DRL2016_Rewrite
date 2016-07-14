@@ -23,7 +23,7 @@ class LevelRenderer(object):
         else:
             return xr, yr
 
-    def render_entity(self, entity, camera_x, camera_y):
+    def render_entity(self, entity):
         position = entity.components[ComponentType.POSITION]
         renderable = entity.components[ComponentType.RENDERABLE]
 
@@ -52,8 +52,7 @@ class LevelRenderer(object):
                         libtcod.console_set_char_background(self.console, x, y, col=to_color(x, 0, y))
 
         for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
-            # TODO: Camera lol
-            self.render_entity(entity, camera_x=0, camera_y=0)
+            self.render_entity(entity)
 
         libtcod.console_blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
 
@@ -78,7 +77,8 @@ class UI(object):
         if header == '':
             header_height = 0
         else:
-            header_height = libtcod.console_get_height_rect(self.console, 0, 0, width, self.config.SCREEN_HEIGHT, header)
+            header_height = libtcod.console_get_height_rect(self.console, 0, 0, width, self.config.SCREEN_HEIGHT,
+                                                            header)
         height = len(options) + header_height
 
         window = libtcod.console_new(width, height)
@@ -118,10 +118,10 @@ class UI(object):
     def main_menu(self):
         # title and credits
         libtcod.console_set_default_foreground(0, libtcod.white)
-        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 4, libtcod.BKGND_DARKEN,
-                                 libtcod.CENTER, 'A Roguelike Where You Dodge Projectiles')
-        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 3, libtcod.BKGND_DARKEN,
-                                 libtcod.CENTER, 'by MoyTW')
+        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 4,
+                                 libtcod.BKGND_DARKEN, libtcod.CENTER, 'A Roguelike Where You Dodge Projectiles')
+        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 3,
+                                 libtcod.BKGND_DARKEN, libtcod.CENTER, 'by MoyTW')
 
         # menu + choice
         return self.menu('', ['New Game', 'Quit'], 24)
