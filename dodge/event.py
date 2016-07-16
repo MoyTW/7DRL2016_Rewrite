@@ -1,4 +1,4 @@
-from constants import event_templates
+from dodge.constants import event_templates
 
 
 class Event(object):

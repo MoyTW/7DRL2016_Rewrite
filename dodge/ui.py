@@ -1,6 +1,5 @@
 import tcod as libtcod
-from constants import ComponentType
-from constants import GameStatus, InputCommands
+from dodge.constants import ComponentType, GameStatus, InputCommands
 
 
 class InputHandler(object):

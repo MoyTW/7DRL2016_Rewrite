@@ -4,7 +4,7 @@ import ui as ui
 from entity import Entity
 import components
 from level import Level
-from constants import ComponentType, EventType, EventParam
+from dodge.constants import ComponentType, EventType, EventParam
 
 
 class GameState(object):
