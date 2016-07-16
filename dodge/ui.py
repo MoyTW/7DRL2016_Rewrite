@@ -1,4 +1,4 @@
-import libtcodpy as libtcod
+import tcod as libtcod
 from constants import ComponentType
 from constants import GameStatus, InputCommands
 
