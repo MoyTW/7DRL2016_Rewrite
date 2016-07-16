@@ -1,5 +1,5 @@
 from component import Component
-from constants import ComponentType, EventType, EventParam
+from dodge.constants import ComponentType, EventType, EventParam
 
 
 class Actor(Component):

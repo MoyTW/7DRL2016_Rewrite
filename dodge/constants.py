@@ -20,3 +20,16 @@ class EventType(Enum):
 
 class EventParam(Enum):
     QUANTITY, DAMAGE_TYPE, TARGET, X, Y, IGNORE_BLOCKERS = range(6)
+
+event_templates = {
+    EventType.DAMAGE: ((EventParam.QUANTITY, True),
+                       (EventParam.DAMAGE_TYPE, False)),
+    EventType.ATTACK: ((EventParam.QUANTITY, True),
+                       (EventParam.TARGET, True)),
+    EventType.TELEPORT: ((EventParam.X, True),
+                         (EventParam.Y, True)),
+    EventType.MOVE: ((EventParam.X, True),
+                     (EventParam.Y, True)),
+    EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
+    EventType.END_TURN: []
+}

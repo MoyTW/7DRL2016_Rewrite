@@ -1,8 +1,10 @@
+from event import Event
 from config import Config
 import ui as ui
 from entity import Entity
 import components
 from level import Level
+from constants import ComponentType, EventType, EventParam
 
 
 class GameState(object):

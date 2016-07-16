@@ -1,6 +1,7 @@
 import unittest
-from components import Actor
-from dodge.event import Event, EventType, EventParam
+from dodge.components import Actor
+from dodge.event import Event
+from dodge.constants import EventType, EventParam
 
 
 class TestActorComponent(unittest.TestCase):

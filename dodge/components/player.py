@@ -1,5 +1,6 @@
 from component import Component
-from constants import ComponentType
+from dodge.constants import ComponentType
+
 
 class Player(Component):
     def __init__(self):

@@ -1,4 +1,4 @@
-from constants import ComponentType
+from dodge.constants import ComponentType
 from component import Component
 
 

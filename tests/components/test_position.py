@@ -1,6 +1,7 @@
 import unittest
+from dodge.constants import EventType, EventParam
 from dodge.components.position import Position
-from dodge.event import Event, EventType, EventParam
+from dodge.event import Event
 
 
 class TestComponent(unittest.TestCase):
