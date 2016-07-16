@@ -26,7 +26,11 @@ class Actor(Component):
         return self._ttl
 
     def _pass_time(self, time):
-        self._ttl -= time
+        ttl = self._ttl - time
+        if ttl < 0:
+            raise ValueError('ttl cannot go negative! Previous: ' + str(self._ttl) + ' Pass Value: ' + str(time))
+        else:
+            self._ttl = ttl
 
     def _end_turn(self):
         self._ttl = self.speed
