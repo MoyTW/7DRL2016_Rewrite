@@ -7,7 +7,14 @@ class Entity(object):
             for component in components:
                 self.components[component.type] = component
 
-    # TODO: Drop-through behaviour
     def handle_event(self, event):
         for component in self.components.values():
-            component.handle_event(event)
+            event_return = component.handle_event(event)
+            if event_return is True:
+                break
+            elif event_return is False:
+                pass
+            else:
+                for event in event_return:
+                    self.handle_event(event)
+                break

@@ -9,8 +9,7 @@ class Component(object):
 
     def handle_event(self, event):
         if event.event_type in self._target_events:
-            self._handle_event(event)
-            return True
+            return self._handle_event(event)
         else:
             return False
 
