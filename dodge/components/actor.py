@@ -25,6 +25,10 @@ class Actor(Component):
     def ttl(self):
         return self._ttl
 
+    @property
+    def is_live(self):
+        return self.ttl == 0
+
     def _pass_time(self, time):
         ttl = self._ttl - time
         if ttl < 0:
