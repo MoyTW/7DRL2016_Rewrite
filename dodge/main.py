@@ -63,28 +63,36 @@ class Game(object):
 
         return live
 
-    def player_turn(self):
+    def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
         print(command)
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_state.status = GameStatus.MENU
         elif command == InputCommands.MV_UP:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: 0, EventParam.Y: -1})
+            player.handle_event(event)
         elif command == InputCommands.MV_UP_RIGHT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: -1})
+            player.handle_event(event)
         elif command == InputCommands.MV_RIGHT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 0})
+            player.handle_event(event)
         elif command == InputCommands.MV_DOWN_RIGHT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 1})
+            player.handle_event(event)
         elif command == InputCommands.MV_DOWN:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: 0, EventParam.Y: 1})
+            player.handle_event(event)
         elif command == InputCommands.MV_DOWN_LEFT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: 1})
+            player.handle_event(event)
         elif command == InputCommands.MV_LEFT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: 0})
+            player.handle_event(event)
         elif command == InputCommands.MV_UP_LEFT:
-            pass
+            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: -1})
+            player.handle_event(event)
         else:
             raise NotImplementedError()
 
@@ -99,7 +107,7 @@ class Game(object):
         for actor in live:
             end_turn = Event(EventType.END_TURN, None)
             if actor.components[ComponentType.PLAYER] is not None:
-                self.player_turn()
+                self.player_turn(actor)
             elif actor.components[ComponentType.AI] is not None:
                 raise NotImplementedError()
             else:

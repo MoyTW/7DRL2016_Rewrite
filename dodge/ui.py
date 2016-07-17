@@ -101,6 +101,7 @@ class LevelRenderer(object):
         libtcod.console_clear(self.console)
         libtcod.console_set_default_foreground(0, libtcod.white)
 
+        # PERF: Possible improvement here to not recompute if not necessary
         self.level.recompute_fov()
 
         # Display blocked tiles
