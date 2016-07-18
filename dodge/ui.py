@@ -86,8 +86,8 @@ class LevelRenderer(object):
             return xr, yr
 
     def render_entity(self, entity):
-        position = entity.components[ComponentType.POSITION]
-        renderable = entity.components[ComponentType.RENDERABLE]
+        position = entity.get_component(ComponentType.POSITION)
+        renderable = entity.get_component(ComponentType.RENDERABLE)
 
         if self.level.in_fov(position.x, position.y) or \
                 (renderable.always_visible and self.level[position.x][position.y].explored):

@@ -52,13 +52,13 @@ class Game(object):
     def pass_actor_time(self):
         """Passes time on actors, and returns a list of now-live actors."""
         actors = self.game_state.level.entities_with_component(ComponentType.ACTOR)
-        ttl = min([actor.components[ComponentType.ACTOR].ttl for actor in actors])
+        ttl = min([actor.get_component(ComponentType.ACTOR).ttl for actor in actors])
         live = []
 
         for actor in actors:
             pass_time = Event(EventType.PASS_TIME, {EventParam.QUANTITY: ttl})
             actor.handle_event(pass_time)
-            if actor.components[ComponentType.ACTOR].is_live:
+            if actor.get_component(ComponentType.ACTOR).is_live:
                 live.append(actor)
 
         return live
@@ -106,9 +106,9 @@ class Game(object):
         # Take turns of live actors
         for actor in live:
             end_turn = Event(EventType.END_TURN, None)
-            if actor.components[ComponentType.PLAYER] is not None:
+            if actor.has_component(ComponentType.PLAYER):
                 self.player_turn(actor)
-            elif actor.components[ComponentType.AI] is not None:
+            elif actor.has_component(ComponentType.AI):
                 raise NotImplementedError()
             else:
                 raise ValueError('Cannot resolve turn of actor ' + actor.eid + ', is not player and has no AI!')

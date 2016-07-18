@@ -67,10 +67,10 @@ class Level(object):
         raise NotImplementedError()
 
     def entities_with_component(self, component_type):
-        return [e for e in self._entities.viewvalues() if component_type in frozenset(e.components.keys())]
+        return [e for e in self._entities.viewvalues() if e.has_component(component_type)]
 
     def entities_with_components(self, component_types):
-        return [e for e in self._entities.viewvalues() if frozenset(e.components.keys()) >= frozenset(component_types)]
+        return [e for e in self._entities.viewvalues() if e.has_components(component_types)]
 
     def in_fov(self, x, y):
         return self.fov_map.in_fov(x, y)
@@ -78,7 +78,7 @@ class Level(object):
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
         player = self.entities_with_component(ComponentType.PLAYER)[0]
-        position = player.components[ComponentType.POSITION]
+        position = player.get_component(ComponentType.POSITION)
 
         self.fov_map.recompute_fov(position.x, position.y, self.config.VISION_RADIUS, self.config.FOV_LIGHT_WALLS,
                                    self.config.FOV_ALGO)
