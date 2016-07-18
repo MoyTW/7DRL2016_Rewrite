@@ -24,13 +24,13 @@ class Entity(object):
         return self._components[component_type]
 
     def handle_event(self, event):
-        for component in self.components.values():
-            event_return = component.handle_event(event)
+        current_event = event
+        for component in self._ordered_components:
+            event_return = component.handle_event(current_event)
             if event_return is True:
-                break
+                return True
             elif event_return is False:
                 pass
             else:
-                for event in event_return:
-                    self.handle_event(event)
-                break
+                current_event = event_return
+        raise ValueError('Entity ' + str(self.eid) + ' could not handle event ' + str(event))
