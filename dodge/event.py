@@ -1,4 +1,6 @@
-from dodge.constants import event_templates
+from dodge.constants import event_templates, EventParam
+from entity import Entity
+from stack import Stack
 
 
 class Event(object):
@@ -21,3 +23,23 @@ class Event(object):
             if required and k not in self.params:
                 return False
         return True
+
+
+class EventStack(Stack):
+    def __init__(self):
+        super(EventStack, self).__init__()
+
+    def resolve_events(self):
+        while not self.is_empty():
+            self.resolve_top_event()
+
+    def resolve_top_event(self):
+        event = self.pop()
+        if isinstance(event.params[EventParam.TARGET], Entity):
+            event.params[EventParam.TARGET].handle_event(event)
+        else:
+            raise ValueError()
+
+    def push_and_resolve(self, event):
+        self.push(event)
+        self.resolve_events()
