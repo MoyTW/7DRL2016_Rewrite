@@ -98,6 +98,24 @@ class LevelRenderer(object):
                 libtcod.console_set_default_foreground(self.console, renderable.color)
                 libtcod.console_put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
 
+    def move_camera(self, target_x, target_y):
+        # new camera coordinates (top-left corner of the screen relative to the map)
+        x = target_x - self.config.CAMERA_WIDTH / 2
+        y = target_y - self.config.CAMERA_HEIGHT / 2
+
+        # make sure the camera doesn't see outside the map
+        if x < 0:
+            x = 0
+        if y < 0:
+            y = 0
+        if x > self.config.MAP_WIDTH - self.config.CAMERA_WIDTH - 1:
+            x = self.config.MAP_WIDTH - self.config.CAMERA_WIDTH - 1
+        if y > self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT - 1:
+            y = self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT - 1
+
+        self.camera_x = x
+        self.camera_y = y
+
     def color_square(self, color, x, y, flag=libtcod.BKGND_SET):
         # Don't try to color squares off the map
         if x >= self.config.MAP_WIDTH or y >= self.config.MAP_HEIGHT:
@@ -121,15 +139,20 @@ class LevelRenderer(object):
         # PERF: Possible improvement here to not recompute if not necessary
         self.level.recompute_fov()
 
+        # Re-center camera on the player
+        (player_x, player_y) = self.level.get_player_position()
+        self.move_camera(player_x, player_y)
+
         # Display blocked tiles
         for x in range(self.config.CAMERA_WIDTH):
             for y in range(self.config.CAMERA_HEIGHT):
-                if self.level.in_fov(x, y) or self.level[x][y].explored:
-                    if self.level[x][y].blocked is not False:
+                (map_x, map_y) = (self.camera_x + x, self.camera_y + y)
+                if self.level.in_fov(map_x, map_y) or self.level[map_x][map_y].explored:
+                    if self.level[map_x][map_y].blocked is not False:
                         libtcod.console_set_char_background(self.console, x, y, col=libtcod.white)
                     # This is just because it looks nice
                     else:
-                        libtcod.console_set_char_background(self.console, x, y, col=to_color(x, 0, y))
+                        libtcod.console_set_char_background(self.console, x, y, col=to_color(map_x, 0, map_y))
 
         for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
             self.render_entity(entity)
