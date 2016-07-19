@@ -63,6 +63,13 @@ class Level(object):
     def get_entity_by_position(self, x, y):
         raise NotImplementedError()
 
+    def get_player_entity(self):
+        return self.entities_with_component(ComponentType.PLAYER)[0]
+
+    def get_player_position(self):
+        player_position = self.get_player_entity().get_component(ComponentType.POSITION)
+        return player_position.x, player_position.y
+
     def get_entities_by_position(self, x1, y1, x2, y2):
         raise NotImplementedError()
 
@@ -77,7 +84,7 @@ class Level(object):
 
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
-        player = self.entities_with_component(ComponentType.PLAYER)[0]
+        player = self.get_player_entity()
         position = player.get_component(ComponentType.POSITION)
 
         self.fov_map.recompute_fov(position.x, position.y, self.config.VISION_RADIUS, self.config.FOV_LIGHT_WALLS,
