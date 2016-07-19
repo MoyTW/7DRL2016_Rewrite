@@ -1,4 +1,4 @@
-from event import Event
+from event import Event, EventStack
 from config import Config
 import ui as ui
 from entity import Entity
@@ -32,6 +32,7 @@ class Game(object):
         self.config = Config(None)
         self.window = ui.UI(self.config)
         self.input_handler = ui.InputHandler()
+        self.event_stack = EventStack()
         self.game_state = None
         self.renderer = None
 
@@ -48,6 +49,7 @@ class Game(object):
         self.renderer = ui.LevelRenderer(self.window.console, self.game_state.level, self.config)
         self.renderer.render_all()
         self.window.display_text("Hello World!", 12)
+        self.event_stack = EventStack()
 
     def pass_actor_time(self):
         """Passes time on actors, and returns a list of now-live actors."""
@@ -56,8 +58,8 @@ class Game(object):
         live = []
 
         for actor in actors:
-            pass_time = Event(EventType.PASS_TIME, {EventParam.QUANTITY: ttl})
-            actor.handle_event(pass_time)
+            pass_time = Event(EventType.PASS_TIME, {EventParam.TARGET: actor, EventParam.QUANTITY: ttl})
+            self.event_stack.push_and_resolve(pass_time)
             if actor.get_component(ComponentType.ACTOR).is_live:
                 live.append(actor)
 
@@ -70,29 +72,29 @@ class Game(object):
         if command == InputCommands.EXIT:
             self.game_state.status = GameStatus.MENU
         elif command == InputCommands.MV_UP:
-            event = Event(EventType.MOVE, {EventParam.X: 0, EventParam.Y: -1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 0, EventParam.Y: -1})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_UP_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: -1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: -1})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 0})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: 0})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: 1})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN:
-            event = Event(EventType.MOVE, {EventParam.X: 0, EventParam.Y: 1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 0, EventParam.Y: 1})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN_LEFT:
-            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: 1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: 1})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_LEFT:
-            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: 0})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: 0})
+            self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_UP_LEFT:
-            event = Event(EventType.MOVE, {EventParam.X: -1, EventParam.Y: -1})
-            player.handle_event(event)
+            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: -1})
+            self.event_stack.push_and_resolve(event)
         else:
             raise NotImplementedError()
 
@@ -105,14 +107,14 @@ class Game(object):
 
         # Take turns of live actors
         for actor in live:
-            end_turn = Event(EventType.END_TURN, None)
+            end_turn = Event(EventType.END_TURN, {EventParam.TARGET: actor})
             if actor.has_component(ComponentType.PLAYER):
                 self.player_turn(actor)
             elif actor.has_component(ComponentType.AI):
                 raise NotImplementedError()
             else:
                 raise ValueError('Cannot resolve turn of actor ' + actor.eid + ', is not player and has no AI!')
-            actor.handle_event(end_turn)
+            self.event_stack.push_and_resolve(end_turn)
 
     def play_game(self):
         while not self.game_state.status == GameStatus.MENU:
