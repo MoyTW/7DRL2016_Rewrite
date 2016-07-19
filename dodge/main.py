@@ -17,7 +17,7 @@ class GameState(object):
                                  name='player',
                                  components=[components.Player(),
                                              components.Actor(100),
-                                             components.Position(45, 30),
+                                             components.Position(5, 5),
                                              components.Renderable('@', ui.to_color(255, 255, 255))])
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
             self.level.add_entity(self.player)
