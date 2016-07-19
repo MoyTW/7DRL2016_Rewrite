@@ -1,5 +1,6 @@
 import tcod as libtcod
 from dodge.constants import ComponentType, GameStatus, InputCommands
+import utils
 
 
 class InputHandler(object):
@@ -97,6 +98,22 @@ class LevelRenderer(object):
                 libtcod.console_set_default_foreground(self.console, renderable.color)
                 libtcod.console_put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
 
+    def color_square(self, color, x, y, flag=libtcod.BKGND_SET):
+        # Don't try to color squares off the map
+        if x >= self.config.MAP_WIDTH or y >= self.config.MAP_HEIGHT:
+            return False
+
+        visible = self.level.in_fov(x, y)
+        wall = self.level[x][y].block_sight
+        if visible and not wall:
+            libtcod.console_set_char_background(self.console, x - self.camera_x, y - self.camera_y, color, flag)
+
+    def draw_rangefinder(self):
+        (x, y) = self.level.get_player_position()
+        tiles = utils.calculate_circle(x, y, 3)
+        for tile in tiles:
+            self.color_square(libtcod.lightest_blue, tile[0], tile[1], libtcod.BKGND_ALPHA(.1))
+
     def render_all(self):
         libtcod.console_clear(self.console)
         libtcod.console_set_default_foreground(0, libtcod.white)
@@ -116,6 +133,8 @@ class LevelRenderer(object):
 
         for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
             self.render_entity(entity)
+
+        self.draw_rangefinder()
 
         libtcod.console_blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
 
