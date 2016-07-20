@@ -8,10 +8,12 @@ from dodge.constants import GameStatus, ComponentType, EventType, EventParam, In
 
 
 class GameState(object):
-    def __init__(self, config, save=None):
+    def __init__(self, config, event_stack, save=None):
         if save is not None:
             self.load_save(save)
         else:
+            self.config = config
+            self.event_stack = event_stack
             self.status = GameStatus.PLAYING
             self.player = Entity(eid='player',
                                  name='player',
@@ -22,7 +24,7 @@ class GameState(object):
 
             test_enemy = Entity(eid='test_enemy',
                                 name='test_enemy',
-                                components=[components.AI(),
+                                components=[components.AI(event_stack),
                                             components.Actor(100),
                                             components.Position(10, 10),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])
@@ -58,11 +60,12 @@ class Game(object):
             return
 
     def new_game(self):
-        self.game_state = GameState(self.config)
+        self.event_stack = EventStack()
+        self.game_state = GameState(self.config, self.event_stack)
         self.renderer = ui.LevelRenderer(self.window.console, self.game_state.level, self.config)
         self.renderer.render_all()
         self.window.display_text("Hello World!", 12)
-        self.event_stack = EventStack()
+
 
     def pass_actor_time(self):
         """Passes time on actors, and returns a list of now-live actors."""
