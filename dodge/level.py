@@ -34,14 +34,10 @@ class Level(object):
         self._height = height
         self.config = config
 
-        # TODO: Not elegant at all!
-        self._tiles = [[Tile(False) for _ in range(height)] for _ in range(width)]
-        for x in range(width):
-            for y in range(height):
-                if x == 0 or y == 0 or x == width - 1 or height == width - 1:
-                    self._tiles[x][y].blocked = True
-                    self._tiles[x][y].block_sight = True
-                    print(x, y)
+        def is_edge(tx, ty): return tx == 0 or ty == 0 or tx == width - 1 or ty == height - 1
+        self._tiles = [[Tile(True, True) if is_edge(x, y) else Tile(False) for y in range(height)]
+                       for x in range(width)]
+
         self.zones = []
         self._entities = {}
         self.fov_map = FOVMap(width, height)
