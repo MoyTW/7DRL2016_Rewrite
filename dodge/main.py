@@ -19,8 +19,21 @@ class GameState(object):
                                              components.Actor(100),
                                              components.Position(5, 5),
                                              components.Renderable('@', ui.to_color(255, 255, 255))])
+
+            test_enemy = Entity(eid='test_enemy',
+                                name='test_enemy',
+                                components=[components.AI(),
+                                            components.Actor(100),
+                                            components.Position(10, 10),
+                                            components.Renderable('E', ui.to_color(0, 255, 0))])
+
+            # Generate level
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
+            # TODO: This should be in a proper level gen!
             self.level.add_entity(self.player)
+            self.level.add_entity(test_enemy)
+
+            # Init FOV
             self.level.recompute_fov()
 
     def load_save(self, save):
@@ -111,7 +124,10 @@ class Game(object):
             if actor.has_component(ComponentType.PLAYER):
                 self.player_turn(actor)
             elif actor.has_component(ComponentType.AI):
-                raise NotImplementedError()
+                event = Event(EventType.AI_BEGIN_TURN, {EventParam.TARGET: actor,
+                                                        EventParam.FOV_MAP: self.game_state.level.fov_map,
+                                                        EventParam.PLAYER: self.game_state.level.get_player_entity()})
+                self.event_stack.push_and_resolve(event)
             else:
                 raise ValueError('Cannot resolve turn of actor ' + actor.eid + ', is not player and has no AI!')
             self.event_stack.push_and_resolve(end_turn)
