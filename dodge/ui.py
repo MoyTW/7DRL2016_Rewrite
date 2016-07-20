@@ -108,10 +108,10 @@ class LevelRenderer(object):
             x = 0
         if y < 0:
             y = 0
-        if x > self.config.MAP_WIDTH - self.config.CAMERA_WIDTH - 1:
-            x = self.config.MAP_WIDTH - self.config.CAMERA_WIDTH - 1
-        if y > self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT - 1:
-            y = self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT - 1
+        if x > self.config.MAP_WIDTH - self.config.CAMERA_WIDTH:
+            x = self.config.MAP_WIDTH - self.config.CAMERA_WIDTH
+        if y > self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT:
+            y = self.config.MAP_HEIGHT - self.config.CAMERA_HEIGHT
 
         self.camera_x = x
         self.camera_y = y
