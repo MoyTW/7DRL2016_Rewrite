@@ -15,11 +15,11 @@ class ComponentType(Enum):
 
 
 class EventType(Enum):
-    ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN = range(6)
+    ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, AI_ATTACK, ACTIVATE = range(9)
 
 
 class EventParam(Enum):
-    QUANTITY, DAMAGE_TYPE, TARGET, X, Y, IGNORE_BLOCKERS = range(6)
+    QUANTITY, DAMAGE_TYPE, TARGET, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP = range(8)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
@@ -31,5 +31,8 @@ event_templates = {
     EventType.MOVE: ((EventParam.X, True),
                      (EventParam.Y, True)),
     EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
-    EventType.END_TURN: []
+    EventType.END_TURN: [],
+    EventType.AI_BEGIN_TURN: [(EventParam.FOV_MAP, True),  # Should rename FOV_MAP to make it clear it's used for nav
+                              (EventParam.PLAYER, True)],
+    EventType.ACTIVATE: []
 }

@@ -1,13 +1,12 @@
+from dodge.constants import ComponentType, EventType, EventParam
 from component import Component
 
 
-AIName = 'AI'
-
-
 class AI(Component):
-    def __init__(self, ai_type):
-        super(AI, self).__init__(name=AIName)
-        self.ai_type = ai_type
+    def __init__(self):
+        super(AI, self).__init__(component_type=ComponentType.AI,
+                                 target_events=[EventType.AI_BEGIN_TURN, EventType.ACTIVATE],
+                                 emittable_events=[EventType.MOVE, EventType.AI_ATTACK, EventType.END_TURN])
 
-    def handle_event(self, event):
-        raise NotImplementedError()
+    def _handle_event(self, event):
+        return True
