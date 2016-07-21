@@ -19,4 +19,7 @@ class FOVMap(object):
         path = libtcod.path_new_using_map(self.fov_map)
         libtcod.path_compute(path, x, y, target_x, target_y)
         (t_x, t_y) = libtcod.path_walk(path, False)
-        return t_x - x, t_y - y
+        if t_x is None:
+            return None, None
+        else:
+            return t_x - x, t_y - y
