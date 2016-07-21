@@ -8,6 +8,13 @@ class AI(Component):
                                  target_events=[EventType.AI_BEGIN_TURN, EventType.ACTIVATE],
                                  emittable_events=[EventType.MOVE, EventType.AI_ATTACK, EventType.END_TURN],
                                  event_stack=event_stack)
+        self._is_active = False
+
+    @property
+    def is_active(self):
+        return self._is_active
 
     def _handle_event(self, event):
-        return True
+        if event.event_type == EventType.ACTIVATE:
+            self._is_active = True
+            return True

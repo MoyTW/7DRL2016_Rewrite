@@ -28,6 +28,7 @@ class GameState(object):
                                             components.Actor(100),
                                             components.Position(10, 10),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])
+            self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.TARGET: test_enemy}))
 
             # Generate level
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
@@ -66,7 +67,6 @@ class Game(object):
         self.renderer.render_all()
         self.window.display_text("Hello World!", 12)
 
-
     def pass_actor_time(self):
         """Passes time on actors, and returns a list of now-live actors."""
         actors = self.game_state.level.entities_with_component(ComponentType.ACTOR)
@@ -83,7 +83,6 @@ class Game(object):
 
     def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
-        print(command)
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_state.status = GameStatus.MENU
