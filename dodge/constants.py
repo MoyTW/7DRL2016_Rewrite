@@ -32,7 +32,8 @@ event_templates = {
                      (EventParam.Y, True)),
     EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
     EventType.END_TURN: [],
-    EventType.AI_BEGIN_TURN: [(EventParam.FOV_MAP, True),  # Should rename FOV_MAP to make it clear it's used for nav
+    EventType.AI_BEGIN_TURN: [(EventParam.TARGET, True),
+                              (EventParam.FOV_MAP, True),  # Should rename FOV_MAP to make it clear it's used for nav
                               (EventParam.PLAYER, True)],
     EventType.ACTIVATE: []
 }
