@@ -81,34 +81,40 @@ class Game(object):
 
         return live
 
+    def gen_player_move_event(self, x, y):
+        return Event(EventType.MOVE, {EventParam.TARGET: self.game_state.level.get_player_entity(),
+                                      EventParam.X: x,
+                                      EventParam.Y: y,
+                                      EventParam.FOV_MAP: self.game_state.level.fov_map})
+
     def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_state.status = GameStatus.MENU
         elif command == InputCommands.MV_UP:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 0, EventParam.Y: -1})
+            event = self.gen_player_move_event(0, -1)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_UP_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: -1})
+            event = self.gen_player_move_event(1, -1)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: 0})
+            event = self.gen_player_move_event(1, 0)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN_RIGHT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 1, EventParam.Y: 1})
+            event = self.gen_player_move_event(1, 1)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: 0, EventParam.Y: 1})
+            event = self.gen_player_move_event(0, 1)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_DOWN_LEFT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: 1})
+            event = self.gen_player_move_event(-1, 1)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_LEFT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: 0})
+            event = self.gen_player_move_event(-1, 0)
             self.event_stack.push_and_resolve(event)
         elif command == InputCommands.MV_UP_LEFT:
-            event = Event(EventType.MOVE, {EventParam.TARGET: player, EventParam.X: -1, EventParam.Y: -1})
+            event = self.gen_player_move_event(-1, -1)
             self.event_stack.push_and_resolve(event)
         else:
             raise NotImplementedError()

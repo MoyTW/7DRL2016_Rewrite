@@ -12,22 +12,26 @@ class Position(Component):
         self.blocks = blocks
 
     # TODO: Add in map to check for blockers
-    def teleport(self, x, y, ignore_blockers=False):
-        self.x = x
-        self.y = y
+    def teleport(self, x, y, fov_map, ignore_blockers=False):
+        if ignore_blockers or fov_map.is_walkable(x, y):
+            self.x = x
+            self.y = y
 
     # TODO: Add in map to check for blockers
-    def move(self, dx, dy, ignore_blockers=False):
-        self.x += dx
-        self.y += dy
+    def move(self, dx, dy, fov_map, ignore_blockers=False):
+        nx = self.x + dx
+        ny = self.y + dy
+        if ignore_blockers or fov_map.is_walkable(nx, ny):
+            self.x = nx
+            self.y = ny
 
     # TODO: Re-register position post-update
     def _handle_event(self, event):
         if event.event_type == EventType.TELEPORT:
-            self.teleport(event.params[EventParam.X], event.params[EventParam.Y])
+            self.teleport(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.FOV_MAP])
             return True
         elif event.event_type == EventType.MOVE:
-            self.move(event.params[EventParam.X], event.params[EventParam.Y])
+            self.move(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.FOV_MAP])
             return True
         else:
             return False

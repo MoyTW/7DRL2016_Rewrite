@@ -22,7 +22,8 @@ class AI(Component):
         if dx is not None and not (owner_pos.x + dx == player_pos.x and owner_pos.y + dy == player_pos.y):
             move = Event(EventType.MOVE, {EventParam.TARGET: owner,
                                           EventParam.X: dx,
-                                          EventParam.Y: dy})
+                                          EventParam.Y: dy,
+                                          EventParam.FOV_MAP: fov_map})
             self.emit_event(move)
 
     def _handle_event(self, event):
