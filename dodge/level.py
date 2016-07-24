@@ -1,5 +1,5 @@
 from dodge.constants import ComponentType
-from fov import FOVMap
+from dodge.fov import FOVMap
 
 
 class Tile(object):
@@ -63,8 +63,15 @@ class Level(object):
     def remove_entity(self, entity):
         self._entities.pop(entity.eid)
 
+    # TODO: Don't do full scan every time
     def get_entity_by_position(self, x, y):
-        raise NotImplementedError()
+        """Returns the entity in tile (x, y). Assumes that entities cannot share an (x, y) position."""
+        have_pos = self.entities_with_component(ComponentType.POSITION)
+        for entity in have_pos:
+            pos = entity.get_component(ComponentType.POSITION)
+            if x == pos.x and y == pos.y:
+                return entity
+        return None
 
     def get_player_entity(self):
         return self.entities_with_component(ComponentType.PLAYER)[0]
@@ -73,8 +80,16 @@ class Level(object):
         player_position = self.get_player_entity().get_component(ComponentType.POSITION)
         return player_position.x, player_position.y
 
+    # TODO: When you actually invoke this, don't full scan every time
     def get_entities_by_position(self, x1, y1, x2, y2):
-        raise NotImplementedError()
+        """Returns all entities in (x1-x2, y1-y2), inclusive."""
+        have_pos = self.entities_with_component(ComponentType.POSITION)
+        in_area = []
+        for entity in have_pos:
+            pos = entity.get_component(ComponentType.POSITION)
+            if x1 <= pos.x <= x2 and y1 <= pos.y <= y2:
+                in_area.append(entity)
+        return in_area
 
     def entities_with_component(self, component_type):
         return [e for e in self._entities.values() if e.has_component(component_type)]
