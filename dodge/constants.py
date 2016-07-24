@@ -15,8 +15,8 @@ class ComponentType(Enum):
 
 
 class EventType(Enum):
-    ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, AI_ATTACK, ACTIVATE, COLLISION, DEATH \
-        = range(11)
+    (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, AI_ATTACK, ACTIVATE,
+     COLLISION, DEATH) = range(12)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -26,6 +26,9 @@ class EventParam(Enum):
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
                        (EventParam.DAMAGE_TYPE, False)),
+    EventType.PREPARE_ATTACK: ((EventParam.QUANTITY, True),
+                               (EventParam.HANDLER, True),
+                               (EventParam.TARGET, True)),
     EventType.ATTACK: ((EventParam.QUANTITY, True),
                        (EventParam.HANDLER, True),
                        (EventParam.SOURCE, True)),

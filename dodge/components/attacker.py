@@ -1,21 +1,21 @@
 from dodge.components.component import Component
-
-
-AttackerName = 'ATTACKER'
+from dodge.event import Event
+from dodge.constants import EventType, EventParam, ComponentType
 
 
 class Attacker(Component):
-    def __init__(self, base_power):
-        super(Attacker, self).__init__(name=AttackerName)
+    """Rebroadcasts PREPARE_ATTACK events as ATTACK events; has no other logic. Should be last in PREPARE_ATTACK
+    handlers."""
+    def __init__(self, event_stack):
+        super().__init__(component_type=ComponentType.ATTACKER,
+                         target_events=[EventType.PREPARE_ATTACK],
+                         emittable_events=[EventType.ATTACK],
+                         event_stack=event_stack)
 
-        self.base_power = base_power
-
-    @property
-    def power(self):
-        # bonus = sum(equipment.power_bonus for equipment in get_all_equipped(self.owner, self.player, self.inventory))
-        # buffs = sum(buff[0] for buff in self._power_buffs)
-        # return self.base_power + bonus + buffs
-        raise NotImplementedError()
-
-    def handle_event(self, event):
-        raise NotImplementedError()
+    def _handle_event(self, event):
+        if event.event_type == EventType.ATTACK:
+            self.emit_event(Event(EventType.ATTACK, {EventParam.HANDLER: event[EventParam.TARGET],
+                                                     EventParam.SOURCE: event[EventParam.HANDLER],
+                                                     EventParam.QUANTITY: event[EventParam.QUANTITY]}))
+            return True
+        return False
