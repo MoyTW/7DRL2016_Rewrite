@@ -100,6 +100,9 @@ class Level(object):
     def in_fov(self, x, y):
         return self.fov_map.in_fov(x, y)
 
+    def is_walkable(self, x, y):
+        return self.fov_map.is_walkable(x, y) and not self.get_entity_by_position(x, y)
+
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
         player = self.get_player_entity()
