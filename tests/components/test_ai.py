@@ -25,7 +25,7 @@ class TestAIComponent(unittest.TestCase):
     def test_steps_towards_player_around_obstacles(self):
         player = Entity(0, 0, components=[Position(0, 0)])
 
-        turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.TARGET: self.entity,
+        turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
                                                      EventParam.FOV_MAP: self.fov_map,
                                                      EventParam.PLAYER: player})
         self.entity.handle_event(turn_event)
@@ -35,7 +35,7 @@ class TestAIComponent(unittest.TestCase):
     def test_does_not_step_onto_player(self):
         player = Entity(0, 0, components=[Position(2, 2)])
 
-        turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.TARGET: self.entity,
+        turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
                                                      EventParam.FOV_MAP: self.fov_map,
                                                      EventParam.PLAYER: player})
         self.entity.handle_event(turn_event)

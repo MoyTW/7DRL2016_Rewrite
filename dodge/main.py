@@ -28,7 +28,7 @@ class GameState(object):
                                             components.Actor(100),
                                             components.Position(10, 10),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])
-            self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.TARGET: test_enemy}))
+            self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.ACTOR: test_enemy}))
 
             # Generate level
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
@@ -74,7 +74,7 @@ class Game(object):
         live = []
 
         for actor in actors:
-            pass_time = Event(EventType.PASS_TIME, {EventParam.TARGET: actor, EventParam.QUANTITY: ttl})
+            pass_time = Event(EventType.PASS_TIME, {EventParam.ACTOR: actor, EventParam.QUANTITY: ttl})
             self.event_stack.push_and_resolve(pass_time)
             if actor.get_component(ComponentType.ACTOR).is_live:
                 live.append(actor)
@@ -82,7 +82,7 @@ class Game(object):
         return live
 
     def gen_player_move_event(self, x, y):
-        return Event(EventType.MOVE, {EventParam.TARGET: self.game_state.level.get_player_entity(),
+        return Event(EventType.MOVE, {EventParam.ACTOR: self.game_state.level.get_player_entity(),
                                       EventParam.X: x,
                                       EventParam.Y: y,
                                       EventParam.FOV_MAP: self.game_state.level.fov_map})
@@ -128,11 +128,11 @@ class Game(object):
 
         # Take turns of live actors
         for actor in live:
-            end_turn = Event(EventType.END_TURN, {EventParam.TARGET: actor})
+            end_turn = Event(EventType.END_TURN, {EventParam.ACTOR: actor})
             if actor.has_component(ComponentType.PLAYER):
                 self.player_turn(actor)
             elif actor.has_component(ComponentType.AI):
-                event = Event(EventType.AI_BEGIN_TURN, {EventParam.TARGET: actor,
+                event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: actor,
                                                         EventParam.FOV_MAP: self.game_state.level.fov_map,
                                                         EventParam.PLAYER: self.game_state.level.get_player_entity()})
                 self.event_stack.push_and_resolve(event)
