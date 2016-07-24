@@ -11,7 +11,7 @@ class TestAIComponent(unittest.TestCase):
         self.stack = EventStack()
         self.ai = AI(self.stack)
         self.ai._is_active = True
-        self.position = Position(2, 1)
+        self.position = Position(2, 1, self.stack)
         self.entity = Entity(0, 0, components=[self.ai,
                                                self.position,
                                                Actor(100)])
@@ -23,7 +23,7 @@ class TestAIComponent(unittest.TestCase):
         self.fov_map.set_tile_properties(1, 1, False, False)
 
     def test_steps_towards_player_around_obstacles(self):
-        player = Entity(0, 0, components=[Position(0, 0)])
+        player = Entity(0, 0, components=[Position(0, 0, self.stack)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
                                                      EventParam.FOV_MAP: self.fov_map,
@@ -33,7 +33,7 @@ class TestAIComponent(unittest.TestCase):
         self.assertEqual(self.position.y, 2)
 
     def test_does_not_step_onto_player(self):
-        player = Entity(0, 0, components=[Position(2, 2)])
+        player = Entity(0, 0, components=[Position(2, 2, self.stack)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
                                                      EventParam.FOV_MAP: self.fov_map,
