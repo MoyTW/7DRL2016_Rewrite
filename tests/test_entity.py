@@ -40,7 +40,7 @@ class ModifiesEventComponent(Component):
         super(ModifiesEventComponent, self).__init__(component_type=2, target_events=[0], emittable_events=[])
 
     def _handle_event(self, event):
-        event._params['test'] = True
+        event['test'] = True
         return event
 
 

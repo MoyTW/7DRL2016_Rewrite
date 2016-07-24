@@ -15,6 +15,9 @@ class Event:
     def __getitem__(self, item):
         return self._params[item]
 
+    def __setitem__(self, key, value):
+        self._params[key] = value
+
     def is_event_type(self, event_type):
         if self.templates is None:
             raise ValueError('Cannot check event against templates when no templates have been provided!')
