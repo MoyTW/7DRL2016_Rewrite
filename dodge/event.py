@@ -35,8 +35,8 @@ class EventStack(Stack):
 
     def resolve_top_event(self):
         event = self.pop()
-        if event.params[EventParam.ACTOR]:
-            event.params[EventParam.ACTOR].handle_event(event)
+        if event.params[EventParam.HANDLER]:
+            event.params[EventParam.HANDLER].handle_event(event)
         else:
             raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
 

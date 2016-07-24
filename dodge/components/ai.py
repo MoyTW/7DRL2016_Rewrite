@@ -20,7 +20,7 @@ class AI(Component):
         (dx, dy) = level.fov_map.step_towards(owner_pos.x, owner_pos.y, player_pos.x, player_pos.y)
         # TODO: Kind of silly method since you subtract to get dx, dy in step_towards but then add again out here!
         if dx is not None and not (owner_pos.x + dx == player_pos.x and owner_pos.y + dy == player_pos.y):
-            move = Event(EventType.MOVE, {EventParam.ACTOR: owner,
+            move = Event(EventType.MOVE, {EventParam.HANDLER: owner,
                                           EventParam.X: dx,
                                           EventParam.Y: dy,
                                           EventParam.LEVEL: level})
@@ -32,7 +32,7 @@ class AI(Component):
             return True
         elif event.event_type == EventType.AI_BEGIN_TURN:
             if self._is_active:
-                self.move_towards(event.params[EventParam.ACTOR],
+                self.move_towards(event.params[EventParam.HANDLER],
                                   event.params[EventParam.PLAYER].get_component(ComponentType.POSITION),
                                   event.params[EventParam.LEVEL])
             return True

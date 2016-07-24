@@ -21,13 +21,13 @@ class EventType(Enum):
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
-    QUANTITY, DAMAGE_TYPE, ACTOR, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL = range(10)
+    QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL = range(10)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
                        (EventParam.DAMAGE_TYPE, False)),
     EventType.ATTACK: ((EventParam.QUANTITY, True),
-                       (EventParam.ACTOR, True),
+                       (EventParam.HANDLER, True),
                        (EventParam.TARGET, True)),
     EventType.TELEPORT: ((EventParam.X, True),
                          (EventParam.Y, True)),
@@ -36,10 +36,10 @@ event_templates = {
                      (EventParam.LEVEL, True)),
     EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
     EventType.END_TURN: [],
-    EventType.AI_BEGIN_TURN: [(EventParam.ACTOR, True),
+    EventType.AI_BEGIN_TURN: [(EventParam.HANDLER, True),
                               (EventParam.LEVEL, True),
                               (EventParam.PLAYER, True)],
     EventType.ACTIVATE: [],
-    EventType.COLLISION: ((EventParam.ACTOR, True),
+    EventType.COLLISION: ((EventParam.HANDLER, True),
                           (EventParam.TARGET, True))
 }

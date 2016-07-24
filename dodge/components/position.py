@@ -14,7 +14,7 @@ class Position(Component):
         self.blocks = blocks
 
     def emit_collision(self, x, y, level):
-        collision = Event(EventType.COLLISION, {EventParam.ACTOR: level.get_entity_by_position(self.x, self.y),
+        collision = Event(EventType.COLLISION, {EventParam.HANDLER: level.get_entity_by_position(self.x, self.y),
                                                 EventParam.TARGET: level.get_entity_by_position(x, y)})
         self.emit_event(collision)
 
