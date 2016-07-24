@@ -11,8 +11,8 @@ class InputHandler(object):
     def get_keyboard_input(self, game_status):
         # Trap until a recognized key is pressed
         while True:
-            libtcod.console_wait_for_keypress(True)  # Necessary to flush input buffer; otherwise will instantly return
-            k = libtcod.console_wait_for_keypress(True)
+            libtcod.console.wait_for_keypress(True)  # Necessary to flush input buffer; otherwise will instantly return
+            k = libtcod.console.wait_for_keypress(True)
 
             if k.vk == libtcod.KEY_ESCAPE:
                 return InputCommands.EXIT
@@ -95,8 +95,8 @@ class LevelRenderer(object):
             (x, y) = self.to_camera_coordinates(position.x, position.y)
 
             if x is not None:
-                libtcod.console_set_default_foreground(self.console, renderable.color)
-                libtcod.console_put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
+                libtcod.console.set_default_foreground(self.console, renderable.color)
+                libtcod.console.put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
 
     def move_camera(self, target_x, target_y):
         # new camera coordinates (top-left corner of the screen relative to the map)
@@ -124,7 +124,7 @@ class LevelRenderer(object):
         visible = self.level.in_fov(x, y)
         wall = self.level[x][y].block_sight
         if visible and not wall:
-            libtcod.console_set_char_background(self.console, x - self.camera_x, y - self.camera_y, color, flag)
+            libtcod.console.set_char_background(self.console, x - self.camera_x, y - self.camera_y, color, flag)
 
     def draw_rangefinder(self):
         (x, y) = self.level.get_player_position()
@@ -133,8 +133,8 @@ class LevelRenderer(object):
             self.color_square(libtcod.lightest_blue, tile[0], tile[1], libtcod.BKGND_ALPHA(.1))
 
     def render_all(self):
-        libtcod.console_clear(self.console)
-        libtcod.console_set_default_foreground(0, libtcod.white)
+        libtcod.console.clear(self.console)
+        libtcod.console.set_default_foreground(0, libtcod.white)
 
         # PERF: Possible improvement here to not recompute if not necessary
         self.level.recompute_fov()
@@ -149,30 +149,30 @@ class LevelRenderer(object):
                 (map_x, map_y) = (self.camera_x + x, self.camera_y + y)
                 if self.level.in_fov(map_x, map_y) or self.level[map_x][map_y].explored:
                     if self.level[map_x][map_y].blocked is not False:
-                        libtcod.console_set_char_background(self.console, x, y, col=libtcod.white)
+                        libtcod.console.set_char_background(self.console, x, y, col=libtcod.white)
                     # This is just because it looks nice
                     else:
-                        libtcod.console_set_char_background(self.console, x, y, col=to_color(map_x, 0, map_y))
+                        libtcod.console.set_char_background(self.console, x, y, col=to_color(map_x, 0, map_y))
 
         for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
             self.render_entity(entity)
 
         self.draw_rangefinder()
 
-        libtcod.console_blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
+        libtcod.console.blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
 
-        libtcod.console_flush()
+        libtcod.console.flush()
 
 
 class UI(object):
     def __init__(self, config):
         self.config = config
 
-        libtcod.console_init_root(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 'A Roguelike Where You Dodge Projectiles',
+        libtcod.console.init_root(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, 'A Roguelike Where You Dodge Projectiles',
                                   False)
-        self.console = libtcod.console_new(config.MAP_WIDTH, config.MAP_HEIGHT)
-        self.panel = libtcod.console_new(config.SCREEN_WIDTH, config.PANEL_HEIGHT)
-        libtcod.console_set_fullscreen(config.FULL_SCREEN)
+        self.console = libtcod.console.new(config.MAP_WIDTH, config.MAP_HEIGHT)
+        self.panel = libtcod.console.new(config.SCREEN_WIDTH, config.PANEL_HEIGHT)
+        libtcod.console.set_fullscreen(config.FULL_SCREEN)
 
     def menu(self, header, options, width):
         if len(options) > 26:
@@ -182,34 +182,34 @@ class UI(object):
         if header == '':
             header_height = 0
         else:
-            header_height = libtcod.console_get_height_rect(self.console, 0, 0, width, self.config.SCREEN_HEIGHT,
+            header_height = libtcod.console.get_height_rect(self.console, 0, 0, width, self.config.SCREEN_HEIGHT,
                                                             header)
         height = len(options) + header_height
 
-        window = libtcod.console_new(width, height)
+        window = libtcod.console.new(width, height)
 
         # print header
-        libtcod.console_set_default_foreground(window, libtcod.white)
-        libtcod.console_print_rect_ex(window, 0, 0, width, height, libtcod.BKGND_NONE, libtcod.LEFT, header)
+        libtcod.console.set_default_foreground(window, libtcod.white)
+        libtcod.console.print_rect_ex(window, 0, 0, width, height, libtcod.BKGND_NONE, libtcod.LEFT, header)
 
         # print options
         y = header_height
         letter_index = ord('a')
         for option_text in options:
             text = '(' + chr(letter_index) + ') ' + option_text
-            libtcod.console_print_ex(window, 0, y, libtcod.BKGND_NONE, libtcod.LEFT, text)
+            libtcod.console.print_ex(window, 0, y, libtcod.BKGND_NONE, libtcod.LEFT, text)
             y += 1
             letter_index += 1
 
         # blit
         x = self.config.SCREEN_WIDTH / 2 - width / 2
         y = self.config.SCREEN_HEIGHT / 2 - height / 2
-        libtcod.console_blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.7)
+        libtcod.console.blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.7)
 
         # hold window
-        libtcod.console_flush()
-        libtcod.console_wait_for_keypress(True)  # Necessary to flush input buffer; otherwise will instantly return
-        k = libtcod.console_wait_for_keypress(True)
+        libtcod.console.flush()
+        libtcod.console.wait_for_keypress(True)  # Necessary to flush input buffer; otherwise will instantly return
+        k = libtcod.console.wait_for_keypress(True)
 
         # return selection
         index = k.c - ord('a')
@@ -222,10 +222,10 @@ class UI(object):
 
     def main_menu(self):
         # title and credits
-        libtcod.console_set_default_foreground(0, libtcod.white)
-        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 4,
+        libtcod.console.set_default_foreground(0, libtcod.white)
+        libtcod.console.print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 4,
                                  libtcod.BKGND_DARKEN, libtcod.CENTER, 'A Roguelike Where You Dodge Projectiles')
-        libtcod.console_print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 3,
+        libtcod.console.print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 3,
                                  libtcod.BKGND_DARKEN, libtcod.CENTER, 'by MoyTW')
 
         # menu + choice

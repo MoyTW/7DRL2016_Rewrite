@@ -5,10 +5,10 @@ class FOVMap(object):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.fov_map = libtcod.map_new(width, height)
+        self.fov_map = libtcod.map.new(width, height)
 
     def set_tile_properties(self, x, y, is_transparent, is_walkable):
-        libtcod.map_set_properties(self.fov_map, x, y, is_transparent, is_walkable)
+        libtcod.map.set_properties(self.fov_map, x, y, is_transparent, is_walkable)
 
     def set_all_tiles(self, is_transparent=True, is_walkable=True):
         for x in range(self.width):
@@ -26,9 +26,9 @@ class FOVMap(object):
 
     def step_towards(self, x, y, target_x, target_y):
         """Returns a single step from (x, y) to (target_x, target_y)"""
-        path = libtcod.path_new_using_map(self.fov_map)
-        libtcod.path_compute(path, x, y, target_x, target_y)
-        (t_x, t_y) = libtcod.path_walk(path, False)
+        path = libtcod.path.new_using_map(self.fov_map)
+        libtcod.path.compute(path, x, y, target_x, target_y)
+        (t_x, t_y) = libtcod.path.walk(path, False)
         if t_x is None:
             return None, None
         else:
