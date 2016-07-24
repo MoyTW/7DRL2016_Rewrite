@@ -13,34 +13,36 @@ class Position(Component):
         self.y = y
         self.blocks = blocks
 
-    def emit_collision(self):
-        raise NotImplementedError()
+    def emit_collision(self, x, y, level):
+        collision = Event(EventType.COLLISION, {EventParam.ACTOR: level.get_entity_by_position(self.x, self.y),
+                                                EventParam.TARGET: level.get_entity_by_position(x, y)})
+        self.emit_event(collision)
 
     # TODO: Add in map to check for blockers
-    def teleport(self, x, y, fov_map, ignore_blockers=False):
-        if ignore_blockers or fov_map.is_walkable(x, y):
+    def teleport(self, x, y, level, ignore_blockers=False):
+        if ignore_blockers or level.is_walkable(x, y):
             self.x = x
             self.y = y
         else:
-            self.emit_collision()
+            self.emit_collision(x, y, level)
 
     # TODO: Add in map to check for blockers
-    def move(self, dx, dy, fov_map, ignore_blockers=False):
+    def move(self, dx, dy, level, ignore_blockers=False):
         nx = self.x + dx
         ny = self.y + dy
-        if ignore_blockers or fov_map.is_walkable(nx, ny):
+        if ignore_blockers or level.is_walkable(nx, ny):
             self.x = nx
             self.y = ny
         else:
-            self.emit_collision()
+            self.emit_collision(nx, ny, level)
 
     # TODO: Re-register position post-update
     def _handle_event(self, event):
         if event.event_type == EventType.TELEPORT:
-            self.teleport(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.FOV_MAP])
+            self.teleport(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.MOVE:
-            self.move(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.FOV_MAP])
+            self.move(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.COLLISION:
             return True

@@ -4,6 +4,7 @@ from dodge.components import AI, Position, Actor
 from dodge.event import Event, EventStack
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam
+from tests.utils import LevelStub
 
 
 class TestAIComponent(unittest.TestCase):
@@ -21,12 +22,13 @@ class TestAIComponent(unittest.TestCase):
                 self.fov_map.set_tile_properties(x, y, True, True)
         self.fov_map.set_tile_properties(1, 0, False, False)
         self.fov_map.set_tile_properties(1, 1, False, False)
+        self.level = LevelStub(self.fov_map, self.entity)
 
     def test_steps_towards_player_around_obstacles(self):
         player = Entity(0, 0, components=[Position(0, 0, self.stack)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
-                                                     EventParam.FOV_MAP: self.fov_map,
+                                                     EventParam.LEVEL: self.level,
                                                      EventParam.PLAYER: player})
         self.entity.handle_event(turn_event)
         self.assertEqual(self.position.x, 1)
@@ -36,7 +38,7 @@ class TestAIComponent(unittest.TestCase):
         player = Entity(0, 0, components=[Position(2, 2, self.stack)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: self.entity,
-                                                     EventParam.FOV_MAP: self.fov_map,
+                                                     EventParam.LEVEL: self.level,
                                                      EventParam.PLAYER: player})
         self.entity.handle_event(turn_event)
         self.assertEqual(self.position.x, 2)

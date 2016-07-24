@@ -19,14 +19,14 @@ class GameState(object):
                                  name='player',
                                  components=[components.Player(),
                                              components.Actor(100),
-                                             components.Position(5, 5),
+                                             components.Position(5, 5, self.event_stack),
                                              components.Renderable('@', ui.to_color(255, 255, 255))])
 
             test_enemy = Entity(eid='test_enemy',
                                 name='test_enemy',
                                 components=[components.AI(event_stack),
                                             components.Actor(100),
-                                            components.Position(10, 10),
+                                            components.Position(10, 10, self.event_stack),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])
             self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.ACTOR: test_enemy}))
 
@@ -85,7 +85,7 @@ class Game(object):
         return Event(EventType.MOVE, {EventParam.ACTOR: self.game_state.level.get_player_entity(),
                                       EventParam.X: x,
                                       EventParam.Y: y,
-                                      EventParam.FOV_MAP: self.game_state.level.fov_map})
+                                      EventParam.LEVEL: self.game_state.level})
 
     def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
@@ -133,7 +133,7 @@ class Game(object):
                 self.player_turn(actor)
             elif actor.has_component(ComponentType.AI):
                 event = Event(EventType.AI_BEGIN_TURN, {EventParam.ACTOR: actor,
-                                                        EventParam.FOV_MAP: self.game_state.level.fov_map,
+                                                        EventParam.LEVEL: self.game_state.level,
                                                         EventParam.PLAYER: self.game_state.level.get_player_entity()})
                 self.event_stack.push_and_resolve(event)
             else:

@@ -19,8 +19,9 @@ class EventType(Enum):
         = range(11)
 
 
+# TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
-    QUANTITY, DAMAGE_TYPE, ACTOR, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET = range(9)
+    QUANTITY, DAMAGE_TYPE, ACTOR, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL = range(10)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
@@ -32,11 +33,11 @@ event_templates = {
                          (EventParam.Y, True)),
     EventType.MOVE: ((EventParam.X, True),
                      (EventParam.Y, True),
-                     (EventParam.FOV_MAP, True)),
+                     (EventParam.LEVEL, True)),
     EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
     EventType.END_TURN: [],
     EventType.AI_BEGIN_TURN: [(EventParam.ACTOR, True),
-                              (EventParam.FOV_MAP, True),  # Should rename FOV_MAP to make it clear it's used for nav
+                              (EventParam.LEVEL, True),
                               (EventParam.PLAYER, True)],
     EventType.ACTIVATE: [],
     EventType.COLLISION: ((EventParam.ACTOR, True),
