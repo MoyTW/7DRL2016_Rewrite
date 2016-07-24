@@ -1,3 +1,6 @@
+from dodge.stack import Stack
+
+
 class EntityStub:
     def __init__(self):
         self.handled = False
@@ -5,6 +8,14 @@ class EntityStub:
     def handle_event(self, _):
         self.handled = True
         return True
+
+
+class EventStackStub:
+    def __init__(self):
+        self.stack = Stack()
+
+    def push_and_resolve(self, event):
+        self.stack.push(event)
 
 
 class LevelStub:

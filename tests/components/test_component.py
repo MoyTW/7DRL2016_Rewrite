@@ -13,5 +13,5 @@ class TestComponent(unittest.TestCase):
             self.c.handle_event(Event(EventType.DAMAGE, {EventParam.QUANTITY: 5}))
 
     def tests_returns_false_if_not_listening_for_event(self):
-        event = Event(EventType.ATTACK, {EventParam.QUANTITY: 5, EventParam.HANDLER: None, EventParam.TARGET: None})
+        event = Event(EventType.ATTACK, {}, None)
         self.assertFalse(self.c.handle_event(event))

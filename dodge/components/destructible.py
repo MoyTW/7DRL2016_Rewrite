@@ -1,32 +1,43 @@
+from dodge.constants import ComponentType, EventType, EventParam
 from dodge.components.component import Component
-
-
-DestructibleName = 'DESTRUCTIBLE'
+from dodge.event import Event
 
 
 class Destructible(Component):
-    def __init__(self, base_max_hp, base_defense, death_function, hp=None):
-        super(Destructible, self).__init__(name=DestructibleName)
+    def __init__(self, event_stack, base_max_hp, base_defense, hp=None):
+        super().__init__(component_type=ComponentType.DESTRUCTIBLE,
+                         target_events=[EventType.ATTACK],
+                         emittable_events=[EventType.DEATH],
+                         event_stack=event_stack)
 
         self.base_max_hp = base_max_hp
         self.base_defense = base_defense
-        self.death_function = death_function
 
         if hp is None:
-            self.hp = base_max_hp
+            self._hp = base_max_hp
         else:
-            self.hp = hp
+            self._hp = hp
+
+    @property
+    def hp(self):
+        return self._hp
 
     @property
     def max_hp(self):
-        raise NotImplementedError()
+        return self.base_max_hp
 
     @property
     def defense(self):
-        raise NotImplementedError()
+        return self.base_defense
 
-    def take_damage(self, damage):
-        raise NotImplementedError()
+    def take_damage(self, damage, owner):
+        if damage > 0:
+            self._hp -= damage
+        if self._hp <= 0:
+            self.emit_event(Event(EventType.DEATH, {EventParam.HANDLER: owner}))
 
-    def handle_event(self, event):
-        raise NotImplementedError()
+    def _handle_event(self, event):
+        if event.event_type == EventType.ATTACK:
+            self.take_damage(event.params[EventParam.QUANTITY] - self.defense, event.params[EventParam.HANDLER])
+            return True
+        return False
