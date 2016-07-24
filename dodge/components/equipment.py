@@ -1,4 +1,4 @@
-from component import Component
+from dodge.components.component import Component
 
 
 EquipmentName = 'EQUIPMENT'

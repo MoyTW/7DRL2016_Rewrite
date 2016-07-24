@@ -77,10 +77,10 @@ class Level(object):
         raise NotImplementedError()
 
     def entities_with_component(self, component_type):
-        return [e for e in self._entities.viewvalues() if e.has_component(component_type)]
+        return [e for e in self._entities.values() if e.has_component(component_type)]
 
     def entities_with_components(self, component_types):
-        return [e for e in self._entities.viewvalues() if e.has_components(component_types)]
+        return [e for e in self._entities.values() if e.has_components(component_types)]
 
     def in_fov(self, x, y):
         return self.fov_map.in_fov(x, y)

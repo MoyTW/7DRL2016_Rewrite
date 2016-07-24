@@ -1,9 +1,9 @@
 from dodge.constants import event_templates, EventParam
-from entity import Entity
-from stack import Stack
+from dodge.entity import Entity
+from dodge.stack import Stack
 
 
-class Event(object):
+class Event:
     def __init__(self, event_type, params, templates=event_templates):
         self.event_type = event_type
         self.params = params

@@ -1,5 +1,5 @@
 from dodge.constants import ComponentType
-from component import Component
+from dodge.components.component import Component
 
 
 class Renderable(Component):

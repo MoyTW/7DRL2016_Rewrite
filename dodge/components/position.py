@@ -1,5 +1,5 @@
 from dodge.constants import ComponentType, EventType, EventParam
-from component import Component
+from dodge.components.component import Component
 
 
 class Position(Component):

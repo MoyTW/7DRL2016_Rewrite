@@ -1,9 +1,9 @@
-from event import Event, EventStack
-from config import Config
-import ui as ui
-from entity import Entity
-import components
-from level import Level
+from dodge.event import Event, EventStack
+from dodge.config import Config
+import dodge.ui as ui
+from dodge.entity import Entity
+import dodge.components as components
+from dodge.level import Level
 from dodge.constants import GameStatus, ComponentType, EventType, EventParam, InputCommands
 
 

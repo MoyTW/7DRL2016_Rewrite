@@ -100,8 +100,8 @@ class LevelRenderer(object):
 
     def move_camera(self, target_x, target_y):
         # new camera coordinates (top-left corner of the screen relative to the map)
-        x = target_x - self.config.CAMERA_WIDTH / 2
-        y = target_y - self.config.CAMERA_HEIGHT / 2
+        x = int(target_x - self.config.CAMERA_WIDTH / 2)
+        y = int(target_y - self.config.CAMERA_HEIGHT / 2)
 
         # make sure the camera doesn't see outside the map
         if x < 0:
@@ -202,9 +202,9 @@ class UI(object):
             letter_index += 1
 
         # blit
-        x = self.config.SCREEN_WIDTH / 2 - width / 2
-        y = self.config.SCREEN_HEIGHT / 2 - height / 2
-        libtcod.console.blit(window, 0, 0, width, height, 0, x, y, 1.0, 0.7)
+        x = int(self.config.SCREEN_WIDTH / 2 - width / 2)
+        y = int(self.config.SCREEN_HEIGHT / 2 - height / 2)
+        libtcod.console.blit(window, x=0, y=0, w=width, h=height, dst=0, xdst=x, ydst=y, ffade=1.0, bfade=0.7)
 
         # hold window
         libtcod.console.flush()
@@ -223,9 +223,9 @@ class UI(object):
     def main_menu(self):
         # title and credits
         libtcod.console.set_default_foreground(0, libtcod.white)
-        libtcod.console.print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 4,
+        libtcod.console.print_ex(0, int(self.config.SCREEN_WIDTH / 2), int(self.config.SCREEN_HEIGHT / 2 - 4),
                                  libtcod.BKGND_DARKEN, libtcod.CENTER, 'A Roguelike Where You Dodge Projectiles')
-        libtcod.console.print_ex(0, self.config.SCREEN_WIDTH / 2, self.config.SCREEN_HEIGHT / 2 - 3,
+        libtcod.console.print_ex(0, int(self.config.SCREEN_WIDTH / 2), int(self.config.SCREEN_HEIGHT / 2 - 3),
                                  libtcod.BKGND_DARKEN, libtcod.CENTER, 'by MoyTW')
 
         # menu + choice

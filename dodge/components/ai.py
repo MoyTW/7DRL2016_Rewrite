@@ -1,6 +1,6 @@
 from dodge.constants import ComponentType, EventType, EventParam
 from dodge.event import Event
-from component import Component
+from dodge.components.component import Component
 
 
 class AI(Component):
