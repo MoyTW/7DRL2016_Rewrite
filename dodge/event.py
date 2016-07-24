@@ -38,7 +38,7 @@ class EventStack(Stack):
         if isinstance(event.params[EventParam.TARGET], Entity):
             event.params[EventParam.TARGET].handle_event(event)
         else:
-            raise ValueError()
+            raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
 
     def push_and_resolve(self, event):
         self.push(event)
