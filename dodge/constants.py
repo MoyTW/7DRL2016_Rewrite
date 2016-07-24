@@ -38,5 +38,7 @@ event_templates = {
     EventType.AI_BEGIN_TURN: [(EventParam.ACTOR, True),
                               (EventParam.FOV_MAP, True),  # Should rename FOV_MAP to make it clear it's used for nav
                               (EventParam.PLAYER, True)],
-    EventType.ACTIVATE: []
+    EventType.ACTIVATE: [],
+    EventType.COLLISION: ((EventParam.ACTOR, True),
+                          (EventParam.TARGET, True))
 }

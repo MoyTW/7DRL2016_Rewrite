@@ -1,12 +1,14 @@
 from dodge.components.component import Component
+from dodge.constants import ComponentType, EventType
 
 
-ProjectileName = 'PROJECTILE'
+class Projectile(Component):
+    def __init__(self, path, event_stack):
+        super().__init__(component_type=ComponentType.PROJECTILE,
+                         target_events=[EventType.AI_BEGIN_TURN, EventType.COLLISION],
+                         emittable_events=[EventType.DEATH],
+                         event_stack=event_stack)
+        self.path = path
 
-
-class Player(Component):
-    def __init__(self):
-        super(Player, self).__init__(name=ProjectileName)
-
-    def handle_event(self, event):
+    def _handle_event(self, event):
         raise NotImplementedError()
