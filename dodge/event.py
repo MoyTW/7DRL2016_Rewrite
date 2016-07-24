@@ -6,11 +6,14 @@ from dodge.stack import Stack
 class Event:
     def __init__(self, event_type, params, templates=event_templates):
         self.event_type = event_type
-        self.params = params
+        self._params = params
         self.templates = templates
         if templates is not None and not self.is_event_type(event_type):
             raise ValueError(str(event_type) + ' is missing required parameters! Has: ' + str(params) + ' Needs: ' +
                              str(templates[event_type]))
+
+    def __getitem__(self, item):
+        return self._params[item]
 
     def is_event_type(self, event_type):
         if self.templates is None:
@@ -20,7 +23,7 @@ class Event:
             raise ValueError('The desired event_type ' + str(event_type) + ' is not defined in the event templates!')
 
         for (k, required) in self.templates.get(event_type):
-            if required and k not in self.params:
+            if required and k not in self._params:
                 return False
         return True
 
@@ -35,8 +38,8 @@ class EventStack(Stack):
 
     def resolve_top_event(self):
         event = self.pop()
-        if event.params[EventParam.HANDLER]:
-            event.params[EventParam.HANDLER].handle_event(event)
+        if event[EventParam.HANDLER]:
+            event[EventParam.HANDLER].handle_event(event)
         else:
             raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
 

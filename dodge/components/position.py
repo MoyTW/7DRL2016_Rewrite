@@ -39,10 +39,10 @@ class Position(Component):
     # TODO: Re-register position post-update
     def _handle_event(self, event):
         if event.event_type == EventType.TELEPORT:
-            self.teleport(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.LEVEL])
+            self.teleport(event[EventParam.X], event[EventParam.Y], event[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.MOVE:
-            self.move(event.params[EventParam.X], event.params[EventParam.Y], event.params[EventParam.LEVEL])
+            self.move(event[EventParam.X], event[EventParam.Y], event[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.COLLISION:
             return True

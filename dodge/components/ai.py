@@ -32,7 +32,7 @@ class AI(Component):
             return True
         elif event.event_type == EventType.AI_BEGIN_TURN:
             if self._is_active:
-                self.move_towards(event.params[EventParam.HANDLER],
-                                  event.params[EventParam.PLAYER].get_component(ComponentType.POSITION),
-                                  event.params[EventParam.LEVEL])
+                self.move_towards(event[EventParam.HANDLER],
+                                  event[EventParam.PLAYER].get_component(ComponentType.POSITION),
+                                  event[EventParam.LEVEL])
             return True

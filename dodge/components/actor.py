@@ -41,7 +41,7 @@ class Actor(Component):
 
     def _handle_event(self, event):
         if event.event_type == EventType.PASS_TIME:
-            self._pass_time(event.params[EventParam.QUANTITY])
+            self._pass_time(event[EventParam.QUANTITY])
             return True
         elif event.event_type == EventType.END_TURN:
             self._end_turn()

@@ -38,6 +38,6 @@ class Destructible(Component):
 
     def _handle_event(self, event):
         if event.event_type == EventType.ATTACK:
-            self.take_damage(event.params[EventParam.QUANTITY] - self.defense, event.params[EventParam.HANDLER])
+            self.take_damage(event[EventParam.QUANTITY] - self.defense, event[EventParam.HANDLER])
             return True
         return False

@@ -40,7 +40,7 @@ class ModifiesEventComponent(Component):
         super(ModifiesEventComponent, self).__init__(component_type=2, target_events=[0], emittable_events=[])
 
     def _handle_event(self, event):
-        event.params['test'] = True
+        event._params['test'] = True
         return event
 
 
@@ -73,7 +73,7 @@ class TestEntity(unittest.TestCase):
         entity = Entity(0, 0, [ModifiesEventComponent(), HandlesEventComponent()])
         event = Event(0, {}, templates=None)
         self.assertTrue(entity.handle_event(event))
-        self.assertTrue(event.params['test'])
+        self.assertTrue(event['test'])
 
     def test_raises_error_if_no_components(self):
         entity = Entity(0, 0, [])
