@@ -20,13 +20,14 @@ class EventType(Enum):
 
 
 class EventParam(Enum):
-    QUANTITY, DAMAGE_TYPE, ACTOR, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP = range(8)
+    QUANTITY, DAMAGE_TYPE, ACTOR, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET = range(9)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
                        (EventParam.DAMAGE_TYPE, False)),
     EventType.ATTACK: ((EventParam.QUANTITY, True),
-                       (EventParam.ACTOR, True)),
+                       (EventParam.ACTOR, True),
+                       (EventParam.TARGET, True)),
     EventType.TELEPORT: ((EventParam.X, True),
                          (EventParam.Y, True)),
     EventType.MOVE: ((EventParam.X, True),
