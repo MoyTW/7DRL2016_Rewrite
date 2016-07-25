@@ -23,4 +23,4 @@ class TestDestructible(unittest.TestCase):
 
     def test_death_emits_event(self):
         self.destructible.handle_event(self.gen_basic_attack(9999))
-        self.assertEqual(EventType.DEATH, self.stack.stack.peek().event_type)
+        self.assertEqual(EventType.DEATH, self.stack.peek().event_type)

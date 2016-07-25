@@ -10,12 +10,9 @@ class EntityStub:
         return True
 
 
-class EventStackStub:
-    def __init__(self):
-        self.stack = Stack()
-
+class EventStackStub(Stack):
     def push_and_resolve(self, event):
-        self.stack.push(event)
+        self.push(event)
 
 
 class LevelStub:
