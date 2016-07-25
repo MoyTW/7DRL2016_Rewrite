@@ -1,5 +1,6 @@
 from dodge.constants import ComponentType
 from dodge.fov import FOVMap
+import math
 
 
 class Tile(object):
@@ -90,6 +91,17 @@ class Level(object):
             if x1 <= pos.x <= x2 and y1 <= pos.y <= y2:
                 in_area.append(entity)
         return in_area
+
+    def get_entities_in_radius(self, x, y, radius):
+        in_area = self.get_entities_by_position(x - radius, y - radius, x + radius, y + radius)
+        in_radius = []
+        for entity in in_area:
+            position = entity.get_component(ComponentType.POSITION)
+            dx = x - position.x
+            dy = y - position.y
+            if math.sqrt(dx ** 2 + dy ** 2) <= radius:
+                in_radius.append(entity)
+        return in_radius
 
     def entities_with_component(self, component_type):
         return [e for e in self._entities.values() if e.has_component(component_type)]

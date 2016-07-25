@@ -27,6 +27,10 @@ class TestLevel(unittest.TestCase):
         self.assertSetEqual({4}, set([e.eid for e in self.level.get_entities_by_position(4, 6, 7, 7)]))
         self.assertSetEqual(set(), set([e.eid for e in self.level.get_entities_by_position(2, 2, 3, 3)]))
 
+    def test_in_radius_access(self):
+        self.assertSetEqual({2, 3, 4}, set([e.eid for e in self.level.get_entities_in_radius(4, 5, 1)]))
+        self.assertSetEqual({2, 3}, set([e.eid for e in self.level.get_entities_in_radius(4, 4, 1)]))
+
     def test_is_walkable(self):
         self.assertFalse(self.level.is_walkable(0, 0))
         self.assertFalse(self.level.is_walkable(4, 4))
