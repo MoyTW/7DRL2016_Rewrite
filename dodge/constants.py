@@ -1,6 +1,10 @@
 from enum import Enum
 
 
+class Factions(Enum):
+    DEFENDER = range(1)
+
+
 class GameStatus(Enum):
     PLAYING, PLAYER_DEATH, VICTORY, AUTOPILOT, MENU = range(5)
 
@@ -11,7 +15,7 @@ class InputCommands(Enum):
 
 
 class ComponentType(Enum):
-    ACTOR, AI, ATTACKER, DESTRUCTIBLE, EQUIPMENT, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE = range(10)
+    ACTOR, AI, ATTACKER, DESTRUCTIBLE, EQUIPMENT, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION = range(11)
 
 
 class EventType(Enum):
