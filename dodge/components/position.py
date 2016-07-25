@@ -1,3 +1,4 @@
+import math
 from dodge.constants import ComponentType, EventType, EventParam
 from dodge.components.component import Component
 from dodge.event import Event
@@ -13,7 +14,13 @@ class Position(Component):
         self.y = y
         self.blocks = blocks
 
-    def emit_collision(self, x, y, level):
+    def distance_to(self, entity):
+        position = entity.get_component(ComponentType.POSITION)
+        dx = position.x - self.x
+        dy = position.y - self.y
+        return math.sqrt(dx ** 2 + dy ** 2)
+
+    def _emit_collision(self, x, y, level):
         collision = Event(EventType.COLLISION, {EventParam.HANDLER: level.get_entity_by_position(self.x, self.y),
                                                 EventParam.TARGET: level.get_entity_by_position(x, y)})
         self.emit_event(collision)
@@ -24,7 +31,7 @@ class Position(Component):
             self.x = x
             self.y = y
         else:
-            self.emit_collision(x, y, level)
+            self._emit_collision(x, y, level)
 
     # TODO: Add in map to check for blockers
     def move(self, dx, dy, level, ignore_blockers=False):
@@ -34,7 +41,7 @@ class Position(Component):
             self.x = nx
             self.y = ny
         else:
-            self.emit_collision(nx, ny, level)
+            self._emit_collision(nx, ny, level)
 
     # TODO: Re-register position post-update
     def _handle_event(self, event):
