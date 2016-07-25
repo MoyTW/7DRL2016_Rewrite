@@ -17,10 +17,11 @@ class GameState(object):
             self.status = GameStatus.PLAYING
             self.player = Entity(eid='player',
                                  name='player',
-                                 components=[components.Player(),
+                                 components=[components.Player(self.event_stack),
                                              components.Actor(100),
                                              components.Position(5, 5, self.event_stack),
-                                             components.Renderable('@', ui.to_color(255, 255, 255))])
+                                             components.Renderable('@', ui.to_color(255, 255, 255)),
+                                             components.Attacker(self.event_stack)])
 
             test_enemy = Entity(eid='test_enemy',
                                 name='test_enemy',
@@ -92,32 +93,11 @@ class Game(object):
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_state.status = GameStatus.MENU
-        elif command == InputCommands.MV_UP:
-            event = self.gen_player_move_event(0, -1)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_UP_RIGHT:
-            event = self.gen_player_move_event(1, -1)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_RIGHT:
-            event = self.gen_player_move_event(1, 0)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_DOWN_RIGHT:
-            event = self.gen_player_move_event(1, 1)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_DOWN:
-            event = self.gen_player_move_event(0, 1)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_DOWN_LEFT:
-            event = self.gen_player_move_event(-1, 1)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_LEFT:
-            event = self.gen_player_move_event(-1, 0)
-            self.event_stack.push_and_resolve(event)
-        elif command == InputCommands.MV_UP_LEFT:
-            event = self.gen_player_move_event(-1, -1)
-            self.event_stack.push_and_resolve(event)
         else:
-            raise NotImplementedError()
+            event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,
+                                                        EventParam.HANDLER: player,
+                                                        EventParam.INPUT_COMMAND: command})
+            self.event_stack.push_and_resolve(event)
 
     def run_turn(self):
         # Render

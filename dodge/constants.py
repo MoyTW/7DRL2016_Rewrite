@@ -15,13 +15,14 @@ class ComponentType(Enum):
 
 
 class EventType(Enum):
-    (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, AI_ATTACK, ACTIVATE,
-     COLLISION, DEATH) = range(12)
+    (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN, AI_ATTACK,
+     ACTIVATE, COLLISION, DEATH) = range(13)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
-    QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL, SOURCE = range(11)
+    (QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL, SOURCE, INPUT_COMMAND)\
+        = range(12)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
@@ -39,9 +40,12 @@ event_templates = {
                      (EventParam.LEVEL, True)),
     EventType.PASS_TIME: [(EventParam.QUANTITY, True)],
     EventType.END_TURN: [],
-    EventType.AI_BEGIN_TURN: [(EventParam.HANDLER, True),
+    EventType.AI_BEGIN_TURN: ((EventParam.HANDLER, True),
                               (EventParam.LEVEL, True),
-                              (EventParam.PLAYER, True)],
+                              (EventParam.PLAYER, True)),
+    EventType.PLAYER_BEGIN_TURN: ((EventParam.HANDLER, True),
+                                  (EventParam.LEVEL, True),
+                                  (EventParam.INPUT_COMMAND, True)),
     EventType.ACTIVATE: [],
     EventType.COLLISION: ((EventParam.HANDLER, True),
                           (EventParam.TARGET, True)),
