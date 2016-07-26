@@ -82,12 +82,6 @@ class Game(object):
 
         return live
 
-    def gen_player_move_event(self, x, y):
-        return Event(EventType.MOVE, {EventParam.HANDLER: self.game_state.level.get_player_entity(),
-                                      EventParam.X: x,
-                                      EventParam.Y: y,
-                                      EventParam.LEVEL: self.game_state.level})
-
     def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
         # TODO: Use a map, not a huge if/elif!
