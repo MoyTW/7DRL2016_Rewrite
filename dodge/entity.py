@@ -33,4 +33,4 @@ class Entity:
                 pass
             else:
                 current_event = event_return
-        raise ValueError('Entity ' + str(self.eid) + ' could not handle event ' + str(event))
+        raise ValueError('Entity ' + str(self.eid) + ' could not handle event type: ' + str(event.event_type))
