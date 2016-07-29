@@ -1,5 +1,5 @@
 import unittest
-from dodge.paths import Path
+from dodge.paths import Path, LinePath
 
 
 class TestBasePath(unittest.TestCase):
@@ -38,3 +38,38 @@ class TestBasePath(unittest.TestCase):
     def test_project_rejects_negatives(self):
         with self.assertRaises(ValueError):
             self.path.project(-2)
+
+
+class TestLinePath(unittest.TestCase):
+    def test_vertical_line(self):
+        path = LinePath(0, 0, 0, -5)
+        self.assertEqual((0, 0), path.current_position)
+        path.step(2)
+        self.assertEqual((0, -2), path.current_position)
+
+    def test_horizontal_line(self):
+        path = LinePath(0, 0, -5, 0)
+        self.assertEqual((0, 0), path.current_position)
+        path.step(2)
+        self.assertEqual((-2, 0), path.current_position)
+
+    def test_30_deg_line(self):
+        # I mean, not exactly 30 degrees, but close-ish.
+        path = LinePath(0, 0, 4, 6)
+        self.assertEqual((0, 0), path.current_position)
+        path.step(2)
+        self.assertEqual((1, 1), path.current_position)
+        path.step(8)
+        self.assertEqual((4, 6), path.current_position)
+
+    def test_225_deg_line(self):
+        path = LinePath(0, 0, -5, -5)
+        self.assertEqual((0, 0), path.current_position)
+        path.step(4)
+        self.assertEqual((-2, -2), path.current_position)
+
+    def test_projection_past_point(self):
+        path = LinePath(0, 0, 0, 1)
+        self.assertEqual((0, 0), path.current_position)
+        path.step(100)
+        self.assertEqual((0, 100), path.current_position)
