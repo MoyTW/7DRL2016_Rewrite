@@ -2,14 +2,13 @@ import unittest
 from dodge.paths import Path
 
 
-class TestPath(Path):
-    def _calc_step(self):
-        return self._path[-1][0] + 1, self._path[-1][1] + 1
-
-
 class TestBasePath(unittest.TestCase):
+    class TestPath(Path):
+        def _calc_step(self):
+            return self._path[-1][0] + 1, self._path[-1][1] + 1
+
     def setUp(self):
-        self.path = TestPath(0, 0)
+        self.path = self.TestPath(0, 0)
 
     def test_step(self):
         self.path.step()
