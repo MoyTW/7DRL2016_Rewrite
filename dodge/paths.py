@@ -5,6 +5,7 @@ class Path:
         self.current_step = 0
         self._path = [(start_x, start_y)]
 
+    @property
     def current_position(self):
         return self._path[self.current_step]
 
