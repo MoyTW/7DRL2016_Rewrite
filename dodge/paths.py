@@ -13,6 +13,15 @@ class Path:
         return self._path[self.current_step]
 
     @property
+    def current_diff(self):
+        if self.current_step > 0:
+            (px, py) = self._path[self.current_step - 1]
+            (cx, cy) = self.current_position
+            return cx - px, cy - py
+        else:
+            return 0, 0
+
+    @property
     def _last_position(self):
         return self._path[-1]
 
@@ -23,13 +32,13 @@ class Path:
         for _ in range(steps):
             self._path.append(self._calc_step())
 
-    def step(self, steps=1):
-        if steps < 0:
-            raise ValueError('Cannot move along a path by a negative number!')
-
-        self.current_step += steps
+    def step(self):
+        self.current_step += 1
         if len(self._path) <= self.current_step:
-            self._calc(self.current_step - len(self._path) + 1)
+            self._calc(1)
+        return self.current_diff
+
+
 
     def project(self, steps):
         if steps < 0:
