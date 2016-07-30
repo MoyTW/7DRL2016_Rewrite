@@ -13,4 +13,16 @@ class Projectile(Component):
         self.path = path
 
     def _handle_event(self, event):
-        raise NotImplementedError()
+        if event.event_type == EventType.AI_BEGIN_TURN:
+            (dx, dy) = self.path.step()
+            event = Event(EventType.MOVE, {EventParam.X: dx,
+                                           EventParam.Y: dy,
+                                           EventParam.HANDLER: event[EventParam.HANDLER],
+                                           EventParam.LEVEL: event[EventParam.LEVEL]})
+            self.emit_event(event)
+            return True
+        elif event.event_type == EventType.COLLISION:
+            self.emit_event(Event(EventType.DEATH, {EventParam.HANDLER: event[EventParam.HANDLER],
+                                                    EventParam.KILLER: event[EventParam.TARGET]}))
+            return True
+        return False
