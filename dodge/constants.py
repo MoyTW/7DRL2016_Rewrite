@@ -47,7 +47,7 @@ event_templates = {
     EventType.END_TURN: [],
     EventType.AI_BEGIN_TURN: ((EventParam.HANDLER, True),
                               (EventParam.LEVEL, True),
-                              (EventParam.PLAYER, True)),
+                              (EventParam.PLAYER, False)),
     EventType.PLAYER_BEGIN_TURN: ((EventParam.HANDLER, True),
                                   (EventParam.LEVEL, True),
                                   (EventParam.INPUT_COMMAND, True)),
