@@ -7,7 +7,7 @@ class AI(Component):
     def __init__(self, event_stack):
         super(AI, self).__init__(component_type=ComponentType.AI,
                                  target_events=[EventType.AI_BEGIN_TURN, EventType.ACTIVATE],
-                                 emittable_events=[EventType.MOVE, EventType.AI_ATTACK, EventType.END_TURN],
+                                 emittable_events=[EventType.MOVE, EventType.AI_ATTACK],
                                  event_stack=event_stack)
         self._is_active = False
 
