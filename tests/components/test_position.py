@@ -33,13 +33,15 @@ class TestComponent(unittest.TestCase):
         self.assertTrue(self.handler.handled)
 
     def tests_move_event(self):
-        event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 1, EventParam.LEVEL: self.level_stub})
+        event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 1, EventParam.LEVEL: self.level_stub,
+                                       EventParam.HANDLER: None})
         self.assertTrue(self.p.handle_event(event))
         self.assertEqual(self.p.x, 4)
         self.assertEqual(self.p.y, 8)
 
     def tests_move_event_fails_if_tile_blocked(self):
-        event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 0, EventParam.LEVEL: self.level_stub})
+        event = Event(EventType.MOVE, {EventParam.X: 1, EventParam.Y: 0, EventParam.LEVEL: self.level_stub,
+                                       EventParam.HANDLER: None})
         self.assertTrue(self.p.handle_event(event))
         self.assertEqual(self.p.x, 3)
         self.assertEqual(self.p.y, 7)
