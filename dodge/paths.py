@@ -33,12 +33,11 @@ class Path:
             self._path.append(self._calc_step())
 
     def step(self):
-        self.current_step += 1
-        if len(self._path) <= self.current_step:
+        next_step = self.current_step + 1
+        if len(self._path) <= next_step:
             self._calc(1)
+        self.current_step = next_step
         return self.current_diff
-
-
 
     def project(self, steps):
         if steps < 0:
