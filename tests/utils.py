@@ -1,5 +1,6 @@
 from dodge.constants import ComponentType
 from dodge.stack import Stack
+from dodge.paths import Path
 
 
 class EntityStub:
@@ -48,3 +49,9 @@ class LevelStub:
     def get_player_position(self):
         player_position = self.get_player_entity().get_component(ComponentType.POSITION)
         return player_position.x, player_position.y
+
+
+class PathStub(Path):
+    def _calc_step(self):
+        (x, y) = self.current_position
+        return x + 1, y + 1
