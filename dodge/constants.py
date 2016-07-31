@@ -21,7 +21,7 @@ class ComponentType(Enum):
 
 class EventType(Enum):
     (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN, AI_ATTACK,
-     ACTIVATE, COLLISION, DEATH, EQUIP_ITEM, UNEQUIP_ITEM) = range(15)
+     ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM) = range(15)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -57,8 +57,8 @@ event_templates = {
                           (EventParam.TARGET, True)),
     EventType.DEATH: ((EventParam.HANDLER, True),
                       (EventParam.KILLER, False)),
-    EventType.EQUIP_ITEM: ((EventParam.HANDLER, True),
+    EventType.MOUNT_ITEM: ((EventParam.HANDLER, True),
                            (EventParam.ITEM, True)),
-    EventType.UNEQUIP_ITEM: ((EventParam.HANDLER, True),
+    EventType.UNMOUNT_ITEM: ((EventParam.HANDLER, True),
                              (EventParam.ITEM, True))
 }

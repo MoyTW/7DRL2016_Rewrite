@@ -16,34 +16,34 @@ class TestMountings(unittest.TestCase):
         self.mountable_invalid = Entity(1, 1, [Mountable(self.mount_invalid)])
 
     def test_equips_to_empty_slot(self):
-        event = Event(EventType.EQUIP_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
+        event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
         self.assertTrue(self.mountings.handle_event(event))
         self.assertEqual(self.mountable_valid, self.mountings[self.mount_valid])
 
     def test_excepts_on_equip_to_occupied_slot(self):
         with self.assertRaises(ValueError):
-            event = Event(EventType.EQUIP_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
+            event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
             self.mountings.handle_event(event)
             self.mountings.handle_event(event)
 
     def test_excepts_on_equip_to_unknown_slot(self):
         with self.assertRaises(ValueError):
-            event = Event(EventType.EQUIP_ITEM, {EventParam.ITEM: self.mountable_invalid, EventParam.HANDLER: None})
+            event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_invalid, EventParam.HANDLER: None})
             self.mountings.handle_event(event)
 
     def test_unequips_from_occupied_slot(self):
-        equip_event = Event(EventType.EQUIP_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
+        equip_event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
         self.mountings.handle_event(equip_event)
-        unequip_event = Event(EventType.UNEQUIP_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
+        unequip_event = Event(EventType.UNMOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
         self.assertTrue(self.mountings.handle_event(unequip_event))
         self.assertEqual(None, self.mountings[self.mount_valid])
 
     def test_excepts_on_unequip_from_unoccupied_slot(self):
         with self.assertRaises(ValueError):
-            event = Event(EventType.UNEQUIP_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
+            event = Event(EventType.UNMOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
             self.mountings.handle_event(event)
 
     def test_excepts_on_unequip_from_unknown_slot(self):
         with self.assertRaises(ValueError):
-            event = Event(EventType.UNEQUIP_ITEM, {EventParam.ITEM: self.mountable_invalid, EventParam.HANDLER: None})
+            event = Event(EventType.UNMOUNT_ITEM, {EventParam.ITEM: self.mountable_invalid, EventParam.HANDLER: None})
             self.mountings.handle_event(event)

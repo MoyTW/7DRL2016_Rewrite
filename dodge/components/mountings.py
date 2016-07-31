@@ -7,7 +7,7 @@ class Mountings(Component):
     enumerated values (LEFT_LARGE_TURRET, LEFT_TURRET, RIGHT_TURRET). """
     def __init__(self, mount_points):
         super().__init__(ComponentType.MOUNTINGS,
-                         target_events=[EventType.EQUIP_ITEM, EventType.UNEQUIP_ITEM],
+                         target_events=[EventType.MOUNT_ITEM, EventType.UNMOUNT_ITEM],
                          emittable_events=[])
         self._mounted = {key: None for key in mount_points}
 
@@ -39,10 +39,10 @@ class Mountings(Component):
                              str(item_mount) + ' does not exist or was unoccupied')
 
     def _handle_event(self, event):
-        if event.event_type == EventType.EQUIP_ITEM:
+        if event.event_type == EventType.MOUNT_ITEM:
             self._equip(event[EventParam.ITEM])
             return True
-        elif event.event_type == EventType.UNEQUIP_ITEM:
+        elif event.event_type == EventType.UNMOUNT_ITEM:
             self._unequip(event[EventParam.ITEM])
             return True
         else:
