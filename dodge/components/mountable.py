@@ -4,7 +4,7 @@ from dodge.constants import ComponentType
 
 class Mountable(Component):
     def __init__(self, mount):
-        super().__init__(component_type=ComponentType.EQUIPMENT,
+        super().__init__(component_type=ComponentType.MOUNTABLE,
                          target_events=[],
                          emittable_events=[])
         self.mount = mount
