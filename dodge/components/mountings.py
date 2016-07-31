@@ -22,18 +22,28 @@ class Mountings(Component):
     def mounted_items(self):
         return self._mounted.values()
 
-    def _equip(self, item, mount):
-        raise NotImplementedError()
+    def _equip(self, item):
+        item_mount = item.get_component(ComponentType.MOUNTABLE).mount
+        if item_mount in self._mounted and self._mounted[item_mount] is None:
+            self._mounted[item_mount] = item
+        else:
+            raise ValueError('Could not mount item ' + str(item.eid) + ':' + str(item.name) + ' - mount point ' +
+                             str(item_mount) + ' does not exist or was already occupied!')
 
     def _unequip(self, item):
-        raise NotImplementedError()
+        item_mount = item.get_component(ComponentType.MOUNTABLE).mount
+        if item_mount in self._mounted and self._mounted[item_mount] is not None:
+            self._mounted[item_mount] = None
+        else:
+            raise ValueError('Could not unmount item ' + str(item.eid) + ':' + str(item.name) + ' - mount point ' +
+                             str(item_mount) + ' does not exist or was unoccupied')
 
     def _handle_event(self, event):
         if event.event_type == EventType.EQUIP_ITEM:
-            self._equip(event[EventParam.TARGET], event[EventParam.MOUNT])
+            self._equip(event[EventParam.ITEM])
             return True
         elif event.event_type == EventType.UNEQUIP_ITEM:
-            self._unequip(event[EventParam.TARGET])
+            self._unequip(event[EventParam.ITEM])
             return True
         else:
             return False
