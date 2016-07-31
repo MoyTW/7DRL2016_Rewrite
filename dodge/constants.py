@@ -15,18 +15,19 @@ class InputCommands(Enum):
 
 
 class ComponentType(Enum):
-    ACTOR, AI, ATTACKER, DESTRUCTIBLE, EQUIPMENT, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION = range(11)
+    (ACTOR, AI, ATTACKER, DESTRUCTIBLE, EQUIPMENT, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS)\
+        = range(12)
 
 
 class EventType(Enum):
     (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN, AI_ATTACK,
-     ACTIVATE, COLLISION, DEATH) = range(13)
+     ACTIVATE, COLLISION, DEATH, EQUIP_ITEM, UNEQUIP_ITEM) = range(15)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
     (QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL, SOURCE, INPUT_COMMAND,
-     KILLER) = range(13)
+     KILLER, MOUNT) = range(14)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
