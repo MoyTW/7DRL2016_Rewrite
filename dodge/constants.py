@@ -65,7 +65,5 @@ event_templates = {
                      (EventParam.X, True),
                      (EventParam.Y, True)),
     EventType.SPAWN_TO_LEVEL: ((EventParam.TARGET, True),
-                               (EventParam.LEVEL, True),
-                               (EventParam.X, True),
-                               (EventParam.Y, True))
+                               (EventParam.LEVEL, True))
 }

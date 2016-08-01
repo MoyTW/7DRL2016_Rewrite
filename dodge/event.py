@@ -12,6 +12,9 @@ class Event:
             raise ValueError(str(event_type) + ' is missing required parameters! Has: ' + str(params) + ' Needs: ' +
                              str(templates[event_type]))
 
+    def __contains__(self, item):
+        return item in self._params
+
     def __getitem__(self, item):
         return self._params[item]
 
