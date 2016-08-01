@@ -35,16 +35,16 @@ class EventStack(Stack):
     def __init__(self):
         super(EventStack, self).__init__()
 
-    def resolve_events(self):
-        while not self.is_empty():
-            self.resolve_top_event()
-
     def resolve_top_event(self):
         event = self.pop()
         if event[EventParam.HANDLER]:
             event[EventParam.HANDLER].handle_event(event)
         else:
             raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
+
+    def resolve_events(self):
+        while not self.is_empty():
+            self.resolve_top_event()
 
     def push_and_resolve(self, event):
         self.push(event)
