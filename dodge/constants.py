@@ -15,13 +15,13 @@ class InputCommands(Enum):
 
 
 class ComponentType(Enum):
-    (ACTOR, AI, ATTACKER, DESTRUCTIBLE, MOUNTABLE, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS)\
-        = range(12)
+    (ACTOR, AI, ATTACKER, DESTRUCTIBLE, MOUNTABLE, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS,
+     WEAPON) = range(13)
 
 
 class EventType(Enum):
     (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN, AI_ATTACK,
-     ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM) = range(15)
+     ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE, SPAWN_TO_LEVEL) = range(17)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -60,5 +60,12 @@ event_templates = {
     EventType.MOUNT_ITEM: ((EventParam.HANDLER, True),
                            (EventParam.ITEM, True)),
     EventType.UNMOUNT_ITEM: ((EventParam.HANDLER, True),
-                             (EventParam.ITEM, True))
+                             (EventParam.ITEM, True)),
+    EventType.FIRE: ((EventParam.HANDLER, True),
+                     (EventParam.X, True),
+                     (EventParam.Y, True)),
+    EventType.SPAWN_TO_LEVEL: ((EventParam.TARGET, True),
+                               (EventParam.LEVEL, True),
+                               (EventParam.X, True),
+                               (EventParam.Y, True))
 }
