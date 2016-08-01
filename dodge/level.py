@@ -112,6 +112,10 @@ class Level(object):
     def in_fov(self, x, y):
         return self.fov_map.in_fov(x, y)
 
+    def set_blocked(self, x, y, blocked):
+        self[x][y].blocked = blocked
+        self.fov_map.set_tile_properties(x, y, not self[x][y].block_sight, not self[x][y].blocked)
+
     def is_walkable(self, x, y):
         return self.fov_map.is_walkable(x, y) and not self.get_entity_by_position(x, y)
 
