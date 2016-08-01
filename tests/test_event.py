@@ -20,19 +20,19 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(self.stack.is_empty())
         self.assertTrue(entity.handled)
 
-    def test_resolves_SPAWN_TO_LEVEL_event(self):
+    def test_resolves_ADD_TO_LEVEL_event(self):
         entity = Entity(0, 0, [])
-        event = Event(EventType.SPAWN_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                                 EventParam.TARGET: entity})
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
+                                               EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(entity, self.level._entities[0])
         self.assertEqual(1, len(self.level._entities))
 
-    def test_resolves_SPAWN_TO_LEVEL_event_with_position(self):
+    def test_resolves_ADD_TO_LEVEL_event_with_position(self):
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
-        event = Event(EventType.SPAWN_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                                 EventParam.TARGET: entity})
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
+                                               EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(entity, self.level.get_entity_by_position(5, 5))
@@ -45,6 +45,6 @@ class TestEvent(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.level.set_blocked(5, 5, True)
             entity = Entity(0, 0, [Position(5, 5, self.stack)])
-            event = Event(EventType.SPAWN_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                                     EventParam.TARGET: entity})
+            event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
+                                                   EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)

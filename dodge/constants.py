@@ -21,7 +21,7 @@ class ComponentType(Enum):
 
 class EventType(Enum):
     (PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN, AI_ATTACK,
-     ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE, SPAWN_TO_LEVEL) = range(17)
+     ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE, ADD_TO_LEVEL) = range(17)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -64,6 +64,6 @@ event_templates = {
     EventType.FIRE: ((EventParam.HANDLER, True),
                      (EventParam.X, True),
                      (EventParam.Y, True)),
-    EventType.SPAWN_TO_LEVEL: ((EventParam.TARGET, True),
-                               (EventParam.LEVEL, True))
+    EventType.ADD_TO_LEVEL: ((EventParam.TARGET, True),
+                             (EventParam.LEVEL, True))
 }
