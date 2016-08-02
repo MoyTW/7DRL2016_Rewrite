@@ -8,30 +8,48 @@ from dodge.entity import Entity
 
 class TestMountings(unittest.TestCase):
     class TestComponent(Component):
-        def __init__(self):
+        def __init__(self, return_value):
             super().__init__(0, EventType.ALL_EVENTS, [])
             self.handled = False
+            self.return_value = return_value
 
         def _handle_event(self, event):
             self.handled = True
-            return True
+            return self.return_value
 
     def setUp(self):
         self.mount_valid = 0
+        self.mount_valid_1 = 1
         self.mount_invalid = 9999
 
-        self.mountings = Mountings([self.mount_valid])
+        self.mountings = Mountings([self.mount_valid, self.mount_valid_1])
 
-        self.mountable_valid = Entity(0, 0, [Mountable(self.mount_valid),
-                                             self.TestComponent()])
+        self.mountable_valid = Entity(0, 0, [Mountable(self.mount_valid)])
         self.mountable_invalid = Entity(1, 1, [Mountable(self.mount_invalid)])
 
     def test_dispatches_events_to_mounted(self):
-        mount = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid}, templates=None)
-        self.mountings.handle_event(mount)
+        handles_entity = Entity(0, 0, [Mountable(self.mount_valid), self.TestComponent(True)])
+        self.mountings.handle_event(Event(EventType.MOUNT_ITEM, {EventParam.ITEM: handles_entity}, templates=None))
         end_turn = Event(EventType.END_TURN, {}, templates=None)
         self.assertTrue(self.mountings.handle_event(end_turn))
-        self.assertTrue(self.mountable_valid.get_component(0).handled)
+        self.assertTrue(handles_entity.get_component(0).handled)
+
+    def test_dispatches_events_to_all_mounted_entities_in_mounting_entity(self):
+        passes_entity_0 = Entity(9, 9, [Mountable(self.mount_valid), self.TestComponent(False)])
+        passes_entity_1 = Entity(8, 8, [Mountable(self.mount_valid_1), self.TestComponent(False)])
+        self.mountings.handle_event(Event(EventType.MOUNT_ITEM, {EventParam.ITEM: passes_entity_0}, templates=None))
+        self.mountings.handle_event(Event(EventType.MOUNT_ITEM, {EventParam.ITEM: passes_entity_1}, templates=None))
+
+        entity = Entity(7, 7, [self.mountings, self.TestComponent(True)])
+        end_turn = Event(EventType.END_TURN, {}, templates=None)
+        self.assertTrue(entity.handle_event(end_turn))
+
+        self.assertTrue(passes_entity_0.get_component(0).handled)
+        self.assertTrue(passes_entity_1.get_component(0).handled)
+        self.assertTrue(entity.get_component(0).handled)
+
+
+
 
     def test_equips_to_empty_slot(self):
         event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
