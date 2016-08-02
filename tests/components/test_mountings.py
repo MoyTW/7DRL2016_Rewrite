@@ -48,8 +48,19 @@ class TestMountings(unittest.TestCase):
         self.assertTrue(passes_entity_1.get_component(0).handled)
         self.assertTrue(entity.get_component(0).handled)
 
+    def test_early_exits_if_mounted_entity_fully_handles(self):
+        passes_entity_0 = Entity(9, 9, [Mountable(self.mount_valid), self.TestComponent(True)])
+        passes_entity_1 = Entity(8, 8, [Mountable(self.mount_valid_1), self.TestComponent(False)])
+        self.mountings.handle_event(Event(EventType.MOUNT_ITEM, {EventParam.ITEM: passes_entity_0}, templates=None))
+        self.mountings.handle_event(Event(EventType.MOUNT_ITEM, {EventParam.ITEM: passes_entity_1}, templates=None))
 
+        entity = Entity(7, 7, [self.mountings, self.TestComponent(True)])
+        end_turn = Event(EventType.END_TURN, {}, templates=None)
+        self.assertTrue(entity.handle_event(end_turn))
 
+        self.assertTrue(passes_entity_0.get_component(0).handled)
+        self.assertFalse(passes_entity_1.get_component(0).handled)
+        self.assertFalse(entity.get_component(0).handled)
 
     def test_equips_to_empty_slot(self):
         event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})
