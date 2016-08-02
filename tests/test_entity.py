@@ -1,7 +1,6 @@
 import unittest
 from dodge.entity import Entity
 from dodge.components.component import Component
-from dodge.constants import EventType, EventParam
 from dodge.event import Event
 
 

@@ -23,14 +23,17 @@ class Entity:
     def get_component(self, component_type):
         return self._components[component_type]
 
-    def handle_event(self, event):
-        current_event = event
+    def handle_event(self, event, must_handle=True):
+        """ Runs the event through the component pipeline, early exiting with True if the event is fully handled.
+
+        :param event: The event to be handled
+        :param must_handle: If must_handle is True, will throw an exception if the entity cannot handle the event
+        :return: True if the program early exits, event if it does not handle it
+        """
         for component in self._ordered_components:
-            event_return = component.handle_event(current_event)
-            if event_return is True:
+            if component.handle_event(event) is True:
                 return True
-            elif event_return is False:
-                pass
-            else:
-                current_event = event_return
-        raise ValueError('Entity ' + str(self.eid) + ' could not handle event type: ' + str(event.event_type))
+        if must_handle:
+            raise ValueError('Entity ' + str(self.eid) + ' could not handle event type: ' + str(event.event_type))
+        else:
+            return event

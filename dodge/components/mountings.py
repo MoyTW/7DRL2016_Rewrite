@@ -51,5 +51,5 @@ class Mountings(Component):
             handled = False
             for entity in self.mounted_items:
                 if handled is not True:
-                    handled = entity.handle_event(event)
+                    handled = entity.handle_event(event, must_handle=False)
             return handled
