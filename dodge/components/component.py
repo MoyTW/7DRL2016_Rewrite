@@ -1,7 +1,13 @@
+from dodge.constants import EventType
+
+
 class Component(object):
     def __init__(self, component_type, target_events, emittable_events, event_stack=None):
         self._type = component_type
-        self._target_events = frozenset(target_events)
+        if target_events == EventType.ALL_EVENTS:
+            self._target_events = frozenset(EventType)
+        else:
+            self._target_events = frozenset(target_events)
         self._emittable_events = frozenset(emittable_events)
         if self._emittable_events and event_stack is None:
             raise ValueError('Component has emittable events ' + str(emittable_events) + ' but no event_stack!')
