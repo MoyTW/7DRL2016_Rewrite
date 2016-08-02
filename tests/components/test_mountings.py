@@ -1,19 +1,37 @@
 import unittest
 from dodge.constants import EventType, EventParam
 from dodge.components import Mountings, Mountable
+from dodge.components.component import Component
 from dodge.event import Event
 from dodge.entity import Entity
 
 
 class TestMountings(unittest.TestCase):
+    class TestComponent(Component):
+        def __init__(self):
+            super().__init__(0, EventType.ALL_EVENTS, [])
+            self.handled = False
+
+        def _handle_event(self, event):
+            self.handled = True
+            return True
+
     def setUp(self):
         self.mount_valid = 0
         self.mount_invalid = 9999
 
         self.mountings = Mountings([self.mount_valid])
 
-        self.mountable_valid = Entity(0, 0, [Mountable(self.mount_valid)])
+        self.mountable_valid = Entity(0, 0, [Mountable(self.mount_valid),
+                                             self.TestComponent()])
         self.mountable_invalid = Entity(1, 1, [Mountable(self.mount_invalid)])
+
+    def test_dispatches_events_to_mounted(self):
+        mount = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid}, templates=None)
+        self.mountings.handle_event(mount)
+        end_turn = Event(EventType.END_TURN, {}, templates=None)
+        self.assertTrue(self.mountings.handle_event(end_turn))
+        self.assertTrue(self.mountable_valid.get_component(0).handled)
 
     def test_equips_to_empty_slot(self):
         event = Event(EventType.MOUNT_ITEM, {EventParam.ITEM: self.mountable_valid, EventParam.HANDLER: None})

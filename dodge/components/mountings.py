@@ -7,7 +7,7 @@ class Mountings(Component):
     enumerated values (LEFT_LARGE_TURRET, LEFT_TURRET, RIGHT_TURRET). """
     def __init__(self, mount_points):
         super().__init__(ComponentType.MOUNTINGS,
-                         target_events=[EventType.MOUNT_ITEM, EventType.UNMOUNT_ITEM],
+                         target_events=EventType.ALL_EVENTS,
                          emittable_events=[])
         self._mounted = {key: None for key in mount_points}
 
@@ -46,4 +46,10 @@ class Mountings(Component):
             self._unequip(event[EventParam.ITEM])
             return True
         else:
-            return False
+            # I really do not like the side-effect-y nature of this! You rely on the handler functions to change the
+            # event object itself, not on the return value of the handle_event!
+            handled = False
+            for entity in self.mounted_items:
+                if handled is not True:
+                    handled = entity.handle_event(event)
+            return handled
