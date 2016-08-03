@@ -1,6 +1,9 @@
+from dodge.components import Position, Projectile, Actor
 from dodge.components.component import Component
 from dodge.event import Event
-from dodge.constants import ComponentType, EventType, EventParam, Factions
+from dodge.constants import ComponentType, EventType, EventParam
+from dodge.entity import Entity
+import uuid
 
 
 class Weapon(Component):
@@ -16,5 +19,39 @@ class Weapon(Component):
         self.targeting_range = targeting_radius
         self.cooldown = cooldown
 
-    def _handle_event(self, event):
-        raise NotImplementedError()
+    def _target_nearest(self, position, target_faction, level):
+        nearby_entities = level.get_entities_in_radius(position.x, position.y, self.targeting_range)
+        targets = []
+        for entity in nearby_entities:
+            if entity.has_component(ComponentType.FACTION) and \
+                            entity.get_component(ComponentType.FACTION).faction == target_faction and \
+                            entity.get_component(ComponentType.DESTRUCTIBLE):
+                targets.append(entity)
+        targets.sort(key=position.distance_to)
+
+        if targets:
+            target_pos = targets[0].get_component(ComponentType.POSITION)
+            return target_pos.x, target_pos.y
+        else:
+            return None, None
+
+    def _build_projectile(self, shooter_pos, tx, ty):
+        path = self.path.build_path(shooter_pos.x, shooter_pos.y, tx, ty)
+        projectile = Entity(uuid.uuid4(), self.projectile_name,
+                            [Position(shooter_pos.x, shooter_pos.y, self._event_stack),
+                             Projectile(path, self._event_stack),
+                             Actor(self.speed)])
+        return projectile
+
+    def _handle_event(self, event: Event):
+        shooter = event[EventParam.HANDLER]
+        shooter_pos = shooter.get_component(ComponentType.POSITION)
+        level = event[EventParam.LEVEL]
+
+        (tx, ty) = self._target_nearest(shooter_pos, event[EventParam.FACTION], level)
+        if tx is None:
+            return event
+        else:
+            projectile = self._build_projectile(shooter_pos, tx, ty)
+            self.emit_event(Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: level, EventParam.TARGET: projectile}))
+            return event
