@@ -17,7 +17,7 @@ class TestBasePath(unittest.TestCase):
             return self._path[-1][0] + 1, self._path[-1][1] + 1
 
     def setUp(self):
-        self.path = self.TestPath(0, 0)
+        self.path = self.TestPath(0, 0, 0, 0)
 
     def test_step(self):
         self.assertEqual((1, 1), self.path.step())

@@ -2,11 +2,13 @@ import math
 
 
 class Path:
-    def __init__(self, start_x, start_y):
-        self.start_x = start_x
-        self.start_y = start_y
+    def __init__(self, x0, y0, x1, y1):
+        self.x0 = x0
+        self.y0 = y0
+        self.x1 = x1
+        self.y1 = y1
         self.current_step = 0
-        self._path = [(start_x, start_y)]
+        self._path = [(x0, y0)]
 
     @staticmethod
     def build_path(x0, y0, x1, y1):
@@ -55,7 +57,7 @@ class LinePath(Path):
     """ Defines a line from (x0, y0) to (x1, y1), continuing past (x1, y1). Moves 1 square (vertical or horizontal) per
     step; 45-degree angles will take 2 steps per diagonal transition. """
     def __init__(self, x0, y0, x1, y1):
-        super().__init__(x0, y0)
+        super().__init__(x0, y0, x1, y1)
         self.x1 = x1
         self.y1 = y1
 
