@@ -9,6 +9,10 @@ def step_times(path, times):
 
 class TestBasePath(unittest.TestCase):
     class TestPath(Path):
+        @staticmethod
+        def build_path(x0, y0, x1, y1):
+            raise NotImplementedError()
+
         def _calc_step(self):
             return self._path[-1][0] + 1, self._path[-1][1] + 1
 

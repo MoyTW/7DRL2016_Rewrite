@@ -8,6 +8,10 @@ class Path:
         self.current_step = 0
         self._path = [(start_x, start_y)]
 
+    @staticmethod
+    def build_path(x0, y0, x1, y1):
+        raise NotImplementedError()
+
     @property
     def current_position(self):
         return self._path[self.current_step]
@@ -75,6 +79,10 @@ class LinePath(Path):
         else:
             x_diff = -1
         self.x_diff = x_diff
+
+    @staticmethod
+    def build_path(x0, y0, x1, y1):
+        return LinePath(x0, y0, x1, y1)
 
     def _calc_step(self):
         if self.vertical:
