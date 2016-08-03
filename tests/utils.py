@@ -54,7 +54,7 @@ class LevelStub:
 class PathStub(Path):
     @staticmethod
     def build_path(x0, y0, x1, y1):
-        return PathStub(x0, y0)
+        return PathStub(x0, y0, x1, y1)
 
     def _calc_step(self):
         (x, y) = self.current_position
