@@ -21,14 +21,14 @@ class ComponentType(Enum):
 
 class EventType(Enum):
     (ALL_EVENTS, PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN,
-     AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE, ADD_TO_LEVEL, ADD_COMPONENTS,
+     AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, ADD_COMPONENTS,
      REMOVE_COMPONENTS) = range(20)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
     (QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL, SOURCE, INPUT_COMMAND,
-     KILLER, MOUNT, ITEM) = range(15)
+     KILLER, MOUNT, ITEM, FACTION, COMPONENTS) = range(17)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),
@@ -62,9 +62,11 @@ event_templates = {
                            (EventParam.ITEM, True)),
     EventType.UNMOUNT_ITEM: ((EventParam.HANDLER, True),
                              (EventParam.ITEM, True)),
-    EventType.FIRE: ((EventParam.HANDLER, True),
-                     (EventParam.X, True),
-                     (EventParam.Y, True)),
+    EventType.FIRE_ALL: ((EventParam.HANDLER, True),
+                         (EventParam.LEVEL, True),
+                         (EventParam.FACTION, True)),
     EventType.ADD_TO_LEVEL: ((EventParam.TARGET, True),
-                             (EventParam.LEVEL, True))
+                             (EventParam.LEVEL, True)),
+    EventType.ADD_COMPONENTS: ((EventParam.HANDLER, True),
+                               (EventParam.COMPONENTS, True))
 }

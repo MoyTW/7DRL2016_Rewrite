@@ -9,3 +9,4 @@ from dodge.components.player import Player
 from dodge.components.position import Position
 from dodge.components.projectile import Projectile
 from dodge.components.renderable import Renderable
+from dodge.components.weapon import Weapon

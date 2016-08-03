@@ -6,7 +6,7 @@ from dodge.constants import ComponentType, EventType, EventParam, Factions
 class Weapon(Component):
     def __init__(self, event_stack, path, power, speed, targeting_radius, cooldown=0):
         super().__init__(component_type=ComponentType.WEAPON,
-                         target_events=[EventType.FIRE],
+                         target_events=[EventType.FIRE_ALL],
                          emittable_events=[EventType.ADD_TO_LEVEL],
                          event_stack=event_stack)
         self.path = path
