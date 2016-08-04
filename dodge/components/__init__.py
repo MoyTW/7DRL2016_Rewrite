@@ -10,3 +10,4 @@ from dodge.components.position import Position
 from dodge.components.projectile import Projectile
 from dodge.components.renderable import Renderable
 from dodge.components.weapon import Weapon
+from dodge.components.death.retaliatory import RetaliatoryDeath
