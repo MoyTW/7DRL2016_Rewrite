@@ -44,7 +44,9 @@ class EventStack(Stack):
 
         if entity.has_component(ComponentType.POSITION):
             position = entity.get_component(ComponentType.POSITION)
-            if not level.is_walkable(position.x, position.y):
+            # TODO: This ignore_blockers form (in and True) - surely there's a more elegant way to express it?
+            ignore_blockers = EventParam.IGNORE_BLOCKERS in event and event[EventParam.IGNORE_BLOCKERS]
+            if not level.is_walkable(position.x, position.y) and not ignore_blockers:
                 raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
                                  str(position.y) + ") as it is not walkable!")
 

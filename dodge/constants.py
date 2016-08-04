@@ -67,7 +67,8 @@ event_templates = {
                          (EventParam.FACTION, True),
                          (EventParam.DROPS_THROUGH, True)),
     EventType.ADD_TO_LEVEL: ((EventParam.TARGET, True),
-                             (EventParam.LEVEL, True)),
+                             (EventParam.LEVEL, True),
+                             (EventParam.IGNORE_BLOCKERS, False)),
     EventType.ADD_COMPONENTS: ((EventParam.HANDLER, True),
                                (EventParam.COMPONENTS, True))
 }

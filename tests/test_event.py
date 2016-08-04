@@ -48,3 +48,11 @@ class TestEvent(unittest.TestCase):
             event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
                                                    EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)
+
+    def tests_bypass_block_occupied_with_ignore_blockers(self):
+        self.level.set_blocked(5, 5, True)
+        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
+                                               EventParam.TARGET: entity,
+                                               EventParam.IGNORE_BLOCKERS: True})
+        self.stack.push_and_resolve(event)

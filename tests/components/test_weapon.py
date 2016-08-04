@@ -35,6 +35,7 @@ class TestWeaponComponent(unittest.TestCase):
         add_to_level_event = self.stack.peek()
         self.assertEqual(1, len(self.stack.view()))
         self.assertEqual(self.level, add_to_level_event[EventParam.LEVEL])
+        self.assertTrue(add_to_level_event[EventParam.IGNORE_BLOCKERS])
 
         to_add = add_to_level_event[EventParam.TARGET]
         self.assertEqual(self.projectile_name, to_add.name)
