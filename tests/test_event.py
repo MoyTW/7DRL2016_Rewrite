@@ -41,7 +41,7 @@ class TestEvent(unittest.TestCase):
         self.assertEqual(entity, position_entities[0])
         self.assertEqual(1, len(position_entities))
 
-    def test_excepts_if_block_occupied(self):
+    def test_ADD_TO_LEVEL_excepts_if_block_occupied(self):
         with self.assertRaises(ValueError):
             self.level.set_blocked(5, 5, True)
             entity = Entity(0, 0, [Position(5, 5, self.stack)])
@@ -49,10 +49,18 @@ class TestEvent(unittest.TestCase):
                                                    EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)
 
-    def tests_bypass_block_occupied_with_ignore_blockers(self):
+    def tests_ADD_TO_LEVEL_bypass_block_occupied_with_ignore_blockers(self):
         self.level.set_blocked(5, 5, True)
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
                                                EventParam.TARGET: entity,
                                                EventParam.IGNORE_BLOCKERS: True})
         self.stack.push_and_resolve(event)
+
+    def tests_REMOVE_FROM_LEVEL(self):
+        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        self.level.add_entity(entity)
+        event = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.LEVEL: self.level, EventParam.TARGET: entity})
+        self.stack.push_and_resolve(event)
+        self.assertIsNone(self.level.get_entity_by_position(5, 5))
+        self.assertEqual(0, len(self.level._entities))

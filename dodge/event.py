@@ -58,6 +58,8 @@ class EventStack(Stack):
             event[EventParam.HANDLER].handle_event(event)
         elif event.event_type == EventType.ADD_TO_LEVEL:
             self._resolve_add_to_level(event)
+        elif event.event_type == EventType.REMOVE_FROM_LEVEL:
+            event[EventParam.LEVEL].remove_entity(event[EventParam.TARGET])
         else:
             raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
 

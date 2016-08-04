@@ -21,8 +21,8 @@ class ComponentType(Enum):
 
 class EventType(Enum):
     (ALL_EVENTS, PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN,
-     AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, ADD_COMPONENTS,
-     REMOVE_COMPONENTS) = range(20)
+     AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, REMOVE_FROM_LEVEL,
+     ADD_COMPONENTS, REMOVE_COMPONENTS) = range(21)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -69,6 +69,8 @@ event_templates = {
     EventType.ADD_TO_LEVEL: ((EventParam.TARGET, True),
                              (EventParam.LEVEL, True),
                              (EventParam.IGNORE_BLOCKERS, False)),
+    EventType.REMOVE_FROM_LEVEL: ((EventParam.TARGET, True),
+                                  (EventParam.LEVEL, True)),
     EventType.ADD_COMPONENTS: ((EventParam.HANDLER, True),
                                (EventParam.COMPONENTS, True))
 }
