@@ -1,21 +1,19 @@
 import unittest
 import dodge.components as components
-from dodge.components import Position, Destructible, Faction
 from dodge.event import Event
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam, InputCommands, Factions
 from tests.utils import LevelStub, EventStackStub
 
 
-class TestAIComponent(unittest.TestCase):
+class TestPlayer(unittest.TestCase):
     def setUp(self):
         self.stack = EventStackStub()
         self.player = Entity(eid='player',
                              name='player',
                              components=[components.Player(self.stack),
                                          components.Actor(100),
-                                         components.Position(5, 5, self.stack),
-                                         components.Attacker(self.stack)])
+                                         components.Position(5, 5, self.stack)])
 
     def gen_event_for_command(self, level, command):
         return Event(EventType.PLAYER_BEGIN_TURN, {EventParam.HANDLER: self.player,
@@ -26,21 +24,20 @@ class TestAIComponent(unittest.TestCase):
         level = LevelStub(None, None, player=self.player)
 
         self.player.handle_event(self.gen_event_for_command(level, InputCommands.MV_LEFT))
+        self.stack.pop()  # Remove the FIRE_ALL event
         move_event = self.stack.peek()
 
         self.assertEqual(EventType.MOVE, move_event.event_type)
         self.assertEqual(-1, move_event[EventParam.X])
         self.assertEqual(0, move_event[EventParam.Y])
 
-    def test_attacks_after_move(self):
-        target = Entity(0, 0, [Position(4, 4, self.stack),
-                               Destructible(self.stack, 10, 0),
-                               Faction(Factions.DEFENDER)])
-        level = LevelStub(None, target, player=self.player)
+    def test_fires_after_move(self):
+        level = LevelStub(None, None, self.player)
 
         self.player.handle_event(self.gen_event_for_command(level, InputCommands.MV_LEFT))
 
-        prepare_event = self.stack.peek()
-        self.assertEqual(EventType.PREPARE_ATTACK, prepare_event.event_type)
-        self.assertEqual(self.player, prepare_event[EventParam.HANDLER])
-        self.assertEqual(target, prepare_event[EventParam.TARGET])
+        fire_event = self.stack.peek()
+        self.assertTrue(fire_event.is_event_type(EventType.FIRE_ALL))
+        self.assertEqual(self.player, fire_event[EventParam.HANDLER])
+        self.assertEqual(Factions.DEFENDER, fire_event[EventParam.FACTION])
+        self.assertEqual(level, fire_event[EventParam.LEVEL])

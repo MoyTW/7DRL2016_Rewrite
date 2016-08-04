@@ -7,10 +7,11 @@ class Player(Component):
     def __init__(self, event_stack):
         super(Player, self).__init__(component_type=ComponentType.PLAYER,
                                      target_events=[EventType.PLAYER_BEGIN_TURN],
-                                     emittable_events=[EventType.MOVE, EventType.PREPARE_ATTACK],
+                                     emittable_events=[EventType.MOVE, EventType.FIRE_ALL],
                                      event_stack=event_stack)
-        self.gun_radius = 3  # TODO: Do not hardcode!
-        self.target_factions = frozenset([Factions.DEFENDER])  # TODO: Do not hardcode!
+        # TODO: Hardcoded - don't do this!
+        # TODO: You should be able to target multiple factions...eventually at some distant point
+        self.target_faction = Factions.DEFENDER
 
     def _move(self, x, y, level):
         move_event = Event(EventType.MOVE, {EventParam.HANDLER: level.get_player_entity(),
@@ -19,28 +20,15 @@ class Player(Component):
                                             EventParam.LEVEL: level})
         self.emit_event(move_event)
 
-    def _attack(self, level):
-        player = level.get_player_entity()
-        (px, py) = level.get_player_position()
-        nearby_entities = level.get_entities_in_radius(px, py, self.gun_radius)
-        targets = []
-        for entity in nearby_entities:
-            if entity.has_component(ComponentType.FACTION) and \
-                            entity.get_component(ComponentType.FACTION).faction in self.target_factions and \
-                            entity.get_component(ComponentType.DESTRUCTIBLE):
-                targets.append(entity)
-        targets.sort(key=player.get_component(ComponentType.POSITION).distance_to)
-
-        if targets:
-            target = targets[0]
-            prepare_event = Event(EventType.PREPARE_ATTACK, {EventParam.HANDLER: player,
-                                                             EventParam.TARGET: target,
-                                                             EventParam.QUANTITY: 0})
-            self.emit_event(prepare_event)
+    def _fire_all(self, level):
+        fire_all = Event(EventType.FIRE_ALL, {EventParam.HANDLER: level.get_player_entity(),
+                                              EventParam.LEVEL: level,
+                                              EventParam.FACTION: self.target_faction})
+        self.emit_event(fire_all)
 
     def _process_move_command(self, x, y, level):
         self._move(x, y, level)
-        self._attack(level)
+        self._fire_all(level)
 
     def _handle_event(self, event):
         if event.event_type == EventType.PLAYER_BEGIN_TURN:
