@@ -16,7 +16,7 @@ class InputCommands(Enum):
 
 class ComponentType(Enum):
     (ACTOR, AI, ATTACKER, DESTRUCTIBLE, MOUNTABLE, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS,
-     WEAPON, ATTACK_ON_DEATH) = range(14)
+     WEAPON, RETALIATORY_DEATH, DAMAGE_BONUS) = range(15)
 
 
 class EventType(Enum):

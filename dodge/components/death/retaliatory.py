@@ -6,7 +6,7 @@ from dodge.event import Event
 class RetaliatoryDeath(Component):
     """ On death, broadcast an attack against the killer. """
     def __init__(self, event_stack):
-        super().__init__(ComponentType.ATTACK_ON_DEATH,
+        super().__init__(ComponentType.RETALIATORY_DEATH,
                          target_events=[EventType.DEATH],
                          emittable_events=[EventType.PREPARE_ATTACK],
                          event_stack=event_stack)

@@ -41,18 +41,20 @@ class TestWeaponComponent(unittest.TestCase):
         self.assertEqual(5, to_add.get_component(ComponentType.POSITION).x)
         self.assertEqual(5, to_add.get_component(ComponentType.POSITION).y)
         # Actor
-        self.assertEqual(25, to_add.get_component(ComponentType.ACTOR).speed)
-        self.assertEqual(25, to_add.get_component(ComponentType.ACTOR).ttl)
+        self.assertEqual(self.speed, to_add.get_component(ComponentType.ACTOR).speed)
+        self.assertEqual(self.speed, to_add.get_component(ComponentType.ACTOR).ttl)
         # Projectile
         path = to_add.get_component(ComponentType.PROJECTILE).path
         self.assertEqual(5, path.x0)
         self.assertEqual(5, path.y0)
         self.assertEqual(4, path.x1)
         self.assertEqual(3, path.y1)
-        # Death
-        self.assertTrue(False)
+        # RetaliatoryDeath
+        self.assertTrue(to_add.has_component(ComponentType.RETALIATORY_DEATH))
+        # DamageBonus
+        self.assertEqual(self.power, to_add.get_component(ComponentType.DAMAGE_BONUS).bonus)
         # Attacker
-        self.assertTrue(False)
+        self.assertTrue(to_add.has_component(ComponentType.ATTACKER))
 
     def test_fires_at_nearest_target(self):
         nearest = Entity(0, 0, [Position(5, 4, self.stack), Faction(Factions.DEFENDER),
