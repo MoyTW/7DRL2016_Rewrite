@@ -19,3 +19,8 @@ class TestRetaliatoryDeath(unittest.TestCase):
         self.assertEqual("alice", prepare_attack[EventParam.HANDLER])
         self.assertEqual("bob", prepare_attack[EventParam.TARGET])
         self.assertEqual(0, prepare_attack[EventParam.QUANTITY])
+
+    def test_handles_death_no_killer(self):
+        death = Event(EventType.DEATH, {EventParam.HANDLER: "alice"})
+        self.assertEqual(death, self.retaliatory.handle_event(death))
+        self.assertTrue(self.stack.is_empty())

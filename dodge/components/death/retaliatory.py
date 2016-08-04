@@ -13,8 +13,9 @@ class RetaliatoryDeath(Component):
 
     def _handle_event(self, event):
         if event.event_type == EventType.DEATH:
-            event = Event(EventType.PREPARE_ATTACK, {EventParam.QUANTITY: 0,
-                                                     EventParam.HANDLER: event[EventParam.HANDLER],
-                                                     EventParam.TARGET: event[EventParam.KILLER]})
-            self.emit_event(event)
+            if EventParam.KILLER in event:
+                event = Event(EventType.PREPARE_ATTACK, {EventParam.QUANTITY: 0,
+                                                         EventParam.HANDLER: event[EventParam.HANDLER],
+                                                         EventParam.TARGET: event[EventParam.KILLER]})
+                self.emit_event(event)
             return event
