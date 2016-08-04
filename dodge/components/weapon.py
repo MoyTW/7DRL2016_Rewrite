@@ -1,4 +1,4 @@
-from dodge.components import Position, Projectile, Actor
+from dodge.components import Position, Projectile, Actor, RetaliatoryDeath, DamageBonus, Attacker
 from dodge.components.component import Component
 from dodge.event import Event
 from dodge.constants import ComponentType, EventType, EventParam
@@ -40,7 +40,10 @@ class Weapon(Component):
         projectile = Entity(uuid.uuid4(), self.projectile_name,
                             [Position(shooter_pos.x, shooter_pos.y, self._event_stack),
                              Projectile(path, self._event_stack),
-                             Actor(self.speed)])
+                             Actor(self.speed),
+                             DamageBonus(self.power),
+                             RetaliatoryDeath(self._event_stack),
+                             Attacker(self._event_stack)])
         return projectile
 
     def _handle_event(self, event: Event):
