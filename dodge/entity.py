@@ -1,3 +1,6 @@
+from dodge.constants import EventParam
+
+
 class Entity:
     def __init__(self, eid, name, components=None):
         self.eid = eid
@@ -33,7 +36,7 @@ class Entity:
         for component in self._ordered_components:
             if component.handle_event(event) is True:
                 return True
-        if must_handle:
+        if EventParam.DROPS_THROUGH not in event and must_handle:
             raise ValueError('Entity ' + str(self.eid) + ' could not handle event type: ' + str(event.event_type))
         else:
             return event

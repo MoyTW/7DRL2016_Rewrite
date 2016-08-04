@@ -23,7 +23,8 @@ class TestWeaponComponent(unittest.TestCase):
         self.shooter = Entity(0, 0, [Position(5, 5, self.stack), weapon])
         self.fire_event = Event(EventType.FIRE_ALL, {EventParam.HANDLER: self.shooter,
                                                      EventParam.LEVEL: self.level,
-                                                     EventParam.FACTION: Factions.DEFENDER})
+                                                     EventParam.FACTION: Factions.DEFENDER,
+                                                     EventParam.DROPS_THROUGH: True})
 
     def test_properties_of_projectile(self):
         target = Entity(0, 0, [Position(4, 3, self.stack), Faction(Factions.DEFENDER), Destructible(self.stack, 10, 2)])

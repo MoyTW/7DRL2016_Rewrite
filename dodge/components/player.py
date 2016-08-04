@@ -22,7 +22,8 @@ class Player(Component):
     def _fire_all(self, level):
         fire_all = Event(EventType.FIRE_ALL, {EventParam.HANDLER: level.get_player_entity(),
                                               EventParam.LEVEL: level,
-                                              EventParam.FACTION: self.target_faction})
+                                              EventParam.FACTION: self.target_faction,
+                                              EventParam.DROPS_THROUGH: True})
         self.emit_event(fire_all)
 
     def _process_move_command(self, x, y, level):
