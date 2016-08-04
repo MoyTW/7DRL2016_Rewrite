@@ -17,4 +17,4 @@ class RetaliatoryDeath(Component):
                                                      EventParam.HANDLER: event[EventParam.HANDLER],
                                                      EventParam.TARGET: event[EventParam.KILLER]})
             self.emit_event(event)
-            return True
+            return event

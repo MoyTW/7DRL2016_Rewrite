@@ -1,8 +1,9 @@
-from dodge.components import Position, Projectile, Actor, RetaliatoryDeath, DamageBonus, Attacker
+from dodge.components import Position, Projectile, Actor, RetaliatoryDeath, DamageBonus, Attacker, Renderable
 from dodge.components.component import Component
 from dodge.event import Event
 from dodge.constants import ComponentType, EventType, EventParam
 from dodge.entity import Entity
+import dodge.ui as ui
 import uuid
 
 
@@ -38,12 +39,13 @@ class Weapon(Component):
     def _build_projectile(self, shooter_pos, tx, ty):
         path = self.path.build_path(shooter_pos.x, shooter_pos.y, tx, ty)
         projectile = Entity(uuid.uuid4(), self.projectile_name,
-                            [Position(shooter_pos.x, shooter_pos.y, self._event_stack),
-                             Projectile(path, self._event_stack),
+                            [RetaliatoryDeath(self._event_stack),
                              Actor(self.speed),
                              DamageBonus(self.power),
-                             RetaliatoryDeath(self._event_stack),
-                             Attacker(self._event_stack)])
+                             Projectile(path, self._event_stack),
+                             Position(shooter_pos.x, shooter_pos.y, self._event_stack),
+                             Attacker(self._event_stack),
+                             Renderable('.', ui.to_color(255, 0, 0), True)])  # TODO: Pass in Renderable params?
         return projectile
 
     def _handle_event(self, event: Event):

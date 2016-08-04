@@ -124,8 +124,13 @@ class Game(object):
                                                         EventParam.LEVEL: self.game_state.level,
                                                         EventParam.PLAYER: self.game_state.level.get_player_entity()})
                 self.event_stack.push_and_resolve(event)
+            elif actor.has_component(ComponentType.PROJECTILE):  # TODO: Differentiate from AI?
+                event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: actor,
+                                                        EventParam.LEVEL: self.game_state.level,
+                                                        EventParam.PLAYER: self.game_state.level.get_player_entity()})
+                self.event_stack.push_and_resolve(event)
             else:
-                raise ValueError('Cannot resolve turn of actor ' + actor.eid + ', is not player and has no AI!')
+                raise ValueError('Cannot resolve turn of actor ' + str(actor.eid) + ', is not player and has no AI!')
             self.event_stack.push_and_resolve(end_turn)
 
     def play_game(self):
