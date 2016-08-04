@@ -11,7 +11,7 @@ class TestPlayer(unittest.TestCase):
         self.stack = EventStackStub()
         self.player = Entity(eid='player',
                              name='player',
-                             components=[components.Player(self.stack),
+                             components=[components.Player(self.stack, target_faction=Factions.DEFENDER),
                                          components.Actor(100),
                                          components.Position(5, 5, self.stack)])
 

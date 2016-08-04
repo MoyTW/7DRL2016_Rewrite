@@ -9,7 +9,7 @@ from tests.utils import LevelStub, PathStub, EventStackStub
 class TestProjectileComponent(unittest.TestCase):
     def setUp(self):
         self.stack = EventStackStub()
-        self.projectile = Projectile(PathStub(0, 0), self.stack)
+        self.projectile = Projectile(PathStub(0, 0, 0, 0), self.stack)
         self.position = Position(0, 0, self.stack)
         self.entity = Entity(0, 0, components=[self.projectile,
                                                self.position])

@@ -4,14 +4,13 @@ from dodge.constants import ComponentType, EventType, EventParam, InputCommands,
 
 
 class Player(Component):
-    def __init__(self, event_stack):
+    def __init__(self, event_stack, target_faction):
         super(Player, self).__init__(component_type=ComponentType.PLAYER,
                                      target_events=[EventType.PLAYER_BEGIN_TURN],
                                      emittable_events=[EventType.MOVE, EventType.FIRE_ALL],
                                      event_stack=event_stack)
-        # TODO: Hardcoded - don't do this!
         # TODO: You should be able to target multiple factions...eventually at some distant point
-        self.target_faction = Factions.DEFENDER
+        self.target_faction = target_faction
 
     def _move(self, x, y, level):
         move_event = Event(EventType.MOVE, {EventParam.HANDLER: level.get_player_entity(),

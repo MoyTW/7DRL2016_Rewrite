@@ -4,7 +4,7 @@ import dodge.ui as ui
 from dodge.entity import Entity
 import dodge.components as components
 from dodge.level import Level
-from dodge.constants import GameStatus, ComponentType, EventType, EventParam, InputCommands
+from dodge.constants import GameStatus, ComponentType, EventType, EventParam, InputCommands, Factions
 
 
 class GameState(object):
@@ -17,7 +17,7 @@ class GameState(object):
             self.status = GameStatus.PLAYING
             self.player = Entity(eid='player',
                                  name='player',
-                                 components=[components.Player(self.event_stack),
+                                 components=[components.Player(self.event_stack, target_faction=Factions.DEFENDER),
                                              components.Actor(100),
                                              components.Position(5, 5, self.event_stack),
                                              components.Renderable('@', ui.to_color(255, 255, 255)),
