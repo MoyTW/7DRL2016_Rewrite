@@ -2,11 +2,13 @@ import unittest
 from dodge.components import Actor
 from dodge.event import Event
 from dodge.constants import EventType, EventParam
+from tests.utils import EventStackStub
 
 
 class TestActorComponent(unittest.TestCase):
     def setUp(self):
-        self.component = Actor(100)
+        self.stack = EventStackStub()
+        self.component = Actor(self.stack, 100)
 
     def test_handles_pass_time(self):
         event = Event(EventType.PASS_TIME, {EventParam.QUANTITY: 50})

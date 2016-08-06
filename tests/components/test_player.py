@@ -12,7 +12,7 @@ class TestPlayer(unittest.TestCase):
         self.player = Entity(eid='player',
                              name='player',
                              components=[components.Player(self.stack, target_faction=Factions.DEFENDER),
-                                         components.Actor(100),
+                                         components.Actor(self.stack, 100),
                                          components.Position(5, 5, self.stack)])
 
     def gen_event_for_command(self, level, command):

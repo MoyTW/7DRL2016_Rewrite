@@ -29,7 +29,7 @@ class GameState(object):
                                  name='player',
                                  components=[components.Player(self.event_stack, target_faction=Factions.DEFENDER),
                                              components.Mountings(['turret']),  # TODO: Constant-ify
-                                             components.Actor(100),
+                                             components.Actor(self.event_stack, 100),
                                              components.Position(5, 5, self.event_stack),
                                              components.Renderable('@', ui.to_color(255, 255, 255))])
             mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: self.player, EventParam.ITEM: cutting_laser})
@@ -39,7 +39,7 @@ class GameState(object):
                                 name='test_enemy',
                                 components=[components.Faction(Factions.DEFENDER),
                                             components.AI(event_stack),
-                                            components.Actor(100),
+                                            components.Actor(self.event_stack, 100),
                                             components.Destructible(event_stack, 100, 0),
                                             components.Position(10, 10, self.event_stack),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])

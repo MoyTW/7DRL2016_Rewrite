@@ -40,7 +40,7 @@ class Weapon(Component):
         path = self.path.build_path(shooter_pos.x, shooter_pos.y, tx, ty)
         projectile = Entity(uuid.uuid4(), self.projectile_name,
                             [RetaliatoryDeath(self._event_stack),
-                             Actor(self.speed),
+                             Actor(self._event_stack, self.speed),
                              DamageBonus(self.power),
                              Projectile(path, self._event_stack),
                              Position(shooter_pos.x, shooter_pos.y, self._event_stack),

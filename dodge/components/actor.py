@@ -3,10 +3,11 @@ from dodge.constants import ComponentType, EventType, EventParam
 
 
 class Actor(Component):
-    def __init__(self, base_speed):
+    def __init__(self, event_stack, base_speed):
         super(Actor, self).__init__(component_type=ComponentType.ACTOR,
                                     target_events=[EventType.PASS_TIME, EventType.END_TURN],
-                                    emittable_events=[])
+                                    emittable_events=[],
+                                    event_stack=event_stack)
 
         self._base_speed = base_speed
         self._ttl = self.base_speed
