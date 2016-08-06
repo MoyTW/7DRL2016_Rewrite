@@ -13,7 +13,7 @@ class RetaliatoryDeath(Component):
 
     def _handle_event(self, event):
         if event.event_type == EventType.DEATH:
-            if EventParam.KILLER in event:
+            if EventParam.KILLER in event and event[EventParam.KILLER] is not None:
                 event = Event(EventType.PREPARE_ATTACK, {EventParam.QUANTITY: 0,
                                                          EventParam.HANDLER: event[EventParam.HANDLER],
                                                          EventParam.TARGET: event[EventParam.KILLER]})
