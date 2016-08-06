@@ -62,7 +62,7 @@ class Game(object):
         self.config = Config(None)
         self.window = ui.UI(self.config)
         self.input_handler = ui.InputHandler()
-        self.game_state = None
+        self.game_state = None  # type: GameState
         self.renderer = None
 
     def main_menu(self):
@@ -76,7 +76,7 @@ class Game(object):
     def new_game(self):
         self.game_state = GameState(self.config)
         self.renderer = ui.LevelRenderer(self.window.console, self.game_state.level, self.config)
-        self.renderer.render_all()
+        self.renderer.render_all(0)
         self.window.display_text("Hello World!", 12)
 
     def pass_actor_time(self):
@@ -106,7 +106,7 @@ class Game(object):
 
     def run_turn(self):
         # Render
-        self.renderer.render_all()
+        self.renderer.render_all(self.game_state.player.get_component(ComponentType.ACTOR).speed)
 
         # Pass time
         live = self.pass_actor_time()

@@ -125,6 +125,8 @@ class LevelRenderer(object):
         wall = self.level[x][y].block_sight
         if visible and not wall:
             libtcod.console.set_char_background(self.console, x - self.camera_x, y - self.camera_y, color, flag)
+            return True
+        return False
 
     def draw_rangefinder(self):
         (x, y) = self.level.get_player_position()
@@ -132,7 +134,24 @@ class LevelRenderer(object):
         for tile in tiles:
             self.color_square(libtcod.lightest_blue, tile[0], tile[1], libtcod.BKGND_ALPHA(.1))
 
-    def render_all(self):
+    def draw_paths(self, timeframe):
+        self.level.get_entity_by_position(0, 0)
+        for entity in self.level.entities_with_component(ComponentType.PROJECTILE):
+            continue_draw = True
+            path = entity.get_component(ComponentType.PROJECTILE).path
+            projectile_speed = entity.get_component(ComponentType.ACTOR).speed
+            if projectile_speed == 0:
+                num_moves = self.config.VISION_RADIUS
+            else:
+                num_moves = int(timeframe / projectile_speed)
+
+            for (x, y) in path.project(num_moves):
+                if continue_draw:
+                    continue_draw = self.color_square(libtcod.orange, x, y)
+                    if self.level[x][y].blocked:
+                        continue_draw = False
+
+    def render_all(self, ttl):
         libtcod.console.clear(self.console)
         libtcod.console.set_default_foreground(0, libtcod.white)
 
@@ -158,6 +177,7 @@ class LevelRenderer(object):
             self.render_entity(entity)
 
         self.draw_rangefinder()
+        self.draw_paths(ttl)
 
         libtcod.console.blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
 
