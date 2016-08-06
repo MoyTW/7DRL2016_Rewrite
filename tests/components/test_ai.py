@@ -9,13 +9,6 @@ from tests.utils import LevelStub
 
 class TestAIComponent(unittest.TestCase):
     def setUp(self):
-        self.stack = EventStack()
-        self.ai = AI(self.stack)
-        self.ai._is_active = True
-        self.position = Position(2, 1, self.stack)
-        self.entity = Entity(0, 0, components=[self.ai,
-                                               self.position,
-                                               Actor(self.stack, 100)])
         self.fov_map = FOVMap(3, 3)
         for x in range(3):
             for y in range(3):
@@ -23,6 +16,14 @@ class TestAIComponent(unittest.TestCase):
         self.fov_map.set_tile_properties(1, 0, False, False)
         self.fov_map.set_tile_properties(1, 1, False, False)
         self.level = LevelStub(self.fov_map, self.entity)
+
+        self.stack = EventStack(self.level)
+        self.ai = AI(self.stack)
+        self.ai._is_active = True
+        self.position = Position(2, 1, self.stack)
+        self.entity = Entity(0, 0, components=[self.ai,
+                                               self.position,
+                                               Actor(self.stack, 100)])
 
     def test_steps_towards_player_around_obstacles(self):
         player = Entity(0, 0, components=[Position(0, 0, self.stack)])

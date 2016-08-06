@@ -8,8 +8,8 @@ from dodge.entity import Entity
 
 class TestLevel(unittest.TestCase):
     def setUp(self):
-        self.stack = EventStack()
         self.level = Level(10, 10, Config(None))
+        self.stack = EventStack(self.level)
         self.level.add_entity(Entity(0, 0, [Position(1, 1, self.stack)]))
         self.level.add_entity(Entity(1, 1, [Position(8, 8, self.stack)]))
         self.level.add_entity(Entity(2, 2, [Position(4, 4, self.stack)]))

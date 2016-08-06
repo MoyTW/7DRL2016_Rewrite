@@ -10,8 +10,8 @@ from tests.utils import EntityStub
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
-        self.stack = EventStack()
         self.level = Level(10, 10, Config(None))
+        self.stack = EventStack(self.level)
 
     def test_resolves_handler_based_events(self):
         entity = EntityStub()
@@ -22,8 +22,7 @@ class TestEvent(unittest.TestCase):
 
     def test_resolves_ADD_TO_LEVEL_event(self):
         entity = Entity(0, 0, [])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                               EventParam.TARGET: entity})
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(entity, self.level._entities[0])
@@ -31,8 +30,7 @@ class TestEvent(unittest.TestCase):
 
     def test_resolves_ADD_TO_LEVEL_event_with_position(self):
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                               EventParam.TARGET: entity})
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(entity, self.level.get_entity_by_position(5, 5))
@@ -45,22 +43,19 @@ class TestEvent(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.level.set_blocked(5, 5, True)
             entity = Entity(0, 0, [Position(5, 5, self.stack)])
-            event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                                   EventParam.TARGET: entity})
+            event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)
 
     def tests_ADD_TO_LEVEL_bypass_block_occupied_with_ignore_blockers(self):
         self.level.set_blocked(5, 5, True)
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: self.level,
-                                               EventParam.TARGET: entity,
-                                               EventParam.IGNORE_BLOCKERS: True})
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity, EventParam.IGNORE_BLOCKERS: True})
         self.stack.push_and_resolve(event)
 
     def tests_REMOVE_FROM_LEVEL(self):
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
         self.level.add_entity(entity)
-        event = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.LEVEL: self.level, EventParam.TARGET: entity})
+        event = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.TARGET: entity})
         self.stack.push_and_resolve(event)
         self.assertIsNone(self.level.get_entity_by_position(5, 5))
         self.assertEqual(0, len(self.level._entities))

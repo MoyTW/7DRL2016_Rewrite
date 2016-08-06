@@ -9,16 +9,18 @@ from dodge.paths import LinePath
 
 
 class GameState(object):
-    def __init__(self, config, event_stack, save=None):
+    def __init__(self, config, save=None):
         if save is not None:
             self.load_save(save)
         else:
+            self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
             self.config = config
-            self.event_stack = event_stack
+            self.event_stack = EventStack(self.level)
             self.status = GameStatus.PLAYING
+
             cutting_laser = Entity(eid='cutter',
                                    name='cutting laser',
-                                   components=[components.Weapon(event_stack=event_stack,
+                                   components=[components.Weapon(event_stack=self.event_stack,
                                                                  projectile_name='laser',
                                                                  path=LinePath,
                                                                  power=10,
@@ -38,15 +40,12 @@ class GameState(object):
             test_enemy = Entity(eid='test_enemy',
                                 name='test_enemy',
                                 components=[components.Faction(Factions.DEFENDER),
-                                            components.AI(event_stack),
+                                            components.AI(self.event_stack),
                                             components.Actor(self.event_stack, 100),
-                                            components.Destructible(event_stack, 100, 0),
+                                            components.Destructible(self.event_stack, 100, 0),
                                             components.Position(10, 10, self.event_stack),
                                             components.Renderable('E', ui.to_color(0, 255, 0))])
             self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.HANDLER: test_enemy}))
-
-            # Generate level
-            self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
             # TODO: This should be in a proper level gen!
             self.level.add_entity(self.player)
             self.level.add_entity(test_enemy)
@@ -63,7 +62,6 @@ class Game(object):
         self.config = Config(None)
         self.window = ui.UI(self.config)
         self.input_handler = ui.InputHandler()
-        self.event_stack = EventStack()
         self.game_state = None
         self.renderer = None
 
@@ -76,8 +74,7 @@ class Game(object):
             return
 
     def new_game(self):
-        self.event_stack = EventStack()
-        self.game_state = GameState(self.config, self.event_stack)
+        self.game_state = GameState(self.config)
         self.renderer = ui.LevelRenderer(self.window.console, self.game_state.level, self.config)
         self.renderer.render_all()
         self.window.display_text("Hello World!", 12)
@@ -90,7 +87,7 @@ class Game(object):
 
         for actor in actors:
             pass_time = Event(EventType.PASS_TIME, {EventParam.HANDLER: actor, EventParam.QUANTITY: ttl})
-            self.event_stack.push_and_resolve(pass_time)
+            self.game_state.event_stack.push_and_resolve(pass_time)
             if actor.get_component(ComponentType.ACTOR).is_live:
                 live.append(actor)
 
@@ -105,7 +102,7 @@ class Game(object):
             event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,
                                                         EventParam.HANDLER: player,
                                                         EventParam.INPUT_COMMAND: command})
-            self.event_stack.push_and_resolve(event)
+            self.game_state.event_stack.push_and_resolve(event)
 
     def run_turn(self):
         # Render
@@ -123,15 +120,15 @@ class Game(object):
                 event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: actor,
                                                         EventParam.LEVEL: self.game_state.level,
                                                         EventParam.PLAYER: self.game_state.level.get_player_entity()})
-                self.event_stack.push_and_resolve(event)
+                self.game_state.event_stack.push_and_resolve(event)
             elif actor.has_component(ComponentType.PROJECTILE):  # TODO: Differentiate from AI?
                 event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: actor,
                                                         EventParam.LEVEL: self.game_state.level,
                                                         EventParam.PLAYER: self.game_state.level.get_player_entity()})
-                self.event_stack.push_and_resolve(event)
+                self.game_state.event_stack.push_and_resolve(event)
             else:
                 raise ValueError('Cannot resolve turn of actor ' + str(actor.eid) + ', is not player and has no AI!')
-            self.event_stack.push_and_resolve(end_turn)
+            self.game_state.event_stack.push_and_resolve(end_turn)
 
     def play_game(self):
         while not self.game_state.status == GameStatus.MENU:

@@ -34,23 +34,22 @@ class Event:
 
 
 class EventStack(Stack):
-    def __init__(self):
+    def __init__(self, level):
         super(EventStack, self).__init__()
+        self._level = level
 
-    @staticmethod
-    def _resolve_add_to_level(event):
+    def _resolve_add_to_level(self, event):
         entity = event[EventParam.TARGET]
-        level = event[EventParam.LEVEL]
 
         if entity.has_component(ComponentType.POSITION):
             position = entity.get_component(ComponentType.POSITION)
             # TODO: This ignore_blockers form (in and True) - surely there's a more elegant way to express it?
             ignore_blockers = EventParam.IGNORE_BLOCKERS in event and event[EventParam.IGNORE_BLOCKERS]
-            if not level.is_walkable(position.x, position.y) and not ignore_blockers:
+            if not self._level.is_walkable(position.x, position.y) and not ignore_blockers:
                 raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
                                  str(position.y) + ") as it is not walkable!")
 
-        level.add_entity(entity)
+        self._level.add_entity(entity)
 
     def resolve_top_event(self):
         event = self.pop()
@@ -59,7 +58,7 @@ class EventStack(Stack):
         elif event.event_type == EventType.ADD_TO_LEVEL:
             self._resolve_add_to_level(event)
         elif event.event_type == EventType.REMOVE_FROM_LEVEL:
-            event[EventParam.LEVEL].remove_entity(event[EventParam.TARGET])
+            self._level.remove_entity(event[EventParam.TARGET])
         else:
             raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
 
