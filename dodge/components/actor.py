@@ -1,12 +1,13 @@
 from dodge.components.component import Component
+from dodge.event import Event
 from dodge.constants import ComponentType, EventType, EventParam
 
 
 class Actor(Component):
     def __init__(self, event_stack, base_speed):
         super(Actor, self).__init__(component_type=ComponentType.ACTOR,
-                                    target_events=[EventType.PASS_TIME, EventType.END_TURN],
-                                    emittable_events=[],
+                                    target_events=[EventType.PASS_TIME, EventType.END_TURN, EventType.DEATH],
+                                    emittable_events=[EventType.REMOVE_FROM_LEVEL],
                                     event_stack=event_stack)
 
         self._base_speed = base_speed
@@ -40,12 +41,19 @@ class Actor(Component):
     def _end_turn(self):
         self._ttl = self.speed
 
+    def _death(self, dead_entity):
+        remove_dead = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.TARGET: dead_entity})
+        self.emit_event(remove_dead)
+
     def _handle_event(self, event):
         if event.event_type == EventType.PASS_TIME:
             self._pass_time(event[EventParam.QUANTITY])
             return True
         elif event.event_type == EventType.END_TURN:
             self._end_turn()
+            return True
+        elif event.event_type == EventType.DEATH:
+            self._death(event[EventParam.HANDLER])
             return True
         else:
             return False

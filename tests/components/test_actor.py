@@ -25,3 +25,11 @@ class TestActorComponent(unittest.TestCase):
         end_turn_event = Event(EventType.END_TURN, {})
         self.assertTrue(self.component.handle_event(end_turn_event))
         self.assertEqual(100, self.component.ttl)
+
+    def test_death_emits_remove_from_level(self):
+        death = Event(EventType.DEATH, {EventParam.HANDLER: 'target'})
+        self.assertTrue(self.component.handle_event(death))
+        self.assertEqual(1, len(self.stack.view()))
+        remove_event = self.stack.peek()
+        self.assertEqual(EventType.REMOVE_FROM_LEVEL, remove_event.event_type)
+        self.assertEqual(EventType.REMOVE_FROM_LEVEL, remove_event.event_type)
