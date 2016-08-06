@@ -30,7 +30,8 @@ class TestBasePath(unittest.TestCase):
         self.assertEqual((5, 5), self.path.current_position)
 
     def test_project(self):
-        self.path.project(3)
+        result = self.path.project(3)
+        self.assertEqual([(0, 0), (1, 1), (2, 2), (3, 3)], result)
         self.assertEqual(len(self.path._path), 4)
         self.assertEqual(0, self.path.current_step)
         self.assertEqual((0, 0), self.path.current_position)

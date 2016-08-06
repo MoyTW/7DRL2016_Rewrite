@@ -52,6 +52,8 @@ class Path:
         if len(self._path) <= self.current_step + steps:
             self._calc(steps - len(self._path) + 1)
 
+        return self._path[self.current_step:self.current_step + steps + 1]
+
 
 class LinePath(Path):
     """ Defines a line from (x0, y0) to (x1, y1), continuing past (x1, y1). Moves 1 square (vertical or horizontal) per
