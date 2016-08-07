@@ -135,7 +135,6 @@ class LevelRenderer(object):
             self.color_square(libtcod.lightest_blue, tile[0], tile[1], libtcod.BKGND_ALPHA(.1))
 
     def draw_paths(self, timeframe):
-        self.level.get_entity_by_position(0, 0)
         for entity in self.level.entities_with_component(ComponentType.PROJECTILE):
             continue_draw = True
             path = entity.get_component(ComponentType.PROJECTILE).path
