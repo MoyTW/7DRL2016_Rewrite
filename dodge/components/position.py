@@ -20,36 +20,36 @@ class Position(Component):
         dy = position.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def _emit_collision(self, x, y, level):
-        collision = Event(EventType.COLLISION, {EventParam.HANDLER: level.get_entity_by_position(self.x, self.y),
-                                                EventParam.TARGET: level.get_entity_by_position(x, y)})
+    def _emit_collision(self, nx, ny, handler, level):
+        collision = Event(EventType.COLLISION, {EventParam.HANDLER: handler,
+                                                EventParam.TARGET: level.get_entity_by_position(nx, ny)})
         self.emit_event(collision)
 
     # TODO: Add in map to check for blockers
-    def teleport(self, x, y, level, ignore_blockers=False):
+    def _teleport(self, x, y, handler, level, ignore_blockers=False):
         if ignore_blockers or level.is_walkable(x, y):
             self.x = x
             self.y = y
         else:
-            self._emit_collision(x, y, level)
+            self._emit_collision(x, y, handler, level)
 
     # TODO: Add in map to check for blockers
-    def move(self, dx, dy, level, ignore_blockers=False):
+    def _move(self, dx, dy, handler, level, ignore_blockers=False):
         nx = self.x + dx
         ny = self.y + dy
         if ignore_blockers or level.is_walkable(nx, ny):
             self.x = nx
             self.y = ny
         else:
-            self._emit_collision(nx, ny, level)
+            self._emit_collision(nx, ny, handler, level)
 
     # TODO: Re-register position post-update
     def _handle_event(self, event):
         if event.event_type == EventType.TELEPORT:
-            self.teleport(event[EventParam.X], event[EventParam.Y], event[EventParam.LEVEL])
+            self._teleport(event[EventParam.X], event[EventParam.Y], event[EventParam.HANDLER], event[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.MOVE:
-            self.move(event[EventParam.X], event[EventParam.Y], event[EventParam.LEVEL])
+            self._move(event[EventParam.X], event[EventParam.Y], event[EventParam.HANDLER], event[EventParam.LEVEL])
             return True
         elif event.event_type == EventType.COLLISION:
             return True
