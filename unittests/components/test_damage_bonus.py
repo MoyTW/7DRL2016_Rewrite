@@ -2,7 +2,7 @@ import unittest
 from dodge.constants import EventType, EventParam
 from dodge.components.damage_bonus import DamageBonus
 from dodge.event import Event
-from tests.utils import EventStackStub
+from unittests.utils import EventStackStub
 
 
 class TestDamageBonus(unittest.TestCase):

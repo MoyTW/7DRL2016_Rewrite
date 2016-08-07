@@ -2,7 +2,7 @@ import unittest
 from dodge.constants import EventType, EventParam
 from dodge.components.destructible import Destructible
 from dodge.event import Event
-from tests.utils import EventStackStub
+from unittests.utils import EventStackStub
 
 
 class TestDestructible(unittest.TestCase):

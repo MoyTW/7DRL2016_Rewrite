@@ -3,7 +3,7 @@ from dodge.components import Position, Projectile
 from dodge.event import Event
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam
-from tests.utils import LevelStub, PathStub, EventStackStub
+from unittests.utils import LevelStub, PathStub, EventStackStub
 
 
 class TestProjectileComponent(unittest.TestCase):

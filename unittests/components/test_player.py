@@ -3,7 +3,7 @@ import dodge.components as components
 from dodge.event import Event
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam, InputCommands, Factions
-from tests.utils import LevelStub, EventStackStub
+from unittests.utils import LevelStub, EventStackStub
 
 
 class TestPlayer(unittest.TestCase):

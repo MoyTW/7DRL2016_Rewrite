@@ -5,7 +5,7 @@ from dodge.event import Event
 from dodge.config import Config
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam, Factions, ComponentType
-from tests.utils import EventStackStub, PathStub
+from unittests.utils import EventStackStub, PathStub
 
 
 class TestWeaponComponent(unittest.TestCase):

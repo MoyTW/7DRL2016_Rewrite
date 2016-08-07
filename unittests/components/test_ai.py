@@ -4,7 +4,7 @@ from dodge.components import AI, Position, Actor
 from dodge.event import Event, EventStack
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam
-from tests.utils import LevelStub
+from unittests.utils import LevelStub
 
 
 class TestAIComponent(unittest.TestCase):

@@ -2,7 +2,7 @@ import unittest
 from dodge.components import Actor
 from dodge.event import Event
 from dodge.constants import EventType, EventParam
-from tests.utils import EventStackStub
+from unittests.utils import EventStackStub
 
 
 class TestActorComponent(unittest.TestCase):

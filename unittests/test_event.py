@@ -5,7 +5,7 @@ from dodge.components import Position
 from dodge.event import Event, EventStack
 from dodge.level import Level
 from dodge.entity import Entity
-from tests.utils import EntityStub
+from unittests.utils import EntityStub
 
 
 class TestEvent(unittest.TestCase):

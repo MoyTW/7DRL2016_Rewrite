@@ -3,7 +3,7 @@ from dodge.constants import EventType, EventParam
 from dodge.components.position import Position
 from dodge.event import Event
 from dodge.fov import FOVMap
-from tests.utils import EntityStub, LevelStub, EventStackStub
+from unittests.utils import EntityStub, LevelStub, EventStackStub
 
 
 class TestPosition(unittest.TestCase):
