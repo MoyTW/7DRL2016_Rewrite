@@ -66,12 +66,18 @@ class Level(object):
 
     # TODO: Don't do full scan every time
     def get_entity_by_position(self, x, y):
-        """Returns the entity in tile (x, y). Assumes that entities cannot share an (x, y) position."""
+        """ Returns the entity in tile (x, y). Assumes that entities cannot share an (x, y) position; will throw
+        ValueError if that is untrue. """
         have_pos = self.entities_with_component(ComponentType.POSITION)
+        in_pos = []
         for entity in have_pos:
             pos = entity.get_component(ComponentType.POSITION)
             if x == pos.x and y == pos.y:
-                return entity
+                in_pos.append(entity)
+        if len(in_pos) == 1:
+            return in_pos[0]
+        elif len(in_pos) > 1:
+            raise ValueError('Cannot get entity in (' + str(x) + ', ' + str(y) + ') - there are multiple entities!')
         return None
 
     def get_player_entity(self):
