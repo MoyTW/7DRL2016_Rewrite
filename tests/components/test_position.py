@@ -12,11 +12,11 @@ class TestComponent(unittest.TestCase):
         fov_map.set_all_tiles(True, True)
         fov_map.set_tile_properties(4, 7, False, False)
         fov_map.recompute_fov(3, 7, 100, True, 0)
+        self.handler = EntityStub()
         self.level_stub = LevelStub(fov_map, self.handler)
 
         self.stack = EventStack(self.level_stub)
         self.p = Position(3, 7, self.stack)
-        self.handler = EntityStub()
 
     def tests_teleport_event(self):
         event = Event(EventType.TELEPORT, {EventParam.X: 0, EventParam.Y: 0, EventParam.LEVEL: self.level_stub})

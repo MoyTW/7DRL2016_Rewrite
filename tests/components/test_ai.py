@@ -15,7 +15,7 @@ class TestAIComponent(unittest.TestCase):
                 self.fov_map.set_tile_properties(x, y, True, True)
         self.fov_map.set_tile_properties(1, 0, False, False)
         self.fov_map.set_tile_properties(1, 1, False, False)
-        self.level = LevelStub(self.fov_map, self.entity)
+        self.level = LevelStub(self.fov_map, None)
 
         self.stack = EventStack(self.level)
         self.ai = AI(self.stack)
@@ -24,6 +24,8 @@ class TestAIComponent(unittest.TestCase):
         self.entity = Entity(0, 0, components=[self.ai,
                                                self.position,
                                                Actor(self.stack, 100)])
+        # TODO: omg wtf
+        self.level.handler = self.entity
 
     def test_steps_towards_player_around_obstacles(self):
         player = Entity(0, 0, components=[Position(0, 0, self.stack)])
