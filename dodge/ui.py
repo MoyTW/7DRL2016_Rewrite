@@ -130,7 +130,7 @@ class LevelRenderer(object):
 
     def draw_rangefinder(self):
         (x, y) = self.level.get_player_position()
-        tiles = utils.calculate_circle(x, y, 3)  # TODO: Make configurable
+        tiles = utils.circle_tiles(x, y, 3)  # TODO: Make configurable
         for tile in tiles:
             self.color_square(libtcod.lightest_blue, tile[0], tile[1], libtcod.BKGND_ALPHA(.1))
 
