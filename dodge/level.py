@@ -1,5 +1,6 @@
 from dodge.constants import ComponentType
 from dodge.fov import FOVMap
+from dodge.entity import Entity
 import math
 
 
@@ -63,6 +64,9 @@ class Level(object):
 
     def remove_entity(self, entity):
         self._entities.pop(entity.eid)
+
+    def get_entity_by_id(self, eid) -> Entity:
+        return self._entities[eid]
 
     # TODO: Don't do full scan every time
     def get_entity_by_position(self, x, y):
