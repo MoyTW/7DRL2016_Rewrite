@@ -59,8 +59,11 @@ class Level(object):
     def height(self):
         return self._height
 
-    def add_entity(self, entity):
-        self._entities[entity.eid] = entity
+    def add_entity(self, entity: Entity):
+        if entity.has_component(ComponentType.POSITION):
+            self._entities[entity.eid] = entity
+        else:
+            raise ValueError('Cannot add an entity to the level if it has no position!')
 
     def remove_entity(self, entity):
         self._entities.pop(entity.eid)

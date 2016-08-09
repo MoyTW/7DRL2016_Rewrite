@@ -12,6 +12,11 @@ class EntityStub:
         return True
 
 
+class ComponentStub:
+    def __init__(self, component_type):
+        self.type = component_type
+
+
 class EventStackStub(Stack):
     def push_and_resolve(self, event):
         self.push(event)

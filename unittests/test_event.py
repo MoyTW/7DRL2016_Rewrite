@@ -5,7 +5,7 @@ from dodge.components import Position
 from dodge.event import Event, EventStack
 from dodge.level import Level
 from dodge.entity import Entity
-from unittests.utils import EntityStub
+from unittests.utils import EntityStub, ComponentStub
 
 
 class TestEvent(unittest.TestCase):
@@ -21,7 +21,10 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(entity.handled)
 
     def test_resolves_ADD_TO_LEVEL_event(self):
-        entity = Entity(0, 0, [])
+        position = ComponentStub(ComponentType.POSITION)
+        position.x = 5
+        position.y = 5
+        entity = Entity(0, 0, [position])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
