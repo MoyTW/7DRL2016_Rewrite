@@ -68,6 +68,9 @@ class Level(object):
     def remove_entity(self, entity):
         self._entities.pop(entity.eid)
 
+    def has_entity_with_id(self, eid):
+        return eid in self._entities
+
     def get_entity_by_id(self, eid) -> Entity:
         return self._entities[eid]
 
