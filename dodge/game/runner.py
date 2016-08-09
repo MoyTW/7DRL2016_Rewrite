@@ -38,6 +38,14 @@ class GameRunner:
             raise ValueError('Cannot resolve turn of actor ' + str(actor.eid) + ', is not player and has no AI!')
         self.game_state.event_stack.push_and_resolve(end_turn)
 
+    def resolve_instant_actor(self, actor):
+        iterations = 1000
+        while self.game_state.level.has_entity_with_id(actor.eid):
+            self.resolve_actor(actor)
+            iterations -= 1
+            if iterations <= 0:
+                raise ValueError('Could not resolve instant actor ' + str(actor))
+
     def run_turn(self):
         # Render
         self.level_renderer.render_all(self.game_state.player.get_component(ComponentType.ACTOR).speed)
@@ -48,7 +56,11 @@ class GameRunner:
         # Take turns of live actors
         while self.game_state.actor_queue:
             actor = self.game_state.actor_queue.pop(0)
-            self.resolve_actor(actor)
+            speed = actor.get_component(ComponentType.ACTOR).speed
+            if speed == 0:
+                self.resolve_instant_actor(actor)
+            else:
+                self.resolve_actor(actor)
 
     def play_game(self):
         while not self.game_state.status == GameStatus.MENU:
