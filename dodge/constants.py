@@ -28,7 +28,7 @@ class EventType(Enum):
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
 class EventParam(Enum):
     (QUANTITY, DAMAGE_TYPE, HANDLER, X, Y, IGNORE_BLOCKERS, PLAYER, FOV_MAP, TARGET, LEVEL, SOURCE, INPUT_COMMAND,
-     KILLER, MOUNT, ITEM, FACTION, COMPONENTS, DROPS_THROUGH) = range(18)
+     KILLER, MOUNT, ITEM, FACTION, COMPONENTS, DROPS_THROUGH, TAKES_TURN_IMMEDIATELY) = range(19)
 
 event_templates = {
     EventType.DAMAGE: ((EventParam.QUANTITY, True),

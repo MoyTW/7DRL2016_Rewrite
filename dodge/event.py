@@ -34,13 +34,15 @@ class Event:
 
 
 class EventStack(Stack):
-    def __init__(self, level):
+    def __init__(self, level, actor_queue):
         super(EventStack, self).__init__()
         self._level = level
+        self._actor_queue = actor_queue
 
     def _resolve_add_to_level(self, event):
         entity = event[EventParam.TARGET]
 
+        # Check that it can be added to its coordinates
         if entity.has_component(ComponentType.POSITION):
             position = entity.get_component(ComponentType.POSITION)
             # TODO: This ignore_blockers form (in and True) - surely there's a more elegant way to express it?
@@ -48,6 +50,10 @@ class EventStack(Stack):
             if not self._level.is_walkable(position.x, position.y) and not ignore_blockers:
                 raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
                                  str(position.y) + ") as it is not walkable!")
+
+        # Check to see if it should immediately be resolved
+        if EventParam.TAKES_TURN_IMMEDIATELY in event:
+            self._actor_queue.insert(0, entity)
 
         self._level.add_entity(entity)
 

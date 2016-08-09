@@ -15,7 +15,7 @@ class GameState(object):
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
             self.config = config
             self.actor_queue = []
-            self.event_stack = EventStack(self.level)
+            self.event_stack = EventStack(self.level, self.actor_queue)
             self.status = GameStatus.PLAYING
 
             self._silly_init()

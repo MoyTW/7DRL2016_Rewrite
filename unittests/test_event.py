@@ -11,7 +11,8 @@ from unittests.utils import EntityStub, ComponentStub
 class TestEvent(unittest.TestCase):
     def setUp(self):
         self.level = Level(10, 10, Config(None))
-        self.stack = EventStack(self.level)
+        self.actor_queue = []
+        self.stack = EventStack(self.level, self.actor_queue)
 
     def test_resolves_handler_based_events(self):
         entity = EntityStub()
@@ -21,15 +22,19 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(entity.handled)
 
     def test_resolves_ADD_TO_LEVEL_event(self):
-        position = ComponentStub(ComponentType.POSITION)
-        position.x = 5
-        position.y = 5
-        entity = Entity(0, 0, [position])
+        entity = Entity(0, 0, [Position(5, 5, self.stack)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(entity, self.level._entities[0])
         self.assertEqual(1, len(self.level._entities))
+
+    def test_resolves_ADD_TO_LEVEL_event_with_immediate_turn(self):
+        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity, EventParam.TAKES_TURN_IMMEDIATELY: True})
+
+        self.stack.push_and_resolve(event)
+        self.assertEqual(1, len(self.actor_queue))
 
     def test_resolves_ADD_TO_LEVEL_event_with_position(self):
         entity = Entity(0, 0, [Position(5, 5, self.stack)])
