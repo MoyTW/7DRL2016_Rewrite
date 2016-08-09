@@ -39,6 +39,8 @@ class GameRunner:
         self.game_state.event_stack.push_and_resolve(end_turn)
 
     def resolve_instant_actor(self, actor):
+        # I'm not super fond of this hack.
+        self.level_renderer.render_all(self.game_state.player.get_component(ComponentType.ACTOR).speed)
         iterations = 1000
         while self.game_state.level.has_entity_with_id(actor.eid):
             self.resolve_actor(actor)
