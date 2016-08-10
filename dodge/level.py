@@ -42,9 +42,13 @@ class Level(object):
 
         self.zones = []
         self._entities = {}
-        self.fov_map = FOVMap(width, height)
-        for y in range(height):
-            for x in range(width):
+        self.fov_map = None  # type: FOVMap
+        self.rebuild_fov()
+
+    def rebuild_fov(self):
+        self.fov_map = FOVMap(self.width, self.height)
+        for y in range(self.height):
+            for x in range(self.width):
                 self.fov_map.set_tile_properties(x, y, not self[x][y].block_sight, not self[x][y].blocked)
 
     # Allow by-index access
