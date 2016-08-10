@@ -1,16 +1,15 @@
 import unittest
-from dodge.config import Config
 from dodge.constants import EventType, EventParam, ComponentType
 from dodge.components import Position
 from dodge.event import Event, EventStack
 from dodge.level import Level
 from dodge.entity import Entity
-from unittests.utils import EntityStub, ComponentStub
+from unittests.utils import EntityStub, ConfigStub
 
 
 class TestEvent(unittest.TestCase):
     def setUp(self):
-        self.level = Level(10, 10, Config(None))
+        self.level = Level(10, 10, ConfigStub())
         self.actor_queue = []
         self.stack = EventStack(self.level, self.actor_queue)
 

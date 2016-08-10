@@ -22,6 +22,10 @@ class EventStackStub(Stack):
         self.push(event)
 
 
+class ConfigStub:
+    pass
+
+
 # A mess!
 class LevelStub:
     def __init__(self, fov_map, handler, player=None):

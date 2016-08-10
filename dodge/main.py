@@ -1,3 +1,4 @@
+import resources
 from dodge.game.state import GameState
 from dodge.game.runner import GameRunner
 from dodge.config import Config
@@ -6,7 +7,7 @@ import dodge.ui as ui
 
 class Game(object):
     def __init__(self):
-        self.config = Config(None)
+        self.config = Config(resources.config)
         self.window = ui.UI(self.config)
         self.input_handler = ui.InputHandler()
 

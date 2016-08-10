@@ -1,14 +1,13 @@
 import unittest
 from dodge.components.position import Position
 from dodge.level import Level
-from dodge.config import Config
 from dodge.entity import Entity
-from unittests.utils import EventStackStub
+from unittests.utils import EventStackStub, ConfigStub
 
 
 class TestLevel(unittest.TestCase):
     def setUp(self):
-        self.level = Level(10, 10, Config(None))
+        self.level = Level(10, 10, ConfigStub())
         self.stack = EventStackStub()
         self.level.add_entity(Entity(0, 0, [Position(1, 1, self.stack)]))
         self.level.add_entity(Entity(1, 1, [Position(8, 8, self.stack)]))
