@@ -50,9 +50,11 @@ class GameState(object):
                                            components.Mountable('turret')])  # TODO: Constant-ify
         self.player = Entity(eid='player',
                              name='player',
-                             components=[components.Player(self.event_stack, target_faction=Factions.DEFENDER),
+                             components=[components.Faction(Factions.ASSASSIN),
+                                         components.Player(self.event_stack, target_faction=Factions.DEFENDER),
                                          components.Mountings(['turret']),  # TODO: Constant-ify
                                          components.Actor(self.event_stack, 100),
+                                         components.Destructible(self.event_stack, 100, 0),
                                          components.Position(5, 5, self.event_stack),
                                          components.Renderable('@', ui.to_color(255, 255, 255))])
         mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: self.player, EventParam.ITEM: cutting_laser})
@@ -60,13 +62,27 @@ class GameState(object):
 
         test_enemy = Entity(eid='test_enemy',
                             name='test_enemy',
-                            components=[components.Faction(Factions.DEFENDER),
+                            components=[components.Mountings(['turret']),  # TODO: Constant-ify
+                                        components.Faction(Factions.DEFENDER),
                                         components.AI(self.event_stack),
                                         components.Actor(self.event_stack, 100),
                                         components.Destructible(self.event_stack, 100, 0),
                                         components.Position(10, 10, self.event_stack),
                                         components.Renderable('E', ui.to_color(0, 255, 0))])
         self.event_stack.push(Event(EventType.ACTIVATE, {EventParam.HANDLER: test_enemy}))
+
+        cannon = Entity(eid='cannon',
+                        name='cannon',
+                        components=[components.Weapon(event_stack=self.event_stack,
+                                                      projectile_name='shell',
+                                                      path=LinePath,
+                                                      power=10,
+                                                      speed=30,
+                                                      targeting_radius=8),
+                                    components.Mountable('turret')])
+        mount_cannon = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: test_enemy, EventParam.ITEM: cannon})
+        test_enemy.handle_event(mount_cannon)
+
         # TODO: This should be in a proper level gen!
         self.level.add_entity(self.player)
         self.level.add_entity(test_enemy)

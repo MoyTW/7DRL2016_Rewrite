@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class Factions(Enum):
-    DEFENDER = range(1)
+    DEFENDER, ASSASSIN = range(2)
 
 
 class GameStatus(Enum):
