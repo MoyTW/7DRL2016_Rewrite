@@ -26,7 +26,7 @@ class Weapon(Component):
         for entity in nearby_entities:
             if entity.has_component(ComponentType.FACTION) and \
                             entity.get_component(ComponentType.FACTION).faction == target_faction and \
-                            entity.get_component(ComponentType.DESTRUCTIBLE):
+                            entity.has_component(ComponentType.DESTRUCTIBLE):
                 targets.append(entity)
         targets.sort(key=position.distance_to)
 
