@@ -79,7 +79,7 @@ class Level(object):
         return self._entities[eid]
 
     # TODO: Don't do full scan every time
-    def get_entity_by_position(self, x, y):
+    def get_entity_by_position(self, x, y) -> Entity:
         """ Returns the entity in tile (x, y). Assumes that entities cannot share an (x, y) position; will throw
         ValueError if that is untrue. """
         have_pos = self.entities_with_component(ComponentType.POSITION)
@@ -137,7 +137,11 @@ class Level(object):
         self.fov_map.set_tile_properties(x, y, not self[x][y].block_sight, not self[x][y].blocked)
 
     def is_walkable(self, x, y):
-        return self.fov_map.is_walkable(x, y) and not self.get_entity_by_position(x, y)
+        entity = self.get_entity_by_position(x, y)
+        entity_blocks = False
+        if entity and entity.has_component(ComponentType.POSITION):
+            entity_blocks = entity.get_component(ComponentType.POSITION).blocks
+        return self.fov_map.is_walkable(x, y) and not entity_blocks
 
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
