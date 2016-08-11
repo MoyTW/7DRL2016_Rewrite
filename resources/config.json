@@ -4,10 +4,10 @@
   "MAP_WIDTH": 300,
   "MAP_HEIGHT": 300,
   "PANEL_HEIGHT": 7,
-  "FULL_SCREEN": "False",
+  "FULL_SCREEN": false,
   "CAMERA_WIDTH": 80,
   "CAMERA_HEIGHT": 43,
   "VISION_RADIUS": 20,
   "FOV_ALGO": 0,
-  "FOV_LIGHT_WALLS": "True"
+  "FOV_LIGHT_WALLS": true
 }
