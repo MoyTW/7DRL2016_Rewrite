@@ -20,14 +20,14 @@ class TestWeaponComponent(unittest.TestCase):
         self.level = Level(10, 10, Config)
 
         weapon = Weapon(self.stack, self.projectile_name, self.path, self.power, self.speed, self.targeting_radius)
-        self.shooter = Entity(0, 0, [Position(5, 5, self.stack), weapon])
+        self.shooter = Entity(0, 0, [Position(self.stack, 5, 5, False), weapon])
         self.fire_event = Event(EventType.FIRE_ALL, {EventParam.HANDLER: self.shooter,
                                                      EventParam.LEVEL: self.level,
                                                      EventParam.FACTION: Factions.DEFENDER,
                                                      EventParam.DROPS_THROUGH: True})
 
     def test_properties_of_projectile(self):
-        target = Entity(0, 0, [Position(4, 3, self.stack), Faction(Factions.DEFENDER), Destructible(self.stack, 10, 2)])
+        target = Entity(0, 0, [Position(self.stack, 4, 3, False), Faction(Factions.DEFENDER), Destructible(self.stack, 10, 2)])
         self.level.add_entity(target)
 
         self.assertIsInstance(self.shooter.handle_event(self.fire_event, False), Event)
@@ -60,9 +60,9 @@ class TestWeaponComponent(unittest.TestCase):
         self.assertTrue(to_add.has_component(ComponentType.ATTACKER))
 
     def test_fires_at_nearest_target(self):
-        nearest = Entity(0, 0, [Position(5, 4, self.stack), Faction(Factions.DEFENDER),
+        nearest = Entity(0, 0, [Position(self.stack, 5, 4, False), Faction(Factions.DEFENDER),
                                 Destructible(self.stack, 10, 2)])
-        further = Entity(1, 1, [Position(4, 4, self.stack), Faction(Factions.DEFENDER),
+        further = Entity(1, 1, [Position(self.stack, 4, 4, False), Faction(Factions.DEFENDER),
                                 Destructible(self.stack, 10, 2)])
         self.level.add_entity(nearest)
         self.level.add_entity(further)

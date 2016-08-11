@@ -9,11 +9,11 @@ class TestLevel(unittest.TestCase):
     def setUp(self):
         self.level = Level(10, 10, ConfigStub())
         self.stack = EventStackStub()
-        self.level.add_entity(Entity(0, 0, [Position(1, 1, self.stack)]))
-        self.level.add_entity(Entity(1, 1, [Position(8, 8, self.stack)]))
-        self.level.add_entity(Entity(2, 2, [Position(4, 4, self.stack)]))
-        self.level.add_entity(Entity(3, 3, [Position(4, 5, self.stack)]))
-        self.level.add_entity(Entity(4, 4, [Position(4, 6, self.stack)]))
+        self.level.add_entity(Entity(0, 0, [Position(self.stack, 1, 1, False)]))
+        self.level.add_entity(Entity(1, 1, [Position(self.stack, 8, 8, False)]))
+        self.level.add_entity(Entity(2, 2, [Position(self.stack, 4, 4, False)]))
+        self.level.add_entity(Entity(3, 3, [Position(self.stack, 4, 5, False)]))
+        self.level.add_entity(Entity(4, 4, [Position(self.stack, 4, 6, False)]))
 
     def test_position_point_access(self):
         self.assertEqual(0, self.level.get_entity_by_position(1, 1).eid)
@@ -21,8 +21,8 @@ class TestLevel(unittest.TestCase):
         self.assertIsNone(self.level.get_entity_by_position(2, 2))
 
     def test_position_point_access_raises_error_if_multiple_on_tile(self):
-        self.level.add_entity(Entity(9, 9, [Position(1, 1, self.stack)]))
-        self.level.add_entity(Entity(8, 8, [Position(1, 1, self.stack)]))
+        self.level.add_entity(Entity(9, 9, [Position(self.stack, 1, 1, False)]))
+        self.level.add_entity(Entity(8, 8, [Position(self.stack, 1, 1, False)]))
         with self.assertRaises(ValueError):
             self.level.get_entity_by_position(1, 1)
 

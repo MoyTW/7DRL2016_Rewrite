@@ -5,7 +5,7 @@ from dodge.event import Event
 
 
 class Position(Component):
-    def __init__(self, x, y, event_stack, blocks=False):
+    def __init__(self, event_stack, x, y, blocks):
         super(Position, self).__init__(component_type=ComponentType.POSITION,
                                        target_events=[EventType.TELEPORT, EventType.MOVE, EventType.COLLISION],
                                        emittable_events=[EventType.COLLISION],

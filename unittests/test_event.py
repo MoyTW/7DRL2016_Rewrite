@@ -21,7 +21,7 @@ class TestEvent(unittest.TestCase):
         self.assertTrue(entity.handled)
 
     def test_resolves_ADD_TO_LEVEL_event(self):
-        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
@@ -29,14 +29,14 @@ class TestEvent(unittest.TestCase):
         self.assertEqual(1, len(self.level._entities))
 
     def test_resolves_ADD_TO_LEVEL_event_with_immediate_turn(self):
-        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity, EventParam.TAKES_TURN_IMMEDIATELY: True})
 
         self.stack.push_and_resolve(event)
         self.assertEqual(1, len(self.actor_queue))
 
     def test_resolves_ADD_TO_LEVEL_event_with_position(self):
-        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
@@ -49,18 +49,18 @@ class TestEvent(unittest.TestCase):
     def test_ADD_TO_LEVEL_excepts_if_block_occupied(self):
         with self.assertRaises(ValueError):
             self.level.set_blocked(5, 5, True)
-            entity = Entity(0, 0, [Position(5, 5, self.stack)])
+            entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
             event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)
 
     def tests_ADD_TO_LEVEL_bypass_block_occupied_with_ignore_blockers(self):
         self.level.set_blocked(5, 5, True)
-        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity, EventParam.IGNORE_BLOCKERS: True})
         self.stack.push_and_resolve(event)
 
     def tests_REMOVE_FROM_LEVEL(self):
-        entity = Entity(0, 0, [Position(5, 5, self.stack)])
+        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
         self.level.add_entity(entity)
         event = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.TARGET: entity})
         self.stack.push_and_resolve(event)

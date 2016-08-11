@@ -13,7 +13,7 @@ class TestPlayer(unittest.TestCase):
                              name='player',
                              components=[components.Player(self.stack, target_faction=Factions.DEFENDER),
                                          components.Actor(self.stack, 100),
-                                         components.Position(5, 5, self.stack)])
+                                         components.Position(self.stack, 5, 5, False)])
 
     def gen_event_for_command(self, level, command):
         return Event(EventType.PLAYER_BEGIN_TURN, {EventParam.HANDLER: self.player,

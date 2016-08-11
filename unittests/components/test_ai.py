@@ -20,7 +20,7 @@ class TestAIComponent(unittest.TestCase):
         self.stack = EventStack(self.level, None)
         self.ai = AI(self.stack)
         self.ai._is_active = True
-        self.position = Position(2, 1, self.stack)
+        self.position = Position(self.stack, 2, 1, False)
         self.entity = Entity(0, 0, components=[self.ai,
                                                self.position,
                                                Actor(self.stack, 100)])
@@ -28,7 +28,7 @@ class TestAIComponent(unittest.TestCase):
         self.level.handler = self.entity
 
     def test_steps_towards_player_around_obstacles(self):
-        player = Entity(0, 0, components=[Position(0, 0, self.stack)])
+        player = Entity(0, 0, components=[Position(self.stack, 0, 0, False)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: self.entity,
                                                      EventParam.LEVEL: self.level,
@@ -38,7 +38,7 @@ class TestAIComponent(unittest.TestCase):
         self.assertEqual(self.position.y, 2)
 
     def test_does_not_step_onto_player(self):
-        player = Entity(0, 0, components=[Position(2, 2, self.stack)])
+        player = Entity(0, 0, components=[Position(self.stack, 2, 2, False)])
 
         turn_event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: self.entity,
                                                      EventParam.LEVEL: self.level,

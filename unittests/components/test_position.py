@@ -16,7 +16,7 @@ class TestPosition(unittest.TestCase):
         self.level_stub = LevelStub(fov_map, self.handler)
 
         self.stack = EventStackStub()
-        self.p = Position(3, 7, self.stack)
+        self.p = Position(self.stack, 3, 7, False)
 
     def tests_teleport_event(self):
         event = Event(EventType.TELEPORT, {EventParam.X: 0, EventParam.Y: 0, EventParam.LEVEL: self.level_stub,

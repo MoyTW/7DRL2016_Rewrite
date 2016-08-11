@@ -43,7 +43,7 @@ class Weapon(Component):
                              Actor(self._event_stack, self.speed),
                              DamageBonus(self.power),
                              Projectile(path, self._event_stack),
-                             Position(shooter_pos.x, shooter_pos.y, self._event_stack),
+                             Position(self._event_stack, shooter_pos.x, shooter_pos.y, False),
                              Attacker(self._event_stack),
                              Renderable('.', ui.to_color(255, 0, 0), True)])  # TODO: Pass in Renderable params?
         return projectile
