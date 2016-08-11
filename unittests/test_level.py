@@ -11,7 +11,7 @@ class TestLevel(unittest.TestCase):
         self.stack = EventStackStub()
         self.level.add_entity(Entity(0, 0, [Position(self.stack, 1, 1, False)]))
         self.level.add_entity(Entity(1, 1, [Position(self.stack, 8, 8, False)]))
-        self.level.add_entity(Entity(2, 2, [Position(self.stack, 4, 4, False)]))
+        self.level.add_entity(Entity(2, 2, [Position(self.stack, 4, 4, True)]))
         self.level.add_entity(Entity(3, 3, [Position(self.stack, 4, 5, False)]))
         self.level.add_entity(Entity(4, 4, [Position(self.stack, 4, 6, False)]))
 
