@@ -2,6 +2,7 @@ import resources
 from dodge.game.state import GameState
 from dodge.game.runner import GameRunner
 from dodge.config import Config
+from dodge.level import SillyLevelBuilder
 import dodge.ui as ui
 
 
@@ -12,7 +13,7 @@ class Game(object):
         self.input_handler = ui.InputHandler()
 
     def start_new_game(self):
-        game_state = GameState(self.config)
+        game_state = GameState(self.config, SillyLevelBuilder)
         level_renderer = ui.LevelRenderer(self.window.console, game_state.level, self.config)
         level_renderer.render_all(0)
 

@@ -1,6 +1,10 @@
-from dodge.constants import ComponentType
+import dodge.components as components
+from dodge.constants import ComponentType, EventParam, EventType, Factions
 from dodge.fov import FOVMap
 from dodge.entity import Entity
+from dodge.event import Event
+from dodge.paths import LinePath
+import dodge.ui as ui
 import math
 
 
@@ -152,9 +156,57 @@ class Level(object):
                                    self.config.FOV_ALGO)
 
 
-class LevelBuilder(object):
+class SillyLevelBuilder:
     def build_zone(self, zone_params):
         raise NotImplementedError()
 
-    def build_level(self, level_params):
-        raise NotImplementedError()
+    @staticmethod
+    def build_level(game_state, level_params):
+        cutting_laser = Entity(eid='cutter',
+                               name='cutting laser',
+                               components=[components.Weapon(event_stack=game_state.event_stack,
+                                                             projectile_name='laser',
+                                                             path=LinePath,
+                                                             power=10,
+                                                             speed=0,
+                                                             targeting_radius=3),  # TODO: Make configurable
+                                           components.Mountable('turret')])  # TODO: Constant-ify
+        game_state.player = Entity(eid='player',
+                                   name='player',
+                                   components=[
+                                       components.Faction(Factions.ASSASSIN),
+                                       components.Player(game_state.event_stack, target_faction=Factions.DEFENDER),
+                                       components.Mountings(['turret']),  # TODO: Constant-ify
+                                       components.Actor(game_state.event_stack, 100),
+                                       components.Destructible(game_state.event_stack, 100, 0),
+                                       components.Position(game_state.event_stack, 5, 5, True),
+                                       components.Renderable('@', ui.to_color(255, 255, 255))])
+        mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: game_state.player, EventParam.ITEM: cutting_laser})
+        game_state.player.handle_event(mount_laser)
+
+        test_enemy = Entity(eid='test_enemy',
+                            name='test_enemy',
+                            components=[components.Mountings(['turret']),  # TODO: Constant-ify
+                                        components.Faction(Factions.DEFENDER),
+                                        components.AI(game_state.event_stack),
+                                        components.Actor(game_state.event_stack, 100),
+                                        components.Destructible(game_state.event_stack, 100, 0),
+                                        components.Position(game_state.event_stack, 10, 10, True),
+                                        components.Renderable('E', ui.to_color(0, 255, 0))])
+        game_state.event_stack.push(Event(EventType.ACTIVATE, {EventParam.HANDLER: test_enemy}))
+
+        cannon = Entity(eid='cannon',
+                        name='cannon',
+                        components=[components.Weapon(event_stack=game_state.event_stack,
+                                                      projectile_name='shell',
+                                                      path=LinePath,
+                                                      power=10,
+                                                      speed=30,
+                                                      targeting_radius=8),
+                                    components.Mountable('turret')])
+        mount_cannon = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: test_enemy, EventParam.ITEM: cannon})
+        test_enemy.handle_event(mount_cannon)
+
+        # TODO: This should be in a proper level gen!
+        game_state.level.add_entity(game_state.player)
+        game_state.level.add_entity(test_enemy)
