@@ -49,8 +49,9 @@ class Path:
         if steps < 0:
             raise ValueError('Cannot project a path by a negative number!')
 
-        if len(self._path) <= self.current_step + steps:
-            self._calc(steps - len(self._path) + 1)
+        desired_steps = self.current_step + steps
+        if len(self._path) <= desired_steps:
+            self._calc(desired_steps - len(self._path) + 1)
 
         return self._path[self.current_step:self.current_step + steps + 1]
 
