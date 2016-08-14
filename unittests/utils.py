@@ -24,7 +24,7 @@ class EventStackStub(Stack):
 class RenderInfoStub:
     def __init__(self):
         self.char = ' '
-        self.color = None
+        self.rgb = [0, 0, 0]
         self.always_visible = False
 
 class ConfigStub:

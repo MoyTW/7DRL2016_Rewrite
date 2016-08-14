@@ -21,5 +21,6 @@ def circle_tiles(x, y, distance):
                 tiles.append([_x, _y])
     return tiles
 
-def to_color(r, g, b):
+
+def to_color(r, g, b) -> libtcod.Color:
     return libtcod.Color(r, g, b)

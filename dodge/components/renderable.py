@@ -1,11 +1,12 @@
 from dodge.constants import ComponentType
 from dodge.components.component import Component
+import dodge.utils as utils
 
 
 class RenderInfo:
-    def __init__(self, char, color, always_visible=False):
+    def __init__(self, char, rgb, always_visible=False):
         self.char = char
-        self.color = color
+        self.rgb = rgb
         self.always_visible = always_visible
 
 
@@ -15,6 +16,8 @@ class Renderable(Component):
                                          target_events=[],
                                          emittable_events=[])
         self.char = char
+        (r, g, b) = color
+        self.color = utils.to_color(r, g, b)
         self.color = color
         self.always_visible = always_visible
 
@@ -23,4 +26,4 @@ class Renderable(Component):
 
     @staticmethod
     def build_from_info(info: RenderInfo):
-        return Renderable(char=info.char, color=info.color, always_visible=info.always_visible)
+        return Renderable(char=info.char, color=info.rgb, always_visible=info.always_visible)

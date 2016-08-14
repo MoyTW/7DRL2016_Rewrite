@@ -1,10 +1,6 @@
 import pickle
-import dodge.components as components
-import dodge.ui as ui
-from dodge.paths import LinePath
-from dodge.constants import GameStatus, EventParam, EventType, Factions, ComponentType
+from dodge.constants import GameStatus, EventParam, EventType, ComponentType
 from dodge.level import Level
-from dodge.entity import Entity
 from dodge.event import Event, EventStack
 
 

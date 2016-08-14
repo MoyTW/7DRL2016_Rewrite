@@ -64,6 +64,7 @@ class InputHandler(object):
                     elif key_char == 'r':
                         return InputCommands.ZONE_SUMMARY
 
+
 class LevelRenderer(object):
     def __init__(self, console, level, config, camera_x=0, camera_y=0):
         self.console = console
@@ -165,7 +166,7 @@ class LevelRenderer(object):
                         libtcod.console.set_char_background(self.console, x, y, col=libtcod.white)
                     # This is just because it looks nice
                     else:
-                        libtcod.console.set_char_background(self.console, x, y, col=to_color(map_x, 0, map_y))
+                        libtcod.console.set_char_background(self.console, x, y, col=libtcod.Color(map_x, 0, map_y))
 
         for entity in self.level.entities_with_components([ComponentType.RENDERABLE, ComponentType.POSITION]):
             self.render_entity(entity)
