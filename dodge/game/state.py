@@ -33,6 +33,7 @@ class GameState(object):
             # Init FOV
             self.level.recompute_fov()
 
+    # TODO: I don't like Level attaching add_order, and then referring to it all the way out here!
     def pass_actor_time(self):
         """ Passes time on actors. Places actors into the actor_queue. """
         if self.actor_queue:
@@ -46,6 +47,8 @@ class GameState(object):
             self.event_stack.push_and_resolve(pass_time)
             if actor.get_component(ComponentType.ACTOR).is_live:
                 self.actor_queue.append(actor)
+
+        self.actor_queue.sort(key=lambda a: a.add_order)
 
     def load(self, path):
         with open(path, 'rb') as infile:

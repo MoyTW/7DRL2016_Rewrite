@@ -38,6 +38,7 @@ class Level(object):
         self._width = width
         self._height = height
         self.config = config
+        self._num_added = 0
 
         def is_edge(tx, ty): return tx == 0 or ty == 0 or tx == width - 1 or ty == height - 1
         self._tiles = [[Tile(True, True) if is_edge(x, y) else Tile(False) for y in range(height)]
@@ -68,6 +69,8 @@ class Level(object):
 
     def add_entity(self, entity: Entity):
         if entity.has_component(ComponentType.POSITION):
+            entity.add_order = self._num_added
+            self._num_added += 1
             self._entities[entity.eid] = entity
         else:
             raise ValueError('Cannot add an entity to the level if it has no position!')
