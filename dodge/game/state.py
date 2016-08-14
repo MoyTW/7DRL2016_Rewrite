@@ -1,7 +1,20 @@
 import pickle
-from dodge.constants import GameStatus, EventParam, EventType, ComponentType
+from dodge.constants import EventParam, EventType, ComponentType
 from dodge.level import Level
 from dodge.event import Event, EventStack
+
+
+class GameStatus:
+    PLAYING, PLAYER_DEATH, VICTORY, AUTOPILOT, MENU = range(5)
+
+    def __init__(self, status):
+        self._status = status
+
+    def is_status(self, status):
+        return self._status == status
+
+    def set_status(self, status):
+        self._status = status
 
 
 class GameState(object):
@@ -12,8 +25,8 @@ class GameState(object):
             self.level = Level(config.MAP_WIDTH, config.MAP_HEIGHT, config)
             self.config = config
             self.actor_queue = []
-            self.event_stack = EventStack(self.level, self.actor_queue)
-            self.status = GameStatus.PLAYING
+            self.status = GameStatus(GameStatus.PLAYING)
+            self.event_stack = EventStack(self.level, self.actor_queue, self.status)
 
             level_builder.build_level(self, None)
 

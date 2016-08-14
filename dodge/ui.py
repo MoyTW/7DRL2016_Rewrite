@@ -1,5 +1,6 @@
 import tcod as libtcod
-from dodge.constants import ComponentType, GameStatus, InputCommands
+from dodge.constants import ComponentType, InputCommands
+from dodge.game.state import GameStatus
 import dodge.utils as utils
 
 
@@ -8,7 +9,7 @@ class InputHandler(object):
         self.key = libtcod.Key()
 
     # TODO: Change from silly if/else to a map
-    def get_keyboard_input(self, game_status):
+    def get_keyboard_input(self, game_status: GameStatus):
         # Trap until a recognized key is pressed
         while True:
             libtcod.console.wait_for_keypress(True)  # Necessary to flush input buffer; otherwise will instantly return
@@ -17,7 +18,7 @@ class InputHandler(object):
             if k.vk == libtcod.KEY_ESCAPE:
                 return InputCommands.EXIT
 
-            if game_status == GameStatus.PLAYING:
+            if game_status.is_status(GameStatus.PLAYING):
                 # movement keys
                 # TODO: Implement movement
                 if k.vk == libtcod.KEY_UP or k.vk == libtcod.KEY_KP8:

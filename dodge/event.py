@@ -34,10 +34,11 @@ class Event:
 
 
 class EventStack(Stack):
-    def __init__(self, level, actor_queue):
+    def __init__(self, level, actor_queue, game_status):
         super(EventStack, self).__init__()
         self._level = level
         self._actor_queue = actor_queue
+        self._game_status = game_status
 
     def _resolve_add_to_level(self, event):
         entity = event[EventParam.TARGET]

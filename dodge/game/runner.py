@@ -1,4 +1,4 @@
-from dodge.constants import ComponentType, EventParam, EventType, InputCommands, GameStatus
+from dodge.constants import ComponentType, EventParam, EventType, InputCommands
 from dodge.event import Event
 from dodge.entity import Entity
 
@@ -13,7 +13,8 @@ class GameRunner:
         command = self.input_handler.get_keyboard_input(self.game_state.status)
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
-            self.game_state.status = GameStatus.MENU
+            game_status = self.game_state.status
+            game_status.set_status(game_status.MENU)  # TODO: This is kind of awkward?
         else:
             event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,
                                                         EventParam.HANDLER: player,
@@ -65,5 +66,6 @@ class GameRunner:
                 self.resolve_actor(actor)
 
     def play_game(self):
-        while not self.game_state.status == GameStatus.MENU:
+        game_status = self.game_state.status
+        while not game_status.is_status(game_status.MENU):
             self.run_turn()
