@@ -244,5 +244,6 @@ class UI(object):
         libtcod.console.print_ex(0, int(self.config.SCREEN_WIDTH / 2), int(self.config.SCREEN_HEIGHT / 2 - 3),
                                  libtcod.BKGND_DARKEN, libtcod.CENTER, 'by MoyTW')
 
+        # TODO: lol the return values are...not great, there's an info mismatch on caller-side
         # menu + choice
-        return self.menu('', ['New Game', 'Quit'], 24)
+        return self.menu('', ['New Game', 'Continue', 'Quit'], 24)
