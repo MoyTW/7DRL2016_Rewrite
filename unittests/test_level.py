@@ -39,5 +39,6 @@ class TestLevel(unittest.TestCase):
     def test_is_walkable(self):
         self.assertFalse(self.level.is_walkable(0, 0))
         self.assertFalse(self.level.is_walkable(4, 4))
+        self.assertTrue(self.level.is_walkable(4, 4, terrain_only=True))
         self.assertTrue(self.level.is_walkable(2, 2))
         self.assertFalse(self.level.is_walkable(0, 1))

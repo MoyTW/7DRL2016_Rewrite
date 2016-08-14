@@ -142,12 +142,15 @@ class Level(object):
         self[x][y].blocked = blocked
         self.fov_map.set_tile_properties(x, y, not self[x][y].block_sight, not self[x][y].blocked)
 
-    def is_walkable(self, x, y):
-        entity = self.get_entity_by_position(x, y)
-        entity_blocks = False
-        if entity and entity.has_component(ComponentType.POSITION):
-            entity_blocks = entity.get_component(ComponentType.POSITION).blocks
-        return self.fov_map.is_walkable(x, y) and not entity_blocks
+    def is_walkable(self, x, y, terrain_only=False):
+        terrain_walkable = self.fov_map.is_walkable(x, y)
+
+        if terrain_only:
+            return terrain_walkable
+        else:
+            entity_in_pos = self.get_entity_by_position(x, y)
+            entity_in_pos_blocks = entity_in_pos and entity_in_pos.get_component(ComponentType.POSITION).blocks
+            return self.fov_map.is_walkable(x, y) and not entity_in_pos_blocks
 
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit
