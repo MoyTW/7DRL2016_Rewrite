@@ -17,7 +17,7 @@ class TestAIComponent(unittest.TestCase):
         self.fov_map.set_tile_properties(1, 1, False, False)
         self.level = LevelStub(self.fov_map, None)
 
-        self.stack = EventStack(self.level, None)
+        self.stack = EventStack(self.level, None, None)
         self.ai = AI(self.stack)
         self.ai._is_active = True
         self.position = Position(self.stack, 2, 1, False)

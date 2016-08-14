@@ -11,7 +11,7 @@ class TestEvent(unittest.TestCase):
     def setUp(self):
         self.level = Level(10, 10, ConfigStub())
         self.actor_queue = []
-        self.stack = EventStack(self.level, self.actor_queue)
+        self.stack = EventStack(self.level, self.actor_queue, None)
 
     def test_resolves_handler_based_events(self):
         entity = EntityStub()
