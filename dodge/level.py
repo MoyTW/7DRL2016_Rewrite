@@ -162,6 +162,7 @@ class SillyLevelBuilder:
 
     @staticmethod
     def build_level(game_state, level_params):
+        laser_render_info = components.RenderInfo(' ', ui.to_color(0, 0, 0)) # TODO: Make configurable
         cutting_laser = Entity(eid='cutter',
                                name='cutting laser',
                                components=[components.Weapon(event_stack=game_state.event_stack,
@@ -169,7 +170,8 @@ class SillyLevelBuilder:
                                                              path=LinePath,
                                                              power=10,
                                                              speed=0,
-                                                             targeting_radius=3),  # TODO: Make configurable
+                                                             targeting_radius=3,
+                                                             render_info=laser_render_info),
                                            components.Mountable('turret')])  # TODO: Constant-ify
         game_state.player = Entity(eid='player',
                                    name='player',
@@ -202,7 +204,8 @@ class SillyLevelBuilder:
                                                       path=LinePath,
                                                       power=10,
                                                       speed=30,
-                                                      targeting_radius=8),
+                                                      targeting_radius=8,
+                                                      render_info=components.RenderInfo('.', ui.to_color(255, 0, 0))),
                                     components.Mountable('turret')])
         mount_cannon = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: test_enemy, EventParam.ITEM: cannon})
         test_enemy.handle_event(mount_cannon)

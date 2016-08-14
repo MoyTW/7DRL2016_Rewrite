@@ -8,6 +8,7 @@ from dodge.game.state import GameState
 from dodge.game.runner import GameRunner
 from dodge.entity import Entity
 from dodge.event import Event
+from unittests.utils import RenderInfoStub
 
 
 class InputHandlerStub:
@@ -36,13 +37,14 @@ class LevelBuilderStub:
                                                              path=LinePath,
                                                              power=10,
                                                              speed=0,
-                                                             targeting_radius=3),  # TODO: Make configurable
-                                           components.Mountable('turret')])  # TODO: Constant-ify
+                                                             targeting_radius=3,
+                                                             render_info=RenderInfoStub()),
+                                           components.Mountable('turret')])
         game_state.player = Entity(eid='player',
                                    name='player',
                                    components=[
                                        components.Player(game_state.event_stack, target_faction=Factions.DEFENDER),
-                                       components.Mountings(['turret']),  # TODO: Constant-ify
+                                       components.Mountings(['turret']),
                                        components.Actor(game_state.event_stack, 100),
                                        components.Position(game_state.event_stack, 5, 5, True)])
         mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: game_state.player, EventParam.ITEM: cutting_laser})

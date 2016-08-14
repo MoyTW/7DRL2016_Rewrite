@@ -21,6 +21,11 @@ class EventStackStub(Stack):
     def push_and_resolve(self, event):
         self.push(event)
 
+class RenderInfoStub:
+    def __init__(self):
+        self.char = ' '
+        self.color = None
+        self.always_visible = False
 
 class ConfigStub:
     pass

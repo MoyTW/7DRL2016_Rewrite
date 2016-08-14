@@ -3,12 +3,11 @@ from dodge.components.component import Component
 from dodge.event import Event
 from dodge.constants import ComponentType, EventType, EventParam
 from dodge.entity import Entity
-import dodge.ui as ui
 import uuid
 
 
 class Weapon(Component):
-    def __init__(self, event_stack, projectile_name, path, power, speed, targeting_radius, cooldown=0):
+    def __init__(self, event_stack, projectile_name, path, power, speed, targeting_radius, render_info, cooldown=0):
         super().__init__(component_type=ComponentType.WEAPON,
                          target_events=[EventType.FIRE_ALL],
                          emittable_events=[EventType.ADD_TO_LEVEL],
@@ -18,6 +17,7 @@ class Weapon(Component):
         self.power = power
         self.speed = speed
         self.targeting_range = targeting_radius
+        self.render_info = render_info
         self.cooldown = cooldown
 
     def _target_nearest(self, position, target_faction, level):
@@ -45,7 +45,7 @@ class Weapon(Component):
                              Projectile(path, self._event_stack),
                              Position(self._event_stack, shooter_pos.x, shooter_pos.y, False),
                              Attacker(self._event_stack),
-                             Renderable('.', ui.to_color(255, 0, 0), True)])  # TODO: Pass in Renderable params?
+                             Renderable.build_from_info(self.render_info)])
         return projectile
 
     def _handle_event(self, event: Event):

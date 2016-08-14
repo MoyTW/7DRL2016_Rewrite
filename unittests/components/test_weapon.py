@@ -5,7 +5,7 @@ from dodge.event import Event
 from dodge.config import Config
 from dodge.entity import Entity
 from dodge.constants import EventType, EventParam, Factions, ComponentType
-from unittests.utils import EventStackStub, PathStub
+from unittests.utils import EventStackStub, PathStub, RenderInfoStub
 
 
 class TestWeaponComponent(unittest.TestCase):
@@ -19,7 +19,8 @@ class TestWeaponComponent(unittest.TestCase):
         self.stack = EventStackStub()
         self.level = Level(10, 10, Config)
 
-        weapon = Weapon(self.stack, self.projectile_name, self.path, self.power, self.speed, self.targeting_radius)
+        weapon = Weapon(self.stack, self.projectile_name, self.path, self.power, self.speed, self.targeting_radius,
+                        RenderInfoStub())
         self.shooter = Entity(0, 0, [Position(self.stack, 5, 5, False), weapon])
         self.fire_event = Event(EventType.FIRE_ALL, {EventParam.HANDLER: self.shooter,
                                                      EventParam.LEVEL: self.level,
