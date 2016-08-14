@@ -12,13 +12,14 @@ class InputCommands(Enum):
 
 class ComponentType(Enum):
     (ACTOR, AI, ATTACKER, DESTRUCTIBLE, MOUNTABLE, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS,
-     WEAPON, RETALIATORY_DEATH, DAMAGE_BONUS) = range(15)
+     WEAPON, RETALIATORY_DEATH, DAMAGE_BONUS, INVENTORY) = range(16)
 
 
 class EventType(Enum):
     (ALL_EVENTS, PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN,
      AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, REMOVE_FROM_LEVEL,
-     ADD_COMPONENTS, REMOVE_COMPONENTS, PLAYER_DEATH) = range(22)
+     ADD_COMPONENTS, REMOVE_COMPONENTS, PLAYER_DEATH, ADD_ITEM_TO_INVENTORY, PICK_UP_ITEM, REMOVE_ITEM_FROM_INVENTORY,
+     DROP_ITEM) = range(26)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -70,5 +71,15 @@ event_templates = {
     EventType.REMOVE_FROM_LEVEL: [(EventParam.TARGET, True)],
     EventType.ADD_COMPONENTS: ((EventParam.HANDLER, True),
                                (EventParam.COMPONENTS, True)),
-    EventType.PLAYER_DEATH: []
+    EventType.PLAYER_DEATH: [],
+    EventType.ADD_ITEM_TO_INVENTORY: ((EventParam.HANDLER, True),
+                                      (EventParam.ITEM, True)),
+    EventType.PICK_UP_ITEM: ((EventParam.HANDLER, True),
+                             (EventParam.ITEM, True),
+                             (EventParam.LEVEL, True)),
+    EventType.REMOVE_ITEM_FROM_INVENTORY: ((EventParam.HANDLER, True),
+                                           (EventParam.ITEM, True)),
+    EventType.DROP_ITEM: ((EventParam.HANDLER, True),
+                          (EventParam.ITEM, True),
+                          (EventParam.LEVEL, True))
 }
