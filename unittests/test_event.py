@@ -81,26 +81,3 @@ class TestEvent(unittest.TestCase):
         self.stack.push_and_resolve(event)
         self.assertIsNone(self.level.get_entity_by_position(5, 5))
         self.assertEqual(0, len(self.level._entities))
-
-    def test_ADD_TO_LEVEL_with_x_y_no_position(self):
-        entity = Entity(0, 0, [])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity,
-                                               EventParam.X: 5,
-                                               EventParam.Y: 5,
-                                               EventParam.BLOCKS: True})
-
-        self.stack.push_and_resolve(event)
-        self.assertEqual(entity, self.level.get_entity_by_position(5, 5))
-
-    def test_ADD_TO_LEVEL_with_x_y_no_position_respects_block(self):
-        blocker = Entity(0, 0, [Position(self.stack, 5, 5, True)])
-        self.stack.push_and_resolve(Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: blocker}))
-
-        entity = Entity(0, 0, [])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity,
-                                               EventParam.X: 5,
-                                               EventParam.Y: 5,
-                                               EventParam.BLOCKS: True})
-
-        with self.assertRaises(ValueError):
-            self.stack.push_and_resolve(event)
