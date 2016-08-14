@@ -1,13 +1,13 @@
 from dodge.components.component import Component
 from dodge.event import Event
-from dodge.constants import ComponentType, EventType, EventParam, InputCommands, Factions
+from dodge.constants import ComponentType, EventType, EventParam, InputCommands
 
 
 class Player(Component):
     def __init__(self, event_stack, target_faction):
         super(Player, self).__init__(component_type=ComponentType.PLAYER,
-                                     target_events=[EventType.PLAYER_BEGIN_TURN],
-                                     emittable_events=[EventType.MOVE, EventType.FIRE_ALL],
+                                     target_events=[EventType.PLAYER_BEGIN_TURN, EventType.DEATH],
+                                     emittable_events=[EventType.MOVE, EventType.FIRE_ALL, EventType.PLAYER_DEATH],
                                      event_stack=event_stack)
         # TODO: You should be able to target multiple factions...eventually at some distant point
         self.target_faction = target_faction
@@ -52,5 +52,8 @@ class Player(Component):
             elif command == InputCommands.MV_UP_LEFT:
                 self._process_move_command(-1, -1, level)
             return True
+        elif event.event_type == EventType.DEATH:
+            event = Event(EventType.PLAYER_DEATH, {})
+            self.emit_event(event)
         else:
             return False

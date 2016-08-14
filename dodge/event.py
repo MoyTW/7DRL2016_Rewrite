@@ -66,8 +66,10 @@ class EventStack(Stack):
             self._resolve_add_to_level(event)
         elif event.event_type == EventType.REMOVE_FROM_LEVEL:
             self._level.remove_entity(event[EventParam.TARGET])
+        elif event.event_type == EventType.PLAYER_DEATH:
+            self._game_status.set_status(self._game_status.PLAYER_DEATH)
         else:
-            raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event.params))
+            raise ValueError('Cannot resolve event! ' + str(event.event_type) + ":" + str(event._params))
 
     def resolve_events(self):
         while not self.is_empty():

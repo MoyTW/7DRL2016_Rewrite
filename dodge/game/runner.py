@@ -75,4 +75,6 @@ class GameRunner:
     def play_game(self):
         self.game_status.set_status(self.game_status.PLAYING)
         while self.game_status.is_status(self.game_status.PLAYING):
+            if self.game_status.is_status(self.game_status.PLAYER_DEATH):
+                break
             self.run_turn()
