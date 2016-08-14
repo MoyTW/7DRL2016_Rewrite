@@ -60,6 +60,5 @@ class Weapon(Component):
             projectile = self._build_projectile(shooter_pos, tx, ty)
             self.emit_event(Event(EventType.ADD_TO_LEVEL, {EventParam.LEVEL: level,
                                                            EventParam.TARGET: projectile,
-                                                           EventParam.IGNORE_BLOCKERS: True,
                                                            EventParam.TAKES_TURN_IMMEDIATELY: True}))
             return event

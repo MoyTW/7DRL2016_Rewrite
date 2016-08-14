@@ -42,15 +42,17 @@ class EventStack(Stack):
 
     def _resolve_add_to_level(self, event):
         entity = event[EventParam.TARGET]
+        position = entity.get_component(ComponentType.POSITION)
 
         # Check that it can be added to its coordinates
-        if entity.has_component(ComponentType.POSITION):
-            position = entity.get_component(ComponentType.POSITION)
-            # TODO: This ignore_blockers form (in and True) - surely there's a more elegant way to express it?
-            ignore_blockers = EventParam.IGNORE_BLOCKERS in event and event[EventParam.IGNORE_BLOCKERS]
-            if not self._level.is_walkable(position.x, position.y) and not ignore_blockers:
-                raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
-                                 str(position.y) + ") as it is not walkable!")
+        if not self._level.is_walkable(position.x, position.y, terrain_only=True):
+            raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
+                             str(position.y) + ") as the Tile is blocked!")
+        elif position.blocks and not self._level.is_walkable(position.x, position.y):
+            raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
+                             str(position.y) + ") as the existing entity " +
+                             str(self._level.get_entity_by_position(position.x, position.y).name) +
+                             " blocks the position!")
 
         # Check to see if it should immediately be resolved
         if EventParam.TAKES_TURN_IMMEDIATELY in event:
