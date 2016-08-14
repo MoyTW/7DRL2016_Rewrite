@@ -64,11 +64,6 @@ class InputHandler(object):
                     elif key_char == 'r':
                         return InputCommands.ZONE_SUMMARY
 
-
-def to_color(r, g, b):
-    return libtcod.Color(r, g, b)
-
-
 class LevelRenderer(object):
     def __init__(self, console, level, config, camera_x=0, camera_y=0):
         self.console = console

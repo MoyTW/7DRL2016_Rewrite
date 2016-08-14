@@ -1,3 +1,4 @@
+import tcod as libtcod
 import math
 
 
@@ -19,3 +20,6 @@ def circle_tiles(x, y, distance):
             if inc_distance == _distance or math.ceil(_distance) == inc_distance:
                 tiles.append([_x, _y])
     return tiles
+
+def to_color(r, g, b):
+    return libtcod.Color(r, g, b)

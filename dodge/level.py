@@ -4,7 +4,6 @@ from dodge.fov import FOVMap
 from dodge.entity import Entity
 from dodge.event import Event
 from dodge.paths import LinePath
-import dodge.ui as ui
 import math
 
 
@@ -162,7 +161,7 @@ class SillyLevelBuilder:
 
     @staticmethod
     def build_level(game_state, level_params):
-        laser_render_info = components.RenderInfo(' ', ui.to_color(0, 0, 0)) # TODO: Make configurable
+        laser_render_info = components.RenderInfo(' ', (0, 0, 0)) # TODO: Make configurable
         cutting_laser = Entity(eid='cutter',
                                name='cutting laser',
                                components=[components.Weapon(event_stack=game_state.event_stack,
@@ -182,7 +181,7 @@ class SillyLevelBuilder:
                                        components.Actor(game_state.event_stack, 100),
                                        components.Destructible(game_state.event_stack, 100, 0),
                                        components.Position(game_state.event_stack, 5, 5, True),
-                                       components.Renderable('@', ui.to_color(255, 255, 255))])
+                                       components.Renderable('@', (255, 255, 255))])
         mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: game_state.player, EventParam.ITEM: cutting_laser})
         game_state.player.handle_event(mount_laser)
 
@@ -194,7 +193,7 @@ class SillyLevelBuilder:
                                         components.Actor(game_state.event_stack, 100),
                                         components.Destructible(game_state.event_stack, 100, 0),
                                         components.Position(game_state.event_stack, 10, 10, True),
-                                        components.Renderable('E', ui.to_color(0, 255, 0))])
+                                        components.Renderable('E', (0, 255, 0))])
         game_state.event_stack.push(Event(EventType.ACTIVATE, {EventParam.HANDLER: test_enemy}))
 
         cannon = Entity(eid='cannon',
@@ -205,7 +204,7 @@ class SillyLevelBuilder:
                                                       power=10,
                                                       speed=30,
                                                       targeting_radius=8,
-                                                      render_info=components.RenderInfo('.', ui.to_color(255, 0, 0))),
+                                                      render_info=components.RenderInfo('.', (255, 0, 0))),
                                     components.Mountable('turret')])
         mount_cannon = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: test_enemy, EventParam.ITEM: cannon})
         test_enemy.handle_event(mount_cannon)
