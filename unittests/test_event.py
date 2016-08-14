@@ -53,11 +53,26 @@ class TestEvent(unittest.TestCase):
             event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
             self.stack.push_and_resolve(event)
 
-    def tests_ADD_TO_LEVEL_bypass_block_occupied_with_ignore_blockers(self):
-        self.level.set_blocked(5, 5, True)
-        entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
-        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity, EventParam.IGNORE_BLOCKERS: True})
+    def tests_ADD_TO_LEVEL_excepts_if_block_occupied_and_both_entities_block(self):
+        with self.assertRaises(ValueError):
+            blocker = Entity(0, 0, [Position(self.stack, 5, 5, True)])
+            self.stack.push_and_resolve(Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: blocker}))
+
+            entity = Entity(0, 0, [Position(self.stack, 5, 5, True)])
+            event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
+            self.stack.push_and_resolve(event)
+
+    def tests_ADD_TO_LEVEL_excepts_if_block_occupied_but_one_entity_does_not_block(self):
+        non_blocker = Entity(0, 0, [Position(self.stack, 5, 5, False)])
+        self.stack.push_and_resolve(Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: non_blocker}))
+
+        blocker = Entity(0, 0, [Position(self.stack, 5, 5, True)])
+        event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: blocker})
         self.stack.push_and_resolve(event)
+
+        another_non_blocker = Entity(0, 0, [Position(self.stack, 5, 5, False)])
+        another_event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: another_non_blocker})
+        self.stack.push_and_resolve(another_event)
 
     def tests_REMOVE_FROM_LEVEL(self):
         entity = Entity(0, 0, [Position(self.stack, 5, 5, False)])
