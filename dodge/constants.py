@@ -71,11 +71,9 @@ event_templates = {
     EventType.ADD_ITEM_TO_INVENTORY: ((EventParam.HANDLER, True),
                                       (EventParam.ITEM, True)),
     EventType.PICK_UP_ITEM: ((EventParam.HANDLER, True),
-                             (EventParam.ITEM, True),
-                             (EventParam.LEVEL, True)),
+                             (EventParam.ITEM, True)),
     EventType.REMOVE_ITEM_FROM_INVENTORY: ((EventParam.HANDLER, True),
                                            (EventParam.ITEM, True)),
     EventType.DROP_ITEM: ((EventParam.HANDLER, True),
-                          (EventParam.ITEM, True),
-                          (EventParam.LEVEL, True))
+                          (EventParam.ITEM, True))
 }
