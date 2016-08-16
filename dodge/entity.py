@@ -17,6 +17,20 @@ class Entity:
         self._ordered_components.append(component)
         self._components[component.type] = component
 
+    def _remove_component(self, component):
+        self._ordered_components.remove(component)
+        self._components.pop(component.type)
+
+    def add_component(self, component, level):
+        self._add_component(component)
+        if level is not None:
+            raise NotImplementedError('Registering to level is not yet implemented!')
+
+    def remove_component(self, component, level):
+        self._remove_component(component)
+        if level is not None:
+            raise NotImplementedError('Registering to level is not yet implemented!')
+
     def has_component(self, component_type):
         return component_type in self._components
 
