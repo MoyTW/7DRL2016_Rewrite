@@ -108,7 +108,7 @@ class Level(object):
         return player_position.x, player_position.y
 
     # TODO: When you actually invoke this, don't full scan every time
-    def get_entities_by_position(self, x1, y1, x2, y2):
+    def get_entities_in_area(self, x1, y1, x2, y2):
         """Returns all entities in (x1-x2, y1-y2), inclusive."""
         have_pos = self.entities_with_component(ComponentType.POSITION)
         in_area = []
@@ -119,7 +119,7 @@ class Level(object):
         return in_area
 
     def get_entities_in_radius(self, x, y, radius):
-        in_area = self.get_entities_by_position(x - radius, y - radius, x + radius, y + radius)
+        in_area = self.get_entities_in_area(x - radius, y - radius, x + radius, y + radius)
         in_radius = []
         for entity in in_area:
             position = entity.get_component(ComponentType.POSITION)
