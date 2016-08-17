@@ -49,10 +49,10 @@ class EventStack(Stack):
             raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
                              str(position.y) + ") as the Tile is blocked!")
         elif position.blocks and not self._level.is_walkable(position.x, position.y):
+            existing_names = [e.name for e in self._level.get_entities_in_position(position.x, position.y)]
             raise ValueError('Cannot add entity ' + str(entity.name) + ' to (' + str(position.x) + ", " +
-                             str(position.y) + ") as the existing entity " +
-                             str(self._level.get_entity_by_position(position.x, position.y).name) +
-                             " blocks the position!")
+                             str(position.y) + ") as the existing entities " + str(existing_names) +
+                             " block the position!")
 
         # Check to see if it should immediately be resolved
         if EventParam.TAKES_TURN_IMMEDIATELY in event:

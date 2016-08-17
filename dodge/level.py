@@ -85,20 +85,16 @@ class Level(object):
         return self._entities[eid]
 
     # TODO: Don't do full scan every time
-    def get_entity_by_position(self, x, y) -> Entity:
+    def get_entities_in_position(self, x, y, blocks_only=False) -> [Entity]:
         """ Returns the entity in tile (x, y). Assumes that entities cannot share an (x, y) position; will throw
         ValueError if that is untrue. """
         have_pos = self.entities_with_component(ComponentType.POSITION)
         in_pos = []
         for entity in have_pos:
             pos = entity.get_component(ComponentType.POSITION)
-            if x == pos.x and y == pos.y:
+            if x == pos.x and y == pos.y and ((not blocks_only) or (blocks_only and pos.blocks)):
                 in_pos.append(entity)
-        if len(in_pos) == 1:
-            return in_pos[0]
-        elif len(in_pos) > 1:
-            raise ValueError('Cannot get entity in (' + str(x) + ', ' + str(y) + ') - there are multiple entities!')
-        return None
+        return in_pos
 
     def get_player_entity(self):
         return self.entities_with_component(ComponentType.PLAYER)[0]
@@ -148,9 +144,13 @@ class Level(object):
         if terrain_only:
             return terrain_walkable
         else:
-            entity_in_pos = self.get_entity_by_position(x, y)
-            entity_in_pos_blocks = entity_in_pos and entity_in_pos.get_component(ComponentType.POSITION).blocks
-            return self.fov_map.is_walkable(x, y) and not entity_in_pos_blocks
+            entities_in_pos = self.get_entities_in_position(x, y)
+            an_entity_blocks = False
+            for entity in entities_in_pos:
+                if entity.get_component(ComponentType.POSITION).blocks:
+                    an_entity_blocks = True
+                    break
+            return self.fov_map.is_walkable(x, y) and not an_entity_blocks
 
     def recompute_fov(self):
         # Assumes only 1 player-controlled unit

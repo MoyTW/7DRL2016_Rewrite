@@ -40,7 +40,9 @@ class TestEvent(unittest.TestCase):
         event = Event(EventType.ADD_TO_LEVEL, {EventParam.TARGET: entity})
 
         self.stack.push_and_resolve(event)
-        self.assertEqual(entity, self.level.get_entity_by_position(5, 5))
+        entities_in_position = self.level.get_entities_in_position(5, 5)
+        self.assertEqual(entity, entities_in_position[0])
+        self.assertEqual(1, len(entities_in_position))
 
         position_entities = self.level.entities_with_component(ComponentType.POSITION)
         self.assertEqual(entity, position_entities[0])
@@ -79,5 +81,5 @@ class TestEvent(unittest.TestCase):
         self.level.add_entity(entity)
         event = Event(EventType.REMOVE_FROM_LEVEL, {EventParam.TARGET: entity})
         self.stack.push_and_resolve(event)
-        self.assertIsNone(self.level.get_entity_by_position(5, 5))
+        self.assertFalse(self.level.get_entities_in_position(5, 5))
         self.assertEqual(0, len(self.level._entities))

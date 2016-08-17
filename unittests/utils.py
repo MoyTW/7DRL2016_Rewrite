@@ -44,7 +44,7 @@ class LevelStub:
         else:
             return self.fov_map.is_walkable(x, y)
 
-    def get_entity_by_position(self, x, y):
+    def get_entities_in_position(self, x, y):
         return self.handler
 
     def get_entities_in_radius(self, x, y, level):

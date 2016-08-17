@@ -16,15 +16,9 @@ class TestLevel(unittest.TestCase):
         self.level.add_entity(Entity(4, 4, [Position(self.stack, 4, 6, False)]))
 
     def test_position_point_access(self):
-        self.assertEqual(0, self.level.get_entity_by_position(1, 1).eid)
-        self.assertEqual(1, self.level.get_entity_by_position(8, 8).eid)
-        self.assertIsNone(self.level.get_entity_by_position(2, 2))
-
-    def test_position_point_access_raises_error_if_multiple_on_tile(self):
-        self.level.add_entity(Entity(9, 9, [Position(self.stack, 1, 1, False)]))
-        self.level.add_entity(Entity(8, 8, [Position(self.stack, 1, 1, False)]))
-        with self.assertRaises(ValueError):
-            self.level.get_entity_by_position(1, 1)
+        self.assertEqual(0, self.level.get_entities_in_position(1, 1)[0].eid)
+        self.assertEqual(1, self.level.get_entities_in_position(8, 8)[0].eid)
+        self.assertFalse(self.level.get_entities_in_position(2, 2))
 
     def test_position_area_access(self):
         self.assertSetEqual({2, 3, 4}, set([e.eid for e in self.level.get_entities_in_area(4, 4, 4, 6)]))

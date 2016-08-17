@@ -21,9 +21,10 @@ class Position(Component):
         return math.sqrt(dx ** 2 + dy ** 2)
 
     def _emit_collision(self, nx, ny, handler, level):
-        collision = Event(EventType.COLLISION, {EventParam.HANDLER: handler,
-                                                EventParam.TARGET: level.get_entity_by_position(nx, ny)})
-        self.emit_event(collision)
+        blockers = level.get_entities_in_position(nx, ny, blocks_only=True)
+        for blocker in blockers:
+            collision = Event(EventType.COLLISION, {EventParam.HANDLER: handler, EventParam.TARGET: blocker})
+            self.emit_event(collision)
 
     # TODO: Add in map to check for blockers
     def _teleport(self, x, y, handler, level, ignore_blockers=False):
