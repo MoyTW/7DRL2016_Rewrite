@@ -1,12 +1,12 @@
 from dodge.components.component import Component
-
-
-ItemName = 'ITEM'
+from dodge.constants import ComponentType
 
 
 class Item(Component):
     def __init__(self):
-        super(Item, self).__init__(name=ItemName)
+        super().__init__(component_type=ComponentType.ITEM,
+                         target_events=[],
+                         emittable_events=[])
 
-    def handle_event(self, event):
-        raise NotImplementedError()
+    def _handle_event(self, event):
+        raise NotImplementedError('Item component has no logic.')

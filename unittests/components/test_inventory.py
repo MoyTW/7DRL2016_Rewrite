@@ -1,6 +1,6 @@
 import unittest
 from dodge.constants import EventType, EventParam, ComponentType
-from dodge.components import Inventory, Position
+from dodge.components import Inventory, Position, Item
 from dodge.event import Event
 from dodge.entity import Entity
 from unittests.utils import EventStackStub
@@ -11,7 +11,7 @@ class TestInventory(unittest.TestCase):
         self.stack = EventStackStub()
         self.max_size = 10
         self.inventory = Inventory(self.stack, self.max_size)
-        self.item = Entity(0, 0, [])
+        self.item = Entity(0, 0, [Item()])
         self.handler_pos = Position(self.stack, 3, 7, True)
         self.handler = Entity(1, 1, [self.handler_pos])
 
@@ -25,6 +25,13 @@ class TestInventory(unittest.TestCase):
         self.assertTrue(self.item in self.inventory.carried)
         self.assertEqual(1, self.inventory.size)
 
+    def test_cannot_add_non_item(self):
+        item = Entity(1, 1, [])
+        event = Event(EventType.ADD_ITEM_TO_INVENTORY, {EventParam.HANDLER: self.handler, EventParam.ITEM: item})
+
+        with self.assertRaises(ValueError):
+            self.inventory.handle_event(event)
+
     def test_cannot_add_same_item_twice(self):
         event = Event(EventType.ADD_ITEM_TO_INVENTORY, {EventParam.HANDLER: self.handler, EventParam.ITEM: self.item})
         self.inventory.handle_event(event)
@@ -34,11 +41,11 @@ class TestInventory(unittest.TestCase):
 
     def test_adds_directly_excepts_on_size_overflow(self):
         for x in range(10):
-            item = Entity(x, x, None)
+            item = Entity(x, x, [Item()])
             event = Event(EventType.ADD_ITEM_TO_INVENTORY, {EventParam.HANDLER: self.handler, EventParam.ITEM: item})
             self.inventory.handle_event(event)
         with self.assertRaises(ValueError):
-            item = Entity('fails', 'fails', None)
+            item = Entity('fails', 'fails', [Item()])
             event = Event(EventType.ADD_ITEM_TO_INVENTORY, {EventParam.HANDLER: self.handler, EventParam.ITEM: item})
             self.inventory.handle_event(event)
 

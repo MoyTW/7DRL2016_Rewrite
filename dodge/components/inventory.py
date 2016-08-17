@@ -30,7 +30,9 @@ class Inventory(Component):
         return self._carried
 
     def _add_item(self, item):
-        if item in self._carried:
+        if not item.has_component(ComponentType.ITEM):
+            raise ValueError('Cannot add entity ' + str(item) + ' - it is not marked as an item!')
+        elif item in self._carried:
             raise ValueError('Cannot add duplicate item: ' + str(item))
         elif self.size < self._max_size:
             self._carried.append(item)
