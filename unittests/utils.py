@@ -44,8 +44,8 @@ class LevelStub:
         else:
             return self.fov_map.is_walkable(x, y)
 
-    def get_entities_in_position(self, x, y):
-        return self.handler
+    def get_entities_in_position(self, x, y, blocks_only=False):
+        return [self.handler]
 
     def get_entities_in_radius(self, x, y, level):
         if self.player is not None and self.handler is not None:
