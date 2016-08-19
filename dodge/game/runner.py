@@ -4,17 +4,22 @@ from dodge.entity import Entity
 
 
 class GameRunner:
-    def __init__(self, game_state, input_handler, level_renderer):
+    def __init__(self, game_state, input_handler, level_renderer, ui):
         self.game_state = game_state
         self.input_handler = input_handler
         self.level_renderer = level_renderer
         self.game_status = game_state.status
+        self.ui = ui
 
     def player_turn(self, player):
         command = self.input_handler.get_keyboard_input(self.game_state.status)
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_status.set_status(self.game_status.MENU)  # TODO: This is kind of awkward?
+            return False
+        elif command == InputCommands.INVENTORY:
+            items = [e.name for e in player.get_component(ComponentType.INVENTORY).carried]
+            self.ui.menu('Inventory', items, 24)
             return False
         else:
             event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,

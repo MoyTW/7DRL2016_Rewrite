@@ -72,7 +72,7 @@ class TestRegressionLaserMisses(unittest.TestCase):
         moves = [InputCommands.MV_DOWN_RIGHT, InputCommands.MV_DOWN_RIGHT, InputCommands.MV_RIGHT,
                  InputCommands.MV_UP_RIGHT]
         input_stub = InputHandlerStub(moves)
-        runner = GameRunner(state, input_stub, LevelRendererStub())
+        runner = GameRunner(state, input_stub, LevelRendererStub(), None)
 
         runner.play_game()
 

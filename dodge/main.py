@@ -22,7 +22,7 @@ class Game(object):
         level_renderer = ui.LevelRenderer(self.window.console, self.current_game_state.level, self.config)
         level_renderer.render_all(0)
 
-        self.runner = GameRunner(self.current_game_state, self.input_handler, level_renderer)
+        self.runner = GameRunner(self.current_game_state, self.input_handler, level_renderer, self.window)
         self.runner.play_game()
 
     def continue_game(self):

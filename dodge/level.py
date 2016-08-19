@@ -178,9 +178,11 @@ class SillyLevelBuilder:
                                                              targeting_radius=3,
                                                              render_info=laser_render_info),
                                            components.Mountable('turret')])  # TODO: Constant-ify
+        test_item = Entity(eid='test_item', name='test_item', components=[components.Item()])
         game_state.player = Entity(eid='player',
                                    name='player',
                                    components=[
+                                       components.Inventory(game_state.event_stack, 26),
                                        components.Faction(Factions.ASSASSIN),
                                        components.Player(game_state.event_stack, target_faction=Factions.DEFENDER),
                                        components.Mountings(['turret']),  # TODO: Constant-ify
@@ -188,8 +190,12 @@ class SillyLevelBuilder:
                                        components.Destructible(game_state.event_stack, 100, 0),
                                        components.Position(game_state.event_stack, 5, 5, True),
                                        components.Renderable('@', (255, 255, 255))])
-        mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: game_state.player, EventParam.ITEM: cutting_laser})
+        mount_laser = Event(EventType.MOUNT_ITEM, {EventParam.HANDLER: game_state.player,
+                                                   EventParam.ITEM: cutting_laser})
         game_state.player.handle_event(mount_laser)
+        add_item = Event(EventType.ADD_ITEM_TO_INVENTORY, {EventParam.HANDLER: game_state.player,
+                                                           EventParam.ITEM: test_item})
+        game_state.player.handle_event(add_item)
 
         test_enemy = Entity(eid='test_enemy',
                             name='test_enemy',
