@@ -15,30 +15,37 @@ class GameRunner:
         # TODO: Use a map, not a huge if/elif!
         if command == InputCommands.EXIT:
             self.game_status.set_status(self.game_status.MENU)  # TODO: This is kind of awkward?
+            return False
         else:
             event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,
                                                         EventParam.HANDLER: player,
                                                         EventParam.INPUT_COMMAND: command})
             self.game_state.event_stack.push_and_resolve(event)
+            return True
 
     def resolve_actor(self, actor: Entity):
         end_turn = Event(EventType.END_TURN, {EventParam.HANDLER: actor})
         if actor.has_component(ComponentType.PLAYER):
-            self.player_turn(actor)
-            if self.game_status.is_status(self.game_status.PLAYING):
+            player_took_turn = self.player_turn(actor)
+            if player_took_turn:
                 self.game_state.event_stack.push_and_resolve(end_turn)
+                return True
+            else:
+                return False
         elif actor.has_component(ComponentType.AI):
             event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: actor,
                                                     EventParam.LEVEL: self.game_state.level,
                                                     EventParam.PLAYER: self.game_state.level.get_player_entity()})
             self.game_state.event_stack.push_and_resolve(event)
             self.game_state.event_stack.push_and_resolve(end_turn)
+            return True
         elif actor.has_component(ComponentType.PROJECTILE):  # TODO: Differentiate from AI?
             event = Event(EventType.AI_BEGIN_TURN, {EventParam.HANDLER: actor,
                                                     EventParam.LEVEL: self.game_state.level,
                                                     EventParam.PLAYER: self.game_state.level.get_player_entity()})
             self.game_state.event_stack.push_and_resolve(event)
             self.game_state.event_stack.push_and_resolve(end_turn)
+            return True
         else:
             raise ValueError('Cannot resolve turn of actor ' + str(actor.eid) + ', is not player and has no AI!')
 
@@ -67,8 +74,8 @@ class GameRunner:
             if speed == 0:
                 self.resolve_instant_actor(actor)
             else:
-                self.resolve_actor(actor)
-                if not self.game_status.is_status(self.game_status.PLAYING):
+                actor_resolved = self.resolve_actor(actor)
+                if not actor_resolved:
                     self.game_state.actor_queue.insert(0, actor)
                     break
 
