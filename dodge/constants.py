@@ -12,14 +12,14 @@ class InputCommands(Enum):
 
 class ComponentType(Enum):
     (ACTOR, AI, ATTACKER, DESTRUCTIBLE, MOUNTABLE, ITEM, PLAYER, POSITION, PROJECTILE, RENDERABLE, FACTION, MOUNTINGS,
-     WEAPON, RETALIATORY_DEATH, DAMAGE_BONUS, INVENTORY) = range(16)
+     WEAPON, RETALIATORY_DEATH, DAMAGE_BONUS, INVENTORY, HEAL_USE) = range(17)
 
 
 class EventType(Enum):
     (ALL_EVENTS, PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN,
      AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, REMOVE_FROM_LEVEL,
      ADD_COMPONENTS, REMOVE_COMPONENTS, PLAYER_DEATH, ADD_ITEM_TO_INVENTORY, PICK_UP_ITEM, REMOVE_ITEM_FROM_INVENTORY,
-     DROP_ITEM, HEAL) = range(27)
+     DROP_ITEM, HEAL, USE_ITEM) = range(28)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -77,5 +77,7 @@ event_templates = {
     EventType.DROP_ITEM: ((EventParam.HANDLER, True),
                           (EventParam.ITEM, True)),
     EventType.HEAL: ((EventParam.HANDLER, True),
-                     (EventParam.QUANTITY, True))
+                     (EventParam.QUANTITY, True)),
+    EventType.USE_ITEM: ((EventParam.HANDLER, True),
+                         (EventParam.TARGET, True))
 }
