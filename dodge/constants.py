@@ -19,7 +19,7 @@ class EventType(Enum):
     (ALL_EVENTS, PREPARE_ATTACK, ATTACK, DAMAGE, TELEPORT, MOVE, PASS_TIME, END_TURN, AI_BEGIN_TURN, PLAYER_BEGIN_TURN,
      AI_ATTACK, ACTIVATE, COLLISION, DEATH, MOUNT_ITEM, UNMOUNT_ITEM, FIRE_ALL, ADD_TO_LEVEL, REMOVE_FROM_LEVEL,
      ADD_COMPONENTS, REMOVE_COMPONENTS, PLAYER_DEATH, ADD_ITEM_TO_INVENTORY, PICK_UP_ITEM, REMOVE_ITEM_FROM_INVENTORY,
-     DROP_ITEM) = range(26)
+     DROP_ITEM, HEAL) = range(27)
 
 
 # TODO: Change LEVEL to LEVEL_VIEW or something that isn't able to be mucked about with easily
@@ -75,5 +75,7 @@ event_templates = {
     EventType.REMOVE_ITEM_FROM_INVENTORY: ((EventParam.HANDLER, True),
                                            (EventParam.ITEM, True)),
     EventType.DROP_ITEM: ((EventParam.HANDLER, True),
-                          (EventParam.ITEM, True))
+                          (EventParam.ITEM, True)),
+    EventType.HEAL: ((EventParam.HANDLER, True),
+                     (EventParam.QUANTITY, True))
 }
