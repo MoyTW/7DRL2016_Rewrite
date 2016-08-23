@@ -16,4 +16,8 @@ class Config(object):
             self.VISION_RADIUS = int(config["VISION_RADIUS"])
             self.FOV_ALGO = int(config["FOV_ALGO"])
             self.FOV_LIGHT_WALLS = bool(config["FOV_LIGHT_WALLS"])
+            self.HP_BAR_WIDTH = int(config["HP_BAR_WIDTH"])
+
+            # Derived values
+            self.PANEL_Y = self.SCREEN_HEIGHT - self.PANEL_HEIGHT
             # etc etc etc

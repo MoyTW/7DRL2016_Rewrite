@@ -18,8 +18,8 @@ class Game(object):
     def start_new_game(self):
         self.current_game_state = GameState(self.config, SillyLevelBuilder)
         self.game_status = self.current_game_state.status
-        print(self.current_game_state.status)
-        level_renderer = ui.LevelRenderer(self.window.console, self.current_game_state.level, self.config)
+        level_renderer = ui.LevelRenderer(self.window.console, self.window.panel, self.current_game_state.level,
+                                          self.config)
         level_renderer.render_all(0)
 
         self.runner = GameRunner(self.current_game_state, self.input_handler, level_renderer, self.window)

@@ -67,8 +67,9 @@ class InputHandler(object):
 
 
 class LevelRenderer(object):
-    def __init__(self, console, level, config, camera_x=0, camera_y=0):
+    def __init__(self, console, bottom_panel, level, config, camera_x=0, camera_y=0):
         self.console = console
+        self.bottom_panel = bottom_panel
         self.level = level
         self.config = config
         self.camera_x = camera_x
@@ -94,6 +95,23 @@ class LevelRenderer(object):
             if x is not None:
                 libtcod.console.set_default_foreground(self.console, renderable.color)
                 libtcod.console.put_char(self.console, x, y, renderable.char, libtcod.BKGND_NONE)
+
+    def render_panel_bar(self, x, y, total_width, name, value, maximum, bar_color, back_color):
+        bar_width = int(float(value) / maximum * total_width)
+
+        # render background
+        libtcod.console.set_default_background(self.bottom_panel, back_color)
+        libtcod.console.rect(self.bottom_panel, x, y, total_width, 1, False, libtcod.BKGND_SCREEN)
+
+        # render bar
+        libtcod.console.set_default_background(self.bottom_panel, bar_color)
+        if bar_width > 0:
+            libtcod.console.rect(self.bottom_panel, x, y, bar_width, 1, False, libtcod.BKGND_SCREEN)
+
+        # text
+        libtcod.console.set_default_foreground(self.bottom_panel, libtcod.white)
+        libtcod.console.print_ex(self.bottom_panel, int(x + total_width / 2), int(y), libtcod.BKGND_NONE,
+                                 libtcod.CENTER, name + ': ' + str(value) + '/' + str(maximum))
 
     def move_camera(self, target_x, target_y):
         # new camera coordinates (top-left corner of the screen relative to the map)
@@ -176,6 +194,17 @@ class LevelRenderer(object):
         self.draw_paths(ttl)
 
         libtcod.console.blit(self.console, 0, 0, self.config.SCREEN_WIDTH, self.config.SCREEN_HEIGHT, 0, 0, 0)
+
+        # Draw the panel
+        libtcod.console.set_default_background(self.bottom_panel, libtcod.black)
+        libtcod.console.clear(self.bottom_panel)
+
+        player_destructible = self.level.get_player_entity().get_component(ComponentType.DESTRUCTIBLE)
+        self.render_panel_bar(1, 1, self.config.HP_BAR_WIDTH, 'HP', player_destructible.hp, player_destructible.max_hp,
+                              libtcod.light_red, libtcod.darker_red)
+
+        libtcod.console.blit(self.bottom_panel, 0, 0, self.config.SCREEN_WIDTH, self.config.PANEL_HEIGHT, 0, 0,
+                             self.config.PANEL_Y)
 
         libtcod.console.flush()
 

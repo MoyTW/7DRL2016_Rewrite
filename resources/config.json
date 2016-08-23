@@ -9,5 +9,6 @@
   "CAMERA_HEIGHT": 43,
   "VISION_RADIUS": 20,
   "FOV_ALGO": 0,
-  "FOV_LIGHT_WALLS": true
+  "FOV_LIGHT_WALLS": true,
+  "HP_BAR_WIDTH": 20
 }
