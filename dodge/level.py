@@ -178,7 +178,10 @@ class SillyLevelBuilder:
                                                              targeting_radius=3,
                                                              render_info=laser_render_info),
                                            components.Mountable('turret')])  # TODO: Constant-ify
-        test_item = Entity(eid='test_item', name='test_item', components=[components.Item()])
+        test_item = Entity(eid='test_item', name='test_item', components=[
+            components.Item(),
+            components.HealUse(game_state.event_stack, 9999)
+        ])
         game_state.player = Entity(eid='player',
                                    name='player',
                                    components=[

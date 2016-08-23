@@ -18,8 +18,14 @@ class GameRunner:
             self.game_status.set_status(self.game_status.MENU)  # TODO: This is kind of awkward?
             return False
         elif command == InputCommands.INVENTORY:
-            items = [e.name for e in player.get_component(ComponentType.INVENTORY).carried]
-            self.ui.menu('Inventory', items, 24)
+            items = player.get_component(ComponentType.INVENTORY).carried
+            selection = self.ui.menu('Inventory', [item.name for item in items], 24)
+            if selection is not None:
+                # Currently, all items are used on the player only! Also, items don't draw influence from other items,
+                # so you don't need to run down a player stack. If these were implemented, you'd broadcast the event to
+                # the player, or you'd need to add a USER param.
+                event = Event(EventType.USE_ITEM, {EventParam.HANDLER: items[selection], EventParam.TARGET: player})
+                self.game_state.event_stack.push_and_resolve(event)
             return False
         else:
             event = Event(EventType.PLAYER_BEGIN_TURN, {EventParam.LEVEL: self.game_state.level,
