@@ -3,7 +3,7 @@ from dodge.constants import EventType, EventParam, ComponentType
 from dodge.components import Inventory, Position, Item
 from dodge.event import Event
 from dodge.entity import Entity
-from unittests.utils import EventStackStub
+from unittests.utils import EventStackStub, EntityStub
 
 
 class TestInventory(unittest.TestCase):
@@ -98,3 +98,14 @@ class TestInventory(unittest.TestCase):
         self.assertEqual(self.handler_pos.x, item_pos.x)
         self.assertEqual(self.handler_pos.y, item_pos.y)
         self.assertEqual(False, item_pos.blocks)
+
+    def test_usage_broadcasts_and_drops(self):
+        item_stub = EntityStub()
+        self.inventory._add_item(item_stub)
+
+        event = Event(EventType.USE_ITEM, {EventParam.HANDLER: self.handler, EventParam.ITEM: item_stub,
+                                           EventParam.TARGET: self.handler})
+        self.inventory.handle_event(event)
+
+        self.assertEqual(0, self.inventory.size)
+        self.assertTrue(item_stub.handled)

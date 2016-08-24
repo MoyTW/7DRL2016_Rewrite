@@ -10,7 +10,7 @@ class Inventory(Component):
     def __init__(self, event_stack, max_size):
         super().__init__(ComponentType.INVENTORY,
                          target_events=[EventType.ADD_ITEM_TO_INVENTORY, EventType.REMOVE_ITEM_FROM_INVENTORY,
-                                        EventType.PICK_UP_ITEM, EventType.DROP_ITEM],
+                                        EventType.PICK_UP_ITEM, EventType.DROP_ITEM, EventType.USE_ITEM],
                          emittable_events=[EventType.ADD_TO_LEVEL, EventType.REMOVE_FROM_LEVEL],
                          event_stack=event_stack)
         self._carried = []
@@ -77,6 +77,11 @@ class Inventory(Component):
             return True
         elif event.event_type == EventType.DROP_ITEM:
             self._add_item_to_level(item, owner_pos)
+            self._remove_item(item)
+            return True
+        elif event.event_type == EventType.USE_ITEM:
+            # If we want items with more than one use, we'd modify this code section.
+            item.handle_event(event)
             self._remove_item(item)
             return True
         else:

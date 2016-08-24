@@ -11,6 +11,9 @@ class EntityStub:
         self.handled = True
         return True
 
+    def has_component(self, _):
+        return True
+
 
 class ComponentStub:
     def __init__(self, component_type):
