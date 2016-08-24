@@ -2,7 +2,7 @@ import unittest
 from dodge.constants import EventType, EventParam
 from dodge.components.use.heal import HealUse
 from dodge.event import Event
-from unittests.utils import EventStackStub
+from unittests.utils import EventStackStub, EntityStub
 
 
 class TestDestructible(unittest.TestCase):
@@ -12,7 +12,9 @@ class TestDestructible(unittest.TestCase):
         self.heal_use = HealUse(self.stack, self.amount)
 
     def tests_sends_heal_on_use(self):
-        event = Event(EventType.USE_ITEM, {EventParam.HANDLER: self.heal_use, EventParam.TARGET: 'bob'})
+        event = Event(EventType.USE_ITEM, {EventParam.HANDLER: 'alice',
+                                           EventParam.ITEM: 'healing item',
+                                           EventParam.TARGET: 'bob'})
         self.assertTrue(self.heal_use.handle_event(event))
 
         self.assertEqual(1, len(self.stack.view()))

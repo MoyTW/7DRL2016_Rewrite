@@ -79,5 +79,6 @@ event_templates = {
     EventType.HEAL: ((EventParam.HANDLER, True),
                      (EventParam.QUANTITY, True)),
     EventType.USE_ITEM: ((EventParam.HANDLER, True),
+                         (EventParam.ITEM, True),
                          (EventParam.TARGET, True))
 }
